@@ -1,0 +1,43 @@
+---
+title: "Applying methodology for examining potential technology breakthrouths for mitigating electric sector emissions to offshore wind"
+author: "Morgan Browning"
+date: "August 6, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Abstract
+
+Offshore wind is an established technology in Europe, as the second largest source of power generation with over 189 GW of installed capacity [^windeurope], but it has not yet gained market share in the United States (US). There is, however, increasing interest in and action supporting offshore wind development from many coastal states, predominantly along the Atlantic coast. The offshore wind resources in the US are vast, with an estimated 10,800 GW of resource potential, 2,058 GW of which are technically feasible for development [^nrel1]. To date, only 30 MW of this potential has been realized. In late 2016, the five turbine Block Island Wind Farm began commercial operation as the first offshore wind farm in the US. With the potential for growth in the offshore industry in mind, this research seeks to explore energy futures that include offshore wind and the resulting changes to the energy mix and grid emissions. If offshore wind grows in the US, as it seems likely to, it will displace existing generation assets, and depending on which assets those are, the resulting emissions from the power sector. This paper explores combinations of cost curves and carbon mitigation scenarios to measure the changes in the energy mix and quantify offshore wind's impact on the resulting emissions. The results could inform planning geared towards grid emission reductions and the effectiveness of offshore wind to meet emissions reduction goals.
+
+For this analysis, an energy system modeling approach is used to generate and explore potential energy futures. The approach uses the Integrated MARKAL_EFOM System (TIMES) energy-system model and a database representation of the US energy system called the EPAUS9rT, applying a nested parametric sensitibity analysis to represent potential futures. Combinations of carbon mitigation stringencies and offshore wind cost curbes created vastly different energy futures with comparably different emissions profiles. 
+
+This sensitivity analysis allows us to explore the benefits of offshore wind as an energy source within the US as it relates to air quality and green house gas (GHG) emissions reductions. We look at results both nationally and regionally, analyzing the differences in regional adoption of offshore wind and how access to this technology provides a broader range of emission reduction options for the power sector. (add brief summary of results)
+
+# Introduction
+
+Offshore wind is a renewable energy resource available over coastal and great lake waters. Its low variability and uncertainty paired with its proximity to large population centers makes it a prime candidate for electricity production. In the US, approximately 40% of the population lives on the coast, and this population has grown 40% since 1970 [^population]. This means electricity consumption is growing and there is less available area for development. More so, the area thatis available is expensive due to availability constraints. It is, nevertheless, a relatively expensive technology. Many factors contribute to the high price, the most impactful being complex installation that requires highly-skilled instrumentation and labor at sea. Distance to shore and depth of water add to these costs. Lastly, the electricity produced must make its way to shore through seaworthy transmission lines.
+
+Twenty-five coastal or great lakes states and Washington D.C. have instituted Renewable Portfolio Standards or Goals (RPS) [^rps] and twinty have set GHG emissions targets [^ghg]. Both types of policies incentivize the buildout of renewable and emissions-free generation resources, for which offshore wind qualifies. These policies have already begun to change the energy landscape. Policies paired with declining costs for terrestrial wind and solar led renewables to account for 17% of electricity generation in the US in 2018 [^7], an increase of 5% from 2017 [^6]. It is unclear exactly how offshore wind willfit into this changing landscape, and waht impact it will have.
+
+With the growth of the offshore industry in the US in mind, this research explores potential energy futures that include offshore wind and analyzes the resulting changes to the electric sector technology mix and associated emissions. Two drivers for offshore wind development are explored: (1) offshore wind costs and (2) carbon mitigation stringency. 
+
+1. Offshore Wind Costs: Supply chains are not yet developed in the US for offshore wind and the development and transmission costs associated with sea-based projects are high. This results in a high cost for offshore wind as compared to other technologies. However, there is a great deal of potential for a declining cost curve for offshore wind. As capacity expansion in the power sector is highly sensitive to cost, this measure captures one of the main barriers to offshore wind deployment.
+
+2. Carbon Mitigation Stringency: Electricity Generation produces several emissions, including, but not limited to sulfur dioxide (SO2), nitrogen oxides (NOx), fine particulate matter (PM 2.5), methane (CH4), and carbon dioxide (CO2). These emissions vary in their environmental and health impacts, as well as their cost of mitigation. Federal programs already exist for the mitigation of SO2 and NOx from the power sector, but not for CO2. This measure accounts for air-quality and environmental health regulations that would favor non-emitting sources of power genration beyond waht already exists. It also helps to encapsulate the upward trend in states with GHG emissions targets. 
+
+
+
+
+
+
+[^nrel1]: https://www.nrel.gov/docs/fy16osti/66599.pdf
+[^population]: https://coast.noaa.gov/states/fast-facts/economics-and-demographics.html
+[^windeurope]: https://windeurope.org/about-wind/statistics/european/wind-energy-in-europe-in-2018/
+[^rps]: https://s3.amazonaws.com/ncsolarcen-prod/wp-content/uploads/2019/07/RPS-CES-June2019.pdf
+[^ghg]: https://www.c2es.org/document/greenhouse-gas-emissions-targets/
+[^6]: https://www.eia.gov/energyexplained/?page=us_energy_home
+[^7]: https://www.eia.gov/tools/faqs/faq.php?id=427&t=4
