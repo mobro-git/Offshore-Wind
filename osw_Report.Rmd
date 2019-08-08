@@ -23,7 +23,7 @@ Sets global knit options and loads the setup and data import scripts for the pro
 Three scripts are loaded into this markdown document to allow for analysis of the data. The setup script loads the library, creates generalized functions, and creates global variables for color scales and factors.The data script loads the excel spreadsheet with all of the results data and performs the majority of data munging. The results script creates charts, graphs, and tables. This report functions as the annotated synthesis of the data and results.
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, include = TRUE, warning = FALSE, message = FALSE, tidy = TRUE, cache = FALSE)
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, warning = FALSE, message = FALSE, tidy = TRUE, cache = FALSE)
 ```
 ```{r}
 source("osw_Scripts/osw_setup.R")
@@ -155,6 +155,12 @@ if(color > 0) cap_allreg_col
 if(color > 0) newcap_allreg_col
 if(color > 0) cap_allreg_col_free
 if(color > 0) newcap_allreg_col_free
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cap_allreg_bw
+if(bw > 0) newcap_allreg_bw
+if(bw > 0) cap_allreg_bw_free
+if(bw > 0) newcap_allreg_bw_free
 ```
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
 cap_region_table

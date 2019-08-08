@@ -105,24 +105,24 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
     bottom
 }
 
-grid.heatmap.col <- function(data) {
+grid.heatmap.col <- function(data, title) {
   ggplot(data = data, aes(x = costred, y = emred, fill = VAR_FOut)) +
   geom_tile(colour = "gray", size = 0.25) +
   facet_grid(Process ~ .) + 
   labs(x = "Offshore Wind Cost Reductions (%)",
        y = "Emissions Reduction (%)",
-       title = "Electricity Produced by Process: 2050",
+       title = title,
        fill = "Electricity\nProduced\n(PJ)") +
   st
 }
 
-grid.heatmap.bw <- function(data) {
+grid.heatmap.bw <- function(data, title) {
   ggplot(data = data, aes(x = costred, y = emred, fill = VAR_FOut)) +
     geom_tile(colour = "gray", size = 0.25) +
     facet_grid(Process ~ .) + 
     labs(x = "Offshore Wind Cost Reductions (%)",
          y = "Emissions Reduction (%)",
-         title = "Electricity Produced by Process: 2050",
+         title = title,
          fill = "Electricity\nProduced\n(PJ)") +
     st +
     gray_fill_cont
@@ -155,7 +155,8 @@ x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
 col_osw <- c(`Terrestrial Wind` = "chartreuse4", `Hydro` = "skyblue3", 
              `Solar` = "darkgoldenrod2", `Offshore Wind` = "deepskyblue4", 
-             `Nuclear` = "firebrick", `Coal` = "gray9", `Natural Gas` = "gray34")
+             `Nuclear` = "firebrick", `Coal` = "gray9", `Coal CCS` = "gray 20", 
+             Natural Gas` = "gray34", `Natural Gas CCS` = "")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
