@@ -130,22 +130,22 @@ if(color > 0) newcap_reg9_col
 ```
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cap_reg1_col
-if(color > 0) newcap_reg1_col
-if(color > 0) cap_reg2_col
-if(color > 0) newcap_reg2_col
-if(color > 0) cap_reg3_col
-if(color > 0) newcap_reg3_col
-if(color > 0) cap_reg4_col
-if(color > 0) newcap_reg4_col
-if(color > 0) cap_reg5_col
-if(color > 0) newcap_reg5_col
-if(color > 0) cap_reg6_col
-if(color > 0) newcap_reg6_col
-if(color > 0) cap_reg7_col
-if(color > 0) newcap_reg7_col
-if(color > 0) cap_reg9_col
-if(color > 0) newcap_reg9_col
+if(bw > 0) cap_reg1_bw
+if(bw > 0) newcap_reg1_bw
+if(bw > 0) cap_reg2_bw
+if(bw > 0) newcap_reg2_bw
+if(bw > 0) cap_reg3_bw
+if(bw > 0) newcap_reg3_bw
+if(bw > 0) cap_reg4_bw
+if(bw > 0) newcap_reg4_bw
+if(bw > 0) cap_reg5_bw
+if(bw > 0) newcap_reg5_bw
+if(bw > 0) cap_reg6_bw
+if(bw > 0) newcap_reg6_bw
+if(bw > 0) cap_reg7_bw
+if(bw > 0) newcap_reg7_bw
+if(bw > 0) cap_reg9_bw
+if(bw > 0) newcap_reg9_bw
 ```
 
 Cumulative and new addition offshore wind capacity by region, emissions reduction, and cost reduction.

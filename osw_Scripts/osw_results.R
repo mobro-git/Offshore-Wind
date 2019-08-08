@@ -182,6 +182,40 @@ newcap_allreg_col_free <- do.call(lineplot.region, c(ncap.reg.col.list,list(scal
   theme(axis.text.y = element_text(face = "bold")) +
   labs(caption = "*Capacity scales are not fixed")
 
+cap.reg.bw.list <- list(data = osw_varcap_long_reg, yvar = "VAR_Cap", typevar = "emred",
+                         title = "Offshore Wind Total Capacity", ylab = "Capacity (GW)")
+
+cap_reg1_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R1")))
+cap_reg2_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R2")))
+cap_reg3_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R3")))
+cap_reg4_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R4")))
+cap_reg5_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R5")))
+cap_reg6_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R6")))
+cap_reg7_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R7")))
+cap_reg9_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R9")))
+
+cap_allreg_bw <- do.call(lineplot.region, cap.reg.bw.list)
+cap_allreg_bw_free <- do.call(lineplot.region, c(cap.reg.bw.list,list(scale="free_y"))) +
+  theme(axis.text.y = element_text(face = "bold")) +
+  labs(caption = "*Capacity scales are not fixed")
+
+ncap.reg.bw.list <- list(data = osw_varncap_long_reg, yvar = "VAR_Ncap", typevar = "emred",
+                          title = "Offshore Wind New Capacity", ylab = "New Capacity (GW)")
+
+newcap_reg1_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R1")))
+newcap_reg2_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R2")))
+newcap_reg3_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R3")))
+newcap_reg4_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R4")))
+newcap_reg5_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R5")))
+newcap_reg6_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R6")))
+newcap_reg7_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R7")))
+newcap_reg9_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R9")))
+
+newcap_allreg_bw <- do.call(lineplot.region, ncap.reg.bw.list)
+newcap_allreg_bw_free <- do.call(lineplot.region, c(ncap.reg.bw.list,list(scale="free_y"))) +
+  theme(axis.text.y = element_text(face = "bold")) +
+  labs(caption = "*Capacity scales are not fixed")
+
 ## ~ Tables ----
 
 cap_region_table <- osw_varcap_regiontotals %>% 
