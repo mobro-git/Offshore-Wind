@@ -130,6 +130,13 @@ osw_varfout_regiontotals <- osw %>%
 
 
 ## ----elc process--------------------------------------------------
+ccs <- as.data.frame(data_global$`CO2 Retrofits for Coal`) %>%
+  select(-`2011`, -`2010`) %>%
+  categorize()
+
+ccs_retro <- ccs %>% filter(Category == "CO2 RETROFITS - COAL")
+ccs_base <- ccs %>% filter(Category == "ELC-COAL")
+
 elc <- as.data.frame(data_global$`ELC Produced by Process Set`) %>% 
   select(-`2011`, -`2010`, -Commodity, -Attribute) %>% 
   categorize() %>% 

@@ -10,19 +10,18 @@ output:
 
 ***
 
-# Purpose
+# Disclosure
 
-This document functions as an all-inclusive working directory for synthesis and graphical analysis of the results from the offshore wind research of Morgan Browning, an ORISE Fellow at the U.S. Environmental Protection Agency's Office of Research and Development. 
+This document functions as an all-inclusive working directory for synthesis and graphical analysis of the results from the offshore wind research of Morgan Browning, an ORISE Fellow at the U.S. Environmental Protection Agency's Office of Research and Development. This document and its contents are not finalized nor are intended for publication. 
 
-This documents and its contents are not finalized nor are intended for publication. It is annotated primarily for ease of reproducability. Graphs are provided with many variations to meet criteria of different publication and presentation platforms.
+It is annotated primarily for ease of reproducability. Graphs are provided with many variations to meet criteria of different publication and presentation platforms.
 
 # Setup
 
-Sets global knit options and loads the setup and data import scripts for the project.
-
-Three scripts are loaded into this markdown document to allow for analysis of the data. The setup script loads the library, creates generalized functions, and creates global variables for color scales and factors.The data script loads the excel spreadsheet with all of the results data and performs the majority of data munging. The results script creates charts, graphs, and tables. This report functions as the annotated synthesis of the data and results.
+Three scripts are loaded into this markdown document to allow for analysis of the data. The setup script loads the library, creates generalized functions, and creates global variables for color scales and factors. The data script loads the excel spreadsheet with all of the results data and performs the majority of data munging. The results script creates charts, graphs, and tables. This report functions as the annotated synthesis of the data and results.
 
 ```{r setup, include = FALSE}
+# Sets global knit options and loads the setup and data import scripts for the project. Code is hidden for ease of reading. Was running into issues when cacheing results, so have set cache to false. Time to knit <5 minutes, so it does not cause much of an issue. Will consider cacheing in the future if the issue is resolved.
 knitr::opts_chunk$set(echo = FALSE, include = TRUE, warning = FALSE, message = FALSE, tidy = TRUE, cache = FALSE)
 ```
 ```{r}
@@ -31,8 +30,9 @@ source("osw_Scripts/osw_data.R")
 source("osw_Scripts/osw_results.R")
 ```
 ```{r colorcalls}
-color <- 1
-bw <- 0
+# Creates toggles for selecting the color scale of graphics to be printed [color, black & white, gray]. More than one may be selected.
+color <- 0
+bw <- 1
 gray <- 0
 ```
 
@@ -46,7 +46,7 @@ The nested parametric sensitivity analysis was built on combinations of two sets
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(color > 0) cost_col
-if(color > 0) emissions_col 
+if(color > 0) emissions_col
 ```
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
