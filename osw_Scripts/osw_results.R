@@ -698,23 +698,32 @@ ccs_grid_heatmap_bw <- grid.heatmap.bw(ccs, "Coal with CCS Electricity Output: 2
 base_retire <- retire_long %>%
   filter(emred == "BAU" & costred == "20") %>%
   filter(Process != "Other") %>%
-  ggplot(aes(x = Year, y = retire, fill = Process)) +
-  geom_bar(stat = "identity", position = "stack", width = 0.9) +
-  scale_fill_manual(values = col_osw) +
-  labs(x = "Year", y = "Change in Electricity Production (PJ)",
-       title = "Baseline Changes in Electricity Production") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  geom_hline(yintercept = 0, linetype = "dashed", size = 0.75)
+  ggplot() +
+  labs(x = "Year", y = "Change (PJ)",
+       title = "BAU Electricity Production Yearly Changes") +
+  yt
+
+base_retire_fill_col <- base_retire + 
+  geom_bar(aes(x = Year, y = retire, fill = Process), 
+           stat = "identity", position = "stack", width = 0.9) +
+  osw_fill +
+  zero
+
+base_retire_fill_bw <- base_retire + 
+  geom_bar(aes(x = Year, y = retire, fill = Process), 
+           stat = "identity", position = "stack", width = 0.9, colour = "black") +
+  gray_fill +
+  zero
 
 prod_dif %>%
   filter(emred == "BAU" & costred == "40") %>%
   ggplot(aes(x = Year, y = diff, fill = Process)) +
   geom_bar(stat = "identity", position = "stack", width = 0.9) +
-  scale_fill_manual(values = col_osw) +
+  osw_fill +
   labs(x = "Year", y = "Change in Electricity Production (PJ)",
        title = "Baseline Changes in Electricity Production") +
   theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red")
+  zero
 
 prod_dif %>%
   filter(emred == "40" & costred == "40") %>%

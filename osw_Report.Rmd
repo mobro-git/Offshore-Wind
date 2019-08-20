@@ -336,7 +336,7 @@ if(bw > 0) cost80_facetem_fill_bw
 
 ## Heatmaps
 
-```{r}
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(color > 0) osw_grid_heatmap_col
 if(color > 0) wnd_grid_heatmap_col
 if(color > 0) sol_grid_heatmap_col
@@ -346,7 +346,7 @@ if(color > 0) nuk_grid_heatmap_col
 if(color > 0) hyd_grid_heatmap_col
 if(color > 0) ccs_grid_heatmap_col
 ```
-```{r}
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(bw > 0) osw_grid_heatmap_bw 
 if(bw > 0) wnd_grid_heatmap_bw 
 if(bw > 0) sol_grid_heatmap_bw 
@@ -357,17 +357,26 @@ if(bw > 0) hyd_grid_heatmap_bw
 if(bw > 0) ccs_grid_heatmap_bw
 ```
 
+## Retirements and Additions
 
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) base_retire_fill_col
+if(bw > 0) base_retire_fill_bw
+```
 
+## Grid Mix Changes Over Baseline
 
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
 
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+
+```
 
 # TEST
 
 ```{r}
 grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, layout_matrix = rbind(c(1,1,1),c(2,3,4)))
-
 grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, ncol = 2)
-
 ```
 

@@ -226,14 +226,8 @@ retire_long_reg <- retirements %>%
          key = "Year", value = "retire") %>% 
   select(Process, Scenario, emred, costred, everything())
 
-retire_levels <- retire_long_reg %>%
-  group_by(Process) %>%
-  summarize(retirements = sum(retire)) %>%
-  arrange(retirements) %>%
-  pull(Process)
-
 retire_long_reg <- retire_long_reg %>%
-  mutate(Process = factor(Process, levels = retire_levels)) %>%
+  mutate(Process = factor(Process, levels = elc_levels)) %>%
   mutate(emred = factor(emred, levels = levels_emred)) %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   ungroup()

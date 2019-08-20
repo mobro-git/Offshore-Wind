@@ -160,12 +160,14 @@ x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
 col_osw <- c(`Terrestrial Wind` = "chartreuse4", `Hydro` = "skyblue3", 
              `Solar` = "darkgoldenrod2", `Offshore Wind` = "deepskyblue4", 
-             `Nuclear` = "firebrick", `Coal` = "gray9", `Coal CCS` = "gray 20", 
-             `Natural Gas` = "gray34", `Natural Gas CCS` = "gray60", `Coal CCS` = "gray50")
+             `Nuclear` = "firebrick", `Coal` = "gray9", `Natural Gas` = "gray34", 
+             `Coal CCS` = "darkorange3")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
 col_cost <- sequential_hcl(7, h = c(260, 260), c = c(40,80), l = c(75,40))
+
+zero <- geom_hline(yintercept = 0, linetype = "dashed", color = "red")
 
 osw_fill <- scale_fill_manual(values = col_osw)
 osw_color <- scale_color_manual(values = col_osw)
