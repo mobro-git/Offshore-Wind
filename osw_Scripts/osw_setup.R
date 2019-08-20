@@ -14,6 +14,10 @@ library(tibble)
 library(gridExtra)
 library(ggpubr)
 library(patternplot)
+library(plotly)
+library(flexdashboard)
+library(DT)
+library(naniar)
 
 
 ## ----Functions-------------------------------------------
@@ -113,6 +117,7 @@ grid.heatmap.col <- function(data, title) {
        y = "Emissions Reduction (%)",
        title = title,
        fill = "Electricity\nProduced\n(PJ)") +
+  scale_fill_gradient(na.value = "white") +
   st
 }
 
@@ -156,7 +161,7 @@ x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 col_osw <- c(`Terrestrial Wind` = "chartreuse4", `Hydro` = "skyblue3", 
              `Solar` = "darkgoldenrod2", `Offshore Wind` = "deepskyblue4", 
              `Nuclear` = "firebrick", `Coal` = "gray9", `Coal CCS` = "gray 20", 
-             `Natural Gas` = "gray34", `Natural Gas CCS` = "gray60")
+             `Natural Gas` = "gray34", `Natural Gas CCS` = "gray60", `Coal CCS` = "gray50")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
@@ -166,7 +171,7 @@ osw_fill <- scale_fill_manual(values = col_osw)
 osw_color <- scale_color_manual(values = col_osw)
 gray_fill <- scale_fill_grey(start = 0.9, end = 0)
 gray_color <- scale_color_grey(start = 0.8, end = 0)
-gray_fill_cont <- scale_fill_gradient(low = "#AEAEAE", high = "#000000")
+gray_fill_cont <- scale_fill_gradient(low = "#AEAEAE", high = "#000000", na.value = "white")
 em_color <- scale_color_manual(values = col_em)
 cost_color <- scale_color_manual(values = col_cost)
 sec_fill <- scale_fill_manual(values = col_sector)

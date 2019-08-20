@@ -31,9 +31,9 @@ source("osw_Scripts/osw_results.R")
 ```
 ```{r colorcalls}
 # Creates toggles for selecting the color scale of graphics to be printed [color, black & white, gray]. More than one may be selected.
-color <- 0
+color <- 1
 bw <- 1
-gray <- 0
+gray <- 1
 ```
 
 # Scenarios
@@ -282,68 +282,69 @@ if(bw > 0) em80_facetcost_fill_bw
 40% cost reduction
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cost40_facetcost_line_col
-if(color > 0) cost40_facetcost_fill_col
+if(color > 0) cost40_facetem_line_col
+if(color > 0) cost40_facetem_fill_col
 ```
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cost40_facetcost_line_bw
-if(bw > 0) cost40_facetcost_fill_bw
+if(bw > 0) cost40_facetem_line_bw
+if(bw > 0) cost40_facetem_fill_bw
 ```
 
 50% cost reduction
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cost50_facetcost_line_col
-if(color > 0) cost50_facetcost_fill_col
+if(color > 0) cost50_facetem_line_col
+if(color > 0) cost50_facetem_fill_col
 ```
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cost50_facetcost_line_bw
-if(bw > 0) cost50_facetcost_fill_bw
+if(bw > 0) cost50_facetem_line_bw
+if(bw > 0) cost50_facetem_fill_bw
 ```
 
 60% cost reduction
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cost60_facetcost_line_col
-if(color > 0) cost60_facetcost_fill_col
+if(color > 0) cost60_facetem_line_col
+if(color > 0) cost60_facetem_fill_col
 ```
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cost60_facetcost_line_bw
-if(bw > 0) cost60_facetcost_fill_bw
+if(bw > 0) cost60_facetem_line_bw
+if(bw > 0) cost60_facetem_fill_bw
 ```
 
 70% cost reduction
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cost70_facetcost_line_col
-if(color > 0) cost70_facetcost_fill_col
+if(color > 0) cost70_facetem_line_col
+if(color > 0) cost70_facetem_fill_col
 ```
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cost70_facetcost_line_bw
-if(bw > 0) cost70_facetcost_fill_bw
+if(bw > 0) cost70_facetem_line_bw
+if(bw > 0) cost70_facetem_fill_bw
 ```
 
 80% cost reduction
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cost80_facetcost_line_col
-if(color > 0) cost80_facetcost_fill_col
+if(color > 0) cost80_facetem_line_col
+if(color > 0) cost80_facetem_fill_col
 ```
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cost80_facetcost_line_bw
-if(bw > 0) cost80_facetcost_fill_bw
+if(bw > 0) cost80_facetem_line_bw
+if(bw > 0) cost80_facetem_fill_bw
 ```
 
 ## Heatmaps
 
 ```{r}
-if(color > 0) osw_grid_heatmap 
-if(color > 0) wnd_grid_heatmap 
-if(color > 0) sol_grid_heatmap 
-if(color > 0) coal_grid_heatmap
-if(color > 0) nga_grid_heatmap 
-if(color > 0) nuk_grid_heatmap 
-if(color > 0) hyd_grid_heatmap 
+if(color > 0) osw_grid_heatmap_col
+if(color > 0) wnd_grid_heatmap_col
+if(color > 0) sol_grid_heatmap_col
+if(color > 0) coal_grid_heatmap_col
+if(color > 0) nga_grid_heatmap_col
+if(color > 0) nuk_grid_heatmap_col
+if(color > 0) hyd_grid_heatmap_col
+if(color > 0) ccs_grid_heatmap_col
 ```
 ```{r}
 if(bw > 0) osw_grid_heatmap_bw 
@@ -353,6 +354,7 @@ if(bw > 0) coal_grid_heatmap_bw
 if(bw > 0) nga_grid_heatmap_bw 
 if(bw > 0) nuk_grid_heatmap_bw 
 if(bw > 0) hyd_grid_heatmap_bw 
+if(bw > 0) ccs_grid_heatmap_bw
 ```
 
 
@@ -360,7 +362,7 @@ if(bw > 0) hyd_grid_heatmap_bw
 
 
 
-## TEST
+# TEST
 
 ```{r}
 grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, layout_matrix = rbind(c(1,1,1),c(2,3,4)))

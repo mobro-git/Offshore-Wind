@@ -1,5 +1,5 @@
 ## ----import data------------------------------------------
-results <- c("osw_data/OffshoreWind_Resultsdata_07292019.xlsx")
+results <- c("osw_data/OffshoreWind_Resultsdata_08152019.xlsx")
 sheets <- readxl::excel_sheets(results)
 data_global <- ReadAllSheets(results)
 
@@ -43,7 +43,8 @@ osw_varcap_long_reg <- osw_varcap %>%
 
 osw_varcap_long <- osw_varcap_long_reg %>%
   group_by(Scenario, Year, emred, costred) %>%
-  summarize(VAR_Cap = sum(VAR_Cap)) 
+  summarize(VAR_Cap = sum(VAR_Cap)) %>%
+  ungroup()
 
 osw_levels <- osw_varcap_long_reg %>%
   group_by(Region) %>%
@@ -52,7 +53,8 @@ osw_levels <- osw_varcap_long_reg %>%
   pull(Region)
 
 osw_varcap_long_reg <- osw_varcap_long_reg %>% 
-  mutate(Region = factor(Region, levels = osw_levels))
+  mutate(Region = factor(Region, levels = osw_levels)) %>%
+  ungroup()
  
 
 ## ----~osw varncap---------------------------------------------------------
@@ -67,10 +69,12 @@ osw_varncap_long_reg <- osw_varncap %>%
 
 osw_varncap_long <- osw_varncap_long_reg %>%
   group_by(Scenario, Year, emred, costred) %>%
-  summarize(VAR_Ncap = sum(VAR_Ncap))
+  summarize(VAR_Ncap = sum(VAR_Ncap)) %>%
+  ungroup()
 
 osw_varncap_long_reg <- osw_varncap_long_reg %>% 
-  mutate(Region = factor(Region, levels = osw_levels))
+  mutate(Region = factor(Region, levels = osw_levels)) %>%
+  ungroup()
 
 
 ## ----~osw varfout---------------------------------------------------------
@@ -85,10 +89,12 @@ osw_varfout_long_reg <- osw_varfout %>%
 
 osw_varfout_long <- osw_varfout_long_reg %>%
   group_by(Scenario, Year, emred, costred) %>%
-  summarize(VAR_FOut = sum(VAR_FOut))
+  summarize(VAR_FOut = sum(VAR_FOut)) %>%
+  ungroup()
 
 osw_varfout_long_reg <- osw_varfout_long_reg %>% 
-  mutate(Region = factor(Region, levels = osw_levels))
+  mutate(Region = factor(Region, levels = osw_levels)) %>%
+  ungroup
 
 
 ## ----~osw 2050 totals-----------------------------------------------------
@@ -130,6 +136,10 @@ osw_varfout_regiontotals <- osw %>%
 
 
 ## ----elc process--------------------------------------------------
+elc <- as.data.frame(data_global$`ELC Produced by Process Set`) %>% 
+  select(-`2011`, -`2010`, -Commodity, -Attribute) %>%
+  process()
+
 ccs <- as.data.frame(data_global$`CO2 Retrofits for Coal`) %>%
   select(-`2011`, -`2010`) %>%
   categorize()
@@ -137,10 +147,43 @@ ccs <- as.data.frame(data_global$`CO2 Retrofits for Coal`) %>%
 ccs_retro <- ccs %>% filter(Category == "CO2 RETROFITS - COAL")
 ccs_base <- ccs %>% filter(Category == "ELC-COAL")
 
-elc <- as.data.frame(data_global$`ELC Produced by Process Set`) %>% 
-  select(-`2011`, -`2010`, -Commodity, -Attribute) %>% 
-  categorize() %>% 
-  process()
+ccs_retro <- ccs %>% 
+  filter(Category == "CO2 RETROFITS - COAL" & Attribute == "VAR_FOut") %>%
+  select(-`2015`, -`2020`, -`2025`, -Attribute) %>%
+  gather(`2030`, `2035`, `2040`, `2045`, `2050`, key = "Year", value = "VAR_FOut") %>%
+  group_by(Scenario, Region, Year) %>%
+  summarize("Coal CCS" = sum(VAR_FOut))
+
+ccs_base <- ccs %>% 
+  filter(Category == "ELC-COAL" & Attribute == "VAR_FIn") %>%
+  select(-`2015`, -`2020`, -`2025`, -Attribute) %>%
+  gather(`2030`, `2035`, `2040`, `2045`, `2050`, key = "Year", value = "VAR_FIn") %>%
+  group_by(Scenario, Region, Year) %>%
+  summarize("Coal" = sum(VAR_FIn)) %>%
+  ungroup()
+  
+ccs_percent <- left_join(ccs_retro, ccs_base, by = c("Scenario", "Region", "Year")) %>%
+  mutate(CCSpercent = round((`Coal CCS` / Coal), 2)) %>%
+  filter(CCSpercent > 0) %>%
+  select(Scenario, Region, Year, CCSpercent)
+
+coal_calculations <- elc %>%
+  filter(Process == "Coal") %>%
+  gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
+         key = "Year", value = "VAR_FOut") %>%
+  left_join(., ccs_percent, by = c("Scenario", "Region", "Year")) %>%
+  mutate_all(~replace(.,is.na(.), 0)) %>%
+  mutate(`Coal CCS` = VAR_FOut * CCSpercent) %>%
+  mutate(`Coal` = VAR_FOut - `Coal CCS`) %>%
+  select(Scenario, Region, Year, `Coal CCS`, Coal) %>%
+  gather(`Coal CCS`, Coal, key = "Process", value = "VAR_FOut") %>%
+  spread(key = Year, value = VAR_FOut) %>%
+  select(Scenario, Process, Region, everything())
+
+elc <- elc %>% filter(Process != "Coal") %>%
+  bind_rows(., coal_calculations) %>% 
+  categorize()
+
 retirements <- elc
 
 elc_long_reg <- elc %>% 

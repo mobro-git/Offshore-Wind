@@ -8,7 +8,7 @@ cost_plot <- ggplot(scenario_cost) +
              size = 3, alpha = 0.5, nudge_y = 4) +
   scale_y_continuous(limits = c(0, 100), expand = c(.01, 0)) +
   labs(x = "Year", y = "Cost Reduction (%)", 
-       title = "Cost Reduction Scenarios", 
+       title = "OSW Cost Curves", 
        subtitle = "Percentage decrease from 2010 offshore wind CAPEX costs") +
   yt +
   x_cont +
@@ -33,7 +33,7 @@ emissions_plot <- ggplot(scenario_emissions) +
              size = 3, alpha = 0.5, nudge_y = 80) +
   ylim(0, 2200) +
   labs(x = "Year", y = "CO2 Emissions (Mt)", 
-       title = "Emissions Reduction Scenarios", 
+       title = "CO2 Emissions Caps", 
        subtitle = "Scenarios as overall % reduction of 2010 electric sector CO2 emissions") +
   yt +
   x_disc +
@@ -523,7 +523,7 @@ cost60 <- elc_long %>% filter(costred == "60" & !emred %in% c("30", "80"))
 cost70 <- elc_long %>% filter(costred == "70" & !emred %in% c("30", "80"))
 cost80 <- elc_long %>% filter(costred == "80" & !emred %in% c("30", "80"))
 
-cost40_facetcost <-  cost40 %>% 
+cost40_facetem <-  cost40 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
@@ -532,26 +532,26 @@ cost40_facetcost <-  cost40 %>%
   yt +
   x_disc
 
-cost40_facetcost_line_col <- cost40_facetcost +
+cost40_facetem_line_col <- cost40_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
   bottom
 
-cost40_facetcost_line_bw <- cost40_facetcost +
+cost40_facetem_line_bw <- cost40_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
   bottom
 
-cost40_facetcost_fill_col <- cost40_facetcost +
+cost40_facetem_fill_col <- cost40_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
   bottom
 
-cost40_facetcost_fill_bw <- cost40_facetcost +
+cost40_facetem_fill_bw <- cost40_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
   bottom
 
-cost50_facetcost <-  cost50 %>% 
+cost50_facetem <-  cost50 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
@@ -560,26 +560,26 @@ cost50_facetcost <-  cost50 %>%
   yt +
   x_disc
 
-cost50_facetcost_line_col <- cost50_facetcost +
+cost50_facetem_line_col <- cost50_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
   bottom
 
-cost50_facetcost_line_bw <- cost50_facetcost +
+cost50_facetem_line_bw <- cost50_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
   bottom
 
-cost50_facetcost_fill_col <- cost50_facetcost +
+cost50_facetem_fill_col <- cost50_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
   bottom
 
-cost50_facetcost_fill_bw <- cost50_facetcost +
+cost50_facetem_fill_bw <- cost50_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
   bottom
 
-cost60_facetcost <-  cost60 %>% 
+cost60_facetem <-  cost60 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
@@ -588,26 +588,26 @@ cost60_facetcost <-  cost60 %>%
   yt +
   x_disc
 
-cost60_facetcost_line_col <- cost60_facetcost +
+cost60_facetem_line_col <- cost60_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
   bottom
 
-cost60_facetcost_line_bw <- cost60_facetcost +
+cost60_facetem_line_bw <- cost60_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
   bottom
 
-cost60_facetcost_fill_col <- cost60_facetcost +
+cost60_facetem_fill_col <- cost60_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
   bottom
 
-cost60_facetcost_fill_bw <- cost60_facetcost +
+cost60_facetem_fill_bw <- cost60_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
   bottom
 
-cost70_facetcost <-  cost70 %>% 
+cost70_facetem <-  cost70 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
@@ -616,26 +616,26 @@ cost70_facetcost <-  cost70 %>%
   yt +
   x_disc
 
-cost70_facetcost_line_col <- cost70_facetcost +
+cost70_facetem_line_col <- cost70_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
   bottom
 
-cost70_facetcost_line_bw <- cost70_facetcost +
+cost70_facetem_line_bw <- cost70_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
   bottom
 
-cost70_facetcost_fill_col <- cost70_facetcost +
+cost70_facetem_fill_col <- cost70_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
   bottom
 
-cost70_facetcost_fill_bw <- cost70_facetcost +
+cost70_facetem_fill_bw <- cost70_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
   bottom
 
-cost80_facetcost <-  cost80 %>% 
+cost80_facetem <-  cost80 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
@@ -644,42 +644,45 @@ cost80_facetcost <-  cost80 %>%
   yt +
   x_disc
 
-cost80_facetcost_line_col <- cost80_facetcost +
+cost80_facetem_line_col <- cost80_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
   bottom
 
-cost80_facetcost_line_bw <- cost80_facetcost +
+cost80_facetem_line_bw <- cost80_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
   bottom
 
-cost80_facetcost_fill_col <- cost80_facetcost +
+cost80_facetem_fill_col <- cost80_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
   bottom
 
-cost80_facetcost_fill_bw <- cost80_facetcost +
+cost80_facetem_fill_bw <- cost80_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
   bottom
 
 ## ~ Heat Maps ----
 
-osw <- elc_long %>% filter(Year == "2050" & Process == "Offshore Wind")
-wnd <- elc_long %>% filter(Year == "2050" & Process == "Terrestrial Wind")
-sol <- elc_long %>% filter(Year == "2050" & Process == "Solar")
-coal <- elc_long %>% filter(Year == "2050" & Process == "Coal")
-nga <- elc_long %>% filter(Year == "2050" & Process == "Natural Gas")
-nuk <- elc_long %>% filter(Year == "2050" & Process == "Nuclear")
-hyd <- elc_long %>% filter(Year == "2050" & Process == "Hydro")
+osw <- elc_long %>% filter(Year == "2050" & Process == "Offshore Wind" & costred != "20")
+wnd <- elc_long %>% filter(Year == "2050" & Process == "Terrestrial Wind" & costred != "20")
+sol <- elc_long %>% filter(Year == "2050" & Process == "Solar" & costred != "20")
+coal <- elc_long %>% filter(Year == "2050" & Process == "Coal" & costred != "20")
+nga <- elc_long %>% filter(Year == "2050" & Process == "Natural Gas" & costred != "20")
+nuk <- elc_long %>% filter(Year == "2050" & Process == "Nuclear" & costred != "20")
+hyd <- elc_long %>% filter(Year == "2050" & Process == "Hydro" & costred != "20")
+ccs <- elc_long %>% filter(Year == "2050" & Process == "Coal CCS" & costred != "20") %>%
+  replace_with_na(replace = list(VAR_FOut = 0))
 
-osw_grid_heatmap <- grid.heatmap.col(osw, "Offshore Wind Electricity Output: 2050")
-wnd_grid_heatmap <- grid.heatmap.col(wnd, "Terrestrial Wind Electricity Output: 2050")
-sol_grid_heatmap <- grid.heatmap.col(sol, "Solar Electricity Output: 2050")
-coal_grid_heatmap <- grid.heatmap.col(coal, "Coal Electricity Output: 2050")
-nga_grid_heatmap <- grid.heatmap.col(nga, "Natural Gas Electricity Output: 2050")
-nuk_grid_heatmap <- grid.heatmap.col(nuk, "Nuclear Electricity Output: 2050")
-hyd_grid_heatmap <- grid.heatmap.col(hyd, "Hydropower Electricity Output: 2050")
+osw_grid_heatmap_col <- grid.heatmap.col(osw, "Offshore Wind Electricity Output: 2050")
+wnd_grid_heatmap_col <- grid.heatmap.col(wnd, "Terrestrial Wind Electricity Output: 2050")
+sol_grid_heatmap_col <- grid.heatmap.col(sol, "Solar Electricity Output: 2050")
+coal_grid_heatmap_col <- grid.heatmap.col(coal, "Coal Electricity Output: 2050")
+nga_grid_heatmap_col <- grid.heatmap.col(nga, "Natural Gas Electricity Output: 2050")
+nuk_grid_heatmap_col <- grid.heatmap.col(nuk, "Nuclear Electricity Output: 2050")
+hyd_grid_heatmap_col <- grid.heatmap.col(hyd, "Hydropower Electricity Output: 2050")
+ccs_grid_heatmap_col <- grid.heatmap.col(ccs, "Coal with CCS Electricity Output: 2050")
 
 osw_grid_heatmap_bw <- grid.heatmap.bw(osw, "Offshore Wind Electricity Output: 2050")
 wnd_grid_heatmap_bw <- grid.heatmap.bw(wnd, "Terrestrial Wind Electricity Output: 2050")
@@ -688,8 +691,9 @@ coal_grid_heatmap_bw <- grid.heatmap.bw(coal, "Coal Electricity Output: 2050")
 nga_grid_heatmap_bw <- grid.heatmap.bw(nga, "Natural Gas Electricity Output: 2050")
 nuk_grid_heatmap_bw <- grid.heatmap.bw(nuk, "Nuclear Electricity Output: 2050")
 hyd_grid_heatmap_bw <- grid.heatmap.bw(hyd, "Hydropower Electricity Output: 2050")
+ccs_grid_heatmap_bw <- grid.heatmap.bw(ccs, "Coal with CCS Electricity Output: 2050")
 
-## ~ Retirements ----
+## ~ Retirements and Additions----
 
 base_retire <- retire_long %>%
   filter(emred == "BAU" & costred == "20") %>%
@@ -1034,6 +1038,8 @@ enduse %>% filter(Year == "2050") %>% filter(costred != "20") %>%
   facet_grid(~Sector, scales = "free")
 
 ## Save Plots ----
+
+# plots <- 
 
 # lapply(plots,function(x){ggsave(file=paste(x,"pdf",sep="."),get(x))})
 # https://stackoverflow.com/questions/20500706/saving-multiple-ggplots-from-ls-into-one-and-separate-files-in-r
