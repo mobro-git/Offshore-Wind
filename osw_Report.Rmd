@@ -3,6 +3,10 @@ title: "Offshore Wind Results and Analysis"
 author: "Morgan Browning"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
+  html_document:
+    number_sections: yes
+    toc: yes
+    keep_md: TRUE
   pdf_document:
     number_sections: yes
     toc: yes
@@ -32,8 +36,8 @@ source("osw_Scripts/osw_results.R")
 ```{r colorcalls}
 # Creates toggles for selecting the color scale of graphics to be printed [color, black & white, gray]. More than one may be selected.
 color <- 1
-bw <- 1
-gray <- 1
+bw <- 0
+gray <- 0
 ```
 
 # Scenarios
