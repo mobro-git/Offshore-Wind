@@ -14,7 +14,7 @@ output:
 
 This document functions as an all-inclusive working directory for synthesis and graphical analysis of the results from the offshore wind research of Morgan Browning, an ORISE Fellow at the U.S. Environmental Protection Agency's Office of Research and Development. This document and its contents are not finalized nor are intended for publication. 
 
-It is annotated primarily for ease of reproducability. Graphs are provided with many variations to meet criteria of different publication and presentation platforms.
+It is annotated primarily for ease of reproducability and a general understanding of the results. Graphs are provided with many variations to meet criteria of different publication and presentation platforms.
 
 # Setup
 
@@ -56,13 +56,15 @@ if(bw > 0) emissions_bw
 
 # LCOE
 
-EIA's AEO 2019 provides the following values for the estimated levelized cost of electricity (capacity-weighted average) for new generation resources entering service in 2023 (2018 $/MWh). Offshore wind has the highest total LCOE by a large margin. The second most expensive technology is biomass. 
+EIA's AEO 2019 provides the following values for the estimated levelized cost of electricity (capacity-weighted average) for new generation resources entering service in 2023 (2018 $/MWh). Offshore wind has the highest total LCOE by a large margin. The second most expensive technology is biomass. The AEO LCOE was used in the calculation of offshore wind costs for the above cost curves, but LCOE is not directly used in the model.
 
 ```{r}
 lcoe_table
 ```
 
 # Offshore Wind
+
+As offshore wind is the primary technology being assessed in this research, we have explored many facets of offshore wind buildout. These facets are explored below, both at a regional and national cumulative level.
 
 ## Capacity Buildout
 
