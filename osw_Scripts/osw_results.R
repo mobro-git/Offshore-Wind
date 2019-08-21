@@ -691,7 +691,7 @@ coal_grid_heatmap_bw <- grid.heatmap.bw(coal, "Coal Electricity Output: 2050")
 nga_grid_heatmap_bw <- grid.heatmap.bw(nga, "Natural Gas Electricity Output: 2050")
 nuk_grid_heatmap_bw <- grid.heatmap.bw(nuk, "Nuclear Electricity Output: 2050")
 hyd_grid_heatmap_bw <- grid.heatmap.bw(hyd, "Hydropower Electricity Output: 2050")
-ccs_grid_heatmap_bw <- grid.heatmap.bw(ccs, "Coal with CCS Electricity Output: 2050")
+ccs_grid_heatmap_bw <- grid.heatmap.bw(ccs, "Coal with CCS Retrofits Electricity Output: 2050")
 
 ## ~ Retirements and Additions----
 

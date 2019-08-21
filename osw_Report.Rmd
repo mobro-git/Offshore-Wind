@@ -365,6 +365,8 @@ if(bw > 0) ccs_grid_heatmap_bw
 
 ## Retirements and Additions
 
+Basecase year-on-year changes in the grid mix. Shows the modeled fluctuations in generation. All following quantifications of grid mix changes are as compared to these changes in the basecase.
+
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(color > 0) base_retire_fill_col
 if(bw > 0) base_retire_fill_bw
