@@ -216,6 +216,66 @@ newcap_allreg_bw_free <- do.call(lineplot.region, c(ncap.reg.bw.list,list(scale=
   theme(axis.text.y = element_text(face = "bold")) +
   labs(caption = "*Capacity scales are not fixed")
 
+
+## ~ Maps ----
+r1 <- c("maine","new hampshire","vermont","massachusetts","rhode island","connecticut")
+r2 <- c("new york","pennsylvania","new jersey")
+r3 <- c("wisconsin", "michigan", "ohio", "indiana", "illinois")
+r4 <- c("north dakota","south dakota","nebraska", "kansas", "iowa","minnesota","missouri")
+r5 <- c("west virginia","maryland","delaware","virginia","north carolina","south carolina",
+        "georgia","florida","district of columbia")
+r6 <- c("kentucky","tennessee","alabama","mississippi")
+r7 <- c("louisiana","arkansas","oklahoma","texas")
+r8 <- c("montana","wyoming","idaho","colorado","nevada","utah","arizona","new mexico")
+r9 <-c("washington","oregon","california")
+
+us <-map_data("state") %>%
+  mutate(censusRegion = case_when(
+    region %in% r1 ~ "R1",
+    region %in% r2 ~ "R2",
+    region %in% r3 ~ "R3",
+    region %in% r4 ~ "R4",
+    region %in% r5 ~ "R5",
+    region %in% r6 ~ "R6",
+    region %in% r7 ~ "R7",
+    region %in% r8 ~ "R8",
+    region %in% r9 ~ "R9"
+  )) %>%
+  mutate(avgOSW = case_when(
+    region %in% r1 ~ 29.9,
+    region %in% r2 ~ 73.2,
+    region %in% r3 ~ 110.4,
+    region %in% r4 ~ 0.7,
+    region %in% r5 ~ 169.7,
+    region %in% r6 ~ 9.6,
+    region %in% r7 ~ 97.0,
+    region %in% r8 ~ 0.0,
+    region %in% r9 ~ 93.4
+  ))
+
+
+r1map <- subset(us, region %in% r1)
+r2map <- subset(us, region %in% r2)
+r3map <- subset(us, region %in% r3)
+r4map <- subset(us, region %in% r4)
+r5map <- subset(us, region %in% r5)
+r6map <- subset(us, region %in% r6)
+r7map <- subset(us, region %in% r7)
+r8map <- subset(us, region %in% r8)
+r9map <- subset(us, region %in% r9)
+
+regOSW_map_col <- ggplot() + 
+  geom_polygon(data = us, aes(x = long, y = lat, group = group, fill = avgOSW),
+               color = "white") +
+  coord_fixed(1.3) +
+  labs(title = "Average Offshore Wind Capacity",
+       fill = "GW") +
+  theme_bw() +
+  noaxes
+
+regOSW_map_bw <- regOSW_map_col + gray_fill_cont
+
+
 ## ~ Tables ----
 
 cap_region_table <- osw_varcap_regiontotals %>% 

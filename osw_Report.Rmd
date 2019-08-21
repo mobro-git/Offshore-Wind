@@ -3,13 +3,13 @@ title: "Offshore Wind Results and Analysis"
 author: "Morgan Browning"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
   html_document:
     number_sections: yes
     toc: yes
     keep_md: TRUE
-  pdf_document:
-    number_sections: yes
-    toc: yes
 ---
 
 ***
@@ -18,11 +18,13 @@ output:
 
 This document functions as an all-inclusive working directory for synthesis and graphical analysis of the results from the offshore wind research of Morgan Browning, an ORISE Fellow at the U.S. Environmental Protection Agency's Office of Research and Development. This document and its contents are not finalized nor are intended for publication. 
 
-It is annotated primarily for ease of reproducability and a general understanding of the results. Graphs are provided with many variations to meet criteria of different publication and presentation platforms.
+It is annotated primarily for ease of reproducability and a general understanding of the results. 
 
 # Setup
 
 Three scripts are loaded into this markdown document to allow for analysis of the data. The setup script loads the library, creates generalized functions, and creates global variables for color scales and factors. The data script loads the excel spreadsheet with all of the results data and performs the majority of data munging. The results script creates charts, graphs, and tables. This report functions as the annotated synthesis of the data and results.
+
+Graphs are provided with many variations to meet criteria of different publication and presentation platforms. Formats may be chosen using the `colorcalls` toggles
 
 ```{r setup, include = FALSE}
 # Sets global knit options and loads the setup and data import scripts for the project. Code is hidden for ease of reading. Was running into issues when cacheing results, so have set cache to false. Time to knit <5 minutes, so it does not cause much of an issue. Will consider cacheing in the future if the issue is resolved.
@@ -44,18 +46,21 @@ gray <- 0
 
 The nested parametric sensitivity analysis was built on combinations of two sets of scenarios:
 
-1. Electric sector CO~2~ emissions caps, as a linear decrease to a given % decrease from 2010 emissions by 2050
+1. Electric sector CO~2~ emissions caps, as a linear decrease to a given % decrease from 2010 emissions by 2050  
+  + Business and usual emissions represent approximately a 20% reduction in CO~2~ emissions
 
-2. Cost reductions of offshore wind, as a linear decrease to a given % decrease from 2010 costs by 2035, then level costs to 2050
+2. Cost reductions of offshore wind, as a linear decrease to a given % decrease from 2010 costs by 2035, then level costs to 2050  
+  + A 20% cost reduction is used as the base case, assuming very conservative technological advancement and little benefit of economies of scale
+  + Cost curves are set to resolve by 2035 as estimated based on NREL LCOE cost projections for offshore wind
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cost_col
 if(color > 0) emissions_col
+if(color > 0) cost_col
 ```
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cost_bw
 if(bw > 0) emissions_bw
+if(bw > 0) cost_bw
 ```
 
 # LCOE
@@ -101,7 +106,7 @@ cap_2050_table
 
 ## Output
 
-Total offshore wind electricity output across all nine census regions, by cost and emissions reduction scenario.
+Total offshore wind electricity output across all nine census regions, by cost and emissions reduction scenario. Results show almost identical trajectories for total capacity and output due to the non-dispatchable quality of offshore wind. All generated electricity is utilized in the modeled scenarios.
 
 ```{r}
 if(color > 0) output_col_side
@@ -114,44 +119,44 @@ output_2050_table
 
 ## Regions
 
-Cumulative and new addition offshore wind capacity by region.
+Cumulative and new addition offshore wind capacity by region. Regions are listed from least to highest electricity output.
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cap_reg4_col
+if(color > 0) newcap_reg4_col
+if(color > 0) cap_reg6_col
+if(color > 0) newcap_reg6_col
 if(color > 0) cap_reg1_col
 if(color > 0) newcap_reg1_col
 if(color > 0) cap_reg2_col
 if(color > 0) newcap_reg2_col
-if(color > 0) cap_reg3_col
-if(color > 0) newcap_reg3_col
-if(color > 0) cap_reg4_col
-if(color > 0) newcap_reg4_col
-if(color > 0) cap_reg5_col
-if(color > 0) newcap_reg5_col
-if(color > 0) cap_reg6_col
-if(color > 0) newcap_reg6_col
-if(color > 0) cap_reg7_col
-if(color > 0) newcap_reg7_col
 if(color > 0) cap_reg9_col
 if(color > 0) newcap_reg9_col
+if(color > 0) cap_reg7_col
+if(color > 0) newcap_reg7_col
+if(color > 0) cap_reg3_col
+if(color > 0) newcap_reg3_col
+if(color > 0) cap_reg5_col
+if(color > 0) newcap_reg5_col
 ```
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cap_reg4_bw
+if(bw > 0) newcap_reg4_bw
+if(bw > 0) cap_reg6_bw
+if(bw > 0) newcap_reg6_bw
 if(bw > 0) cap_reg1_bw
 if(bw > 0) newcap_reg1_bw
 if(bw > 0) cap_reg2_bw
 if(bw > 0) newcap_reg2_bw
-if(bw > 0) cap_reg3_bw
-if(bw > 0) newcap_reg3_bw
-if(bw > 0) cap_reg4_bw
-if(bw > 0) newcap_reg4_bw
-if(bw > 0) cap_reg5_bw
-if(bw > 0) newcap_reg5_bw
-if(bw > 0) cap_reg6_bw
-if(bw > 0) newcap_reg6_bw
-if(bw > 0) cap_reg7_bw
-if(bw > 0) newcap_reg7_bw
 if(bw > 0) cap_reg9_bw
 if(bw > 0) newcap_reg9_bw
+if(bw > 0) cap_reg7_bw
+if(bw > 0) newcap_reg7_bw
+if(bw > 0) cap_reg3_bw
+if(bw > 0) newcap_reg3_bw
+if(bw > 0) cap_reg5_bw
+if(bw > 0) newcap_reg5_bw
 ```
 
 Cumulative and new addition offshore wind capacity by region, emissions reduction, and cost reduction.
@@ -171,6 +176,13 @@ if(bw > 0) newcap_allreg_bw_free
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
 cap_region_table
 output_region_table
+```
+
+Map of average total capacity 
+
+```{r}
+if(color > 0) regOSW_map_col
+if(bw > 0) regOSW_map_bw
 ```
 
 # Grid Mix
@@ -381,10 +393,10 @@ if(bw > 0) base_retire_fill_bw
 
 ```
 
-# TEST
+<!-- # TEST -->
 
-```{r}
-grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, layout_matrix = rbind(c(1,1,1),c(2,3,4)))
-grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, ncol = 2)
-```
+<!-- ```{r} -->
+<!-- grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, layout_matrix = rbind(c(1,1,1),c(2,3,4))) -->
+<!-- grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, ncol = 2) -->
+<!-- ``` -->
 

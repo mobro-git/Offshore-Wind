@@ -18,6 +18,11 @@ library(plotly)
 library(flexdashboard)
 library(DT)
 library(naniar)
+library(maps)
+library(mapdata)
+library(usmap)
+library(ggmap)
+library(maptools)
 
 
 ## ----Functions-------------------------------------------
@@ -154,6 +159,15 @@ st <- theme_bw() +
             axis.text.y = element_text(size = 9))
 
 nolegend <- guides(color = FALSE, linetype = FALSE, fill = FALSE)
+
+noaxes <- theme(
+  axis.text = element_blank(),
+  axis.line = element_blank(),
+  axis.ticks = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.title = element_blank()
+)
 
 x_cont <- scale_x_continuous(breaks = seq(2020,2050, by = 10), expand = c(0,1))
 x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
