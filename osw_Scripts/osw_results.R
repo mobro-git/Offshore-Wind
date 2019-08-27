@@ -55,8 +55,8 @@ lcoe_table <- lcoe %>%
   column_spec(1, width = "2.95 cm") %>%
   column_spec(2:8, width = "1.2 cm") %>%
   column_spec(9, width = "1.5 cm") %>%
-  pack_rows("Dispatchable technologies", 1, 5) %>%
-  pack_rows("Non-dispatchable technologies", 6, 9) %>%
+  group_rows("Dispatchable technologies", 1, 5) %>%
+  group_rows("Non-dispatchable technologies", 6, 9) %>%
   footnote(general = "U.S. EIA Annual Energy Outlook 2019")
 
 ## Offshore Wind ----
@@ -753,6 +753,9 @@ nuk_grid_heatmap_bw <- grid.heatmap.bw(nuk, "Nuclear Electricity Output: 2050")
 hyd_grid_heatmap_bw <- grid.heatmap.bw(hyd, "Hydropower Electricity Output: 2050")
 ccs_grid_heatmap_bw <- grid.heatmap.bw(ccs, "Coal with CCS Retrofits Electricity Output: 2050")
 
+heatmap_col <- grid.heatmap.col(elc_long, "Grid Mix Production by Process")
+heatmap_bw <- grid.heatmap.bw(elc_long, "Grid Mix Production by Process")
+
 ## ~ Retirements and Additions----
 
 base_retire <- retire_long %>%
@@ -774,6 +777,20 @@ base_retire_fill_bw <- base_retire +
            stat = "identity", position = "stack", width = 0.9, colour = "black") +
   gray_fill +
   zero
+
+prod_dif_facet_col <- prod.dif.col(
+  (prod_dif %>% 
+     filter(costred %in% c("40", "50", "70")) %>% 
+     filter(emred %in% c("BAU", "40", "70"))),
+  "Changes in Grid Mix over Baseline") + 
+  facet_grid(costred~emred)
+
+prod_dif_facet_bw <- prod.dif.bw(
+  (prod_dif %>% 
+     filter(costred %in% c("40", "50", "70")) %>% 
+     filter(emred %in% c("BAU", "40", "70"))),
+  "Changes in Grid Mix over Baseline") + 
+  facet_grid(costred~emred)
 
 prod_dif %>%
   filter(emred == "BAU" & costred == "40") %>%

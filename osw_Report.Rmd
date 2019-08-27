@@ -354,6 +354,10 @@ if(bw > 0) cost80_facetem_fill_bw
 
 ## Heatmaps
 
+```{r}
+if(color > 0) heatmap_col
+if(bw > 0) heatmap_bw
+```
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(color > 0) osw_grid_heatmap_col
 if(color > 0) wnd_grid_heatmap_col
@@ -384,13 +388,11 @@ if(color > 0) base_retire_fill_col
 if(bw > 0) base_retire_fill_bw
 ```
 
-## Grid Mix Changes Over Baseline
+## Changes Over Baseline
 
-```{r, out.width=c('50%', '50%'), fig.show='hold'}
-
-```
-```{r, out.width=c('50%', '50%'), fig.show='hold'}
-
+```{r}
+if (color > 0) prod_dif_facet_col
+if(bw > 0) 
 ```
 
 <!-- # TEST -->

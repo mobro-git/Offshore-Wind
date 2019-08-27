@@ -9,7 +9,7 @@ library(forcats)
 library(scales)
 library(ggrepel)
 library(here)
-library(ggtextures)
+# library(ggtextures)
 library(tibble)
 library(gridExtra)
 library(ggpubr)
@@ -136,6 +136,26 @@ grid.heatmap.bw <- function(data, title) {
          fill = "Electricity\nProduced\n(PJ)") +
     st +
     gray_fill_cont
+}
+
+prod.dif.col <- function(data, title) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+    osw_fill +
+    labs(x = "Year", y = "Change in Electricity Production (PJ)",
+         title = title) +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+    zero
+}
+
+prod.dif.bw <- function(data, title) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+    gray_fill +
+    labs(x = "Year", y = "Change in Electricity Production (PJ)",
+         title = title) +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+    zero
 }
 
 ## ----Factors-----------------------------------------------

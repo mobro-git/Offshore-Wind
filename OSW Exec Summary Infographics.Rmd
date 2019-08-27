@@ -79,7 +79,11 @@ ggplotly(newcap_col_top)
 cap_2050_table
 ```
 
+## Average Regional Installed Capacity
 
+```{r}
+ggplotly(regOSW_map_col)
+```
 
 
 
