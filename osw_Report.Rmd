@@ -383,18 +383,53 @@ if(bw > 0) ccs_grid_heatmap_bw
 
 Basecase year-on-year changes in the grid mix. Shows the modeled fluctuations in generation. All following quantifications of grid mix changes are as compared to these changes in the basecase.
 
-```{r, out.width=c('50%', '50%'), fig.show='hold'}
+```{r}
 if(color > 0) base_retire_fill_col
 if(bw > 0) base_retire_fill_bw
 ```
 
 ## Changes Over Baseline
 
+Summary Graph 
+
 ```{r}
-if (color > 0) prod_dif_facet_col
-if(bw > 0) 
+if (color > 0) prod_dif_col
+if(bw > 0) prod_dif_bw
 ```
 
+By Emissions Reduction %
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) prod_dif_bau_col
+if(color > 0) prod_dif_e30_col
+if(color > 0) prod_dif_e40_col
+if(color > 0) prod_dif_e50_col
+if(color > 0) prod_dif_e60_col
+if(color > 0) prod_dif_e70_col
+if(color > 0) prod_dif_e80_col
+if(bw > 0) prod_dif_bau_bw
+if(bw > 0) prod_dif_e30_bw
+if(bw > 0) prod_dif_e40_bw
+if(bw > 0) prod_dif_e50_bw
+if(bw > 0) prod_dif_e60_bw
+if(bw > 0) prod_dif_e70_bw
+if(bw > 0) prod_dif_e80_bw
+```
+
+By Cost Reduction %
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) prod_dif_c40_col
+if(color > 0) prod_dif_c50_col
+if(color > 0) prod_dif_c60_col
+if(color > 0) prod_dif_c70_col
+if(color > 0) prod_dif_c80_col
+if(bw > 0) prod_dif_c40_bw
+if(bw > 0) prod_dif_c50_bw
+if(bw > 0) prod_dif_c60_bw
+if(bw > 0) prod_dif_c70_bw
+if(bw > 0) prod_dif_c80_bw
+```
 <!-- # TEST -->
 
 <!-- ```{r} -->

@@ -30,6 +30,14 @@ osw <- as.data.frame(data_global$`Offshore Wind`) %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred))
 
+reg.names <- structure(list(lat = c(447343.4,27443.77,-300000,-87448.23,-904151.5,-1060878,
+                                    -1348881,-536203.6,-118611,-2118611,-2094320), 
+                            long = c(2351032,1906626,1100017,85286,1729611,1150017,
+                                     300240.27,-1018340,-2067140,-350821.4,-1167859), 
+                            region = c("I", "II", "III", "IV", "V", "VI", 
+                                       "VII", "VIII", "IX", "IX", "IX")), 
+                       row.names = c(NA, -11L), class = "data.frame")
+
 
 ## ----~osw varcap----------------------------------------------------------
 osw_varcap <- osw %>% 

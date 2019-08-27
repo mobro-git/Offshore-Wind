@@ -54,8 +54,15 @@ ggplotly(emissions_col)
  
 ## Data {.tabset}
 
+### Offshore Wind
+
 ```{r}
 datatable(head(osw, 100), filter = 'top', options = list(pageLength = 20, autoWidth = TRUE))
+```
+
+### Grid Mix
+
+```{r}
 datatable(head(elc_long_reg, 100), filter = 'top', options = list(pageLength = 20, autoWidth = TRUE))
 ```
 
@@ -73,13 +80,15 @@ ggplotly(cap_col_side)
 ggplotly(newcap_col_top)
 ```
 
-## 2050 Installed Capacity
+## Installed Capacity {.tabset}
+
+### 2050 Capacity
 
 ```{r}
 cap_2050_table
 ```
 
-## Average Regional Installed Capacity
+### Average Regional Installed Capacity
 
 ```{r}
 ggplotly(regOSW_map_col)

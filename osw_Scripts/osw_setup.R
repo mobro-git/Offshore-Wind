@@ -23,6 +23,7 @@ library(mapdata)
 library(usmap)
 library(ggmap)
 library(maptools)
+library(sf)
 
 
 ## ----Functions-------------------------------------------
@@ -145,7 +146,9 @@ prod.dif.col <- function(data, title) {
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
          title = title) +
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-    zero
+    zero +
+    yt +
+    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
 }
 
 prod.dif.bw <- function(data, title) {
@@ -155,7 +158,57 @@ prod.dif.bw <- function(data, title) {
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
          title = title) +
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-    zero
+    zero +
+    yt + 
+    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
+}
+
+prod.dif.em.col <- function(data, title) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+    osw_fill +
+    labs(x = "Year", y = "Change in Electricity Production (PJ)",
+         title = title) +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+    zero +
+    yt +
+    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab), scales = "free_y")
+}
+
+prod.dif.em.bw <- function(data, title) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+    gray_fill +
+    labs(x = "Year", y = "Change in Electricity Production (PJ)",
+         title = title) +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+    zero +
+    yt + 
+    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
+}
+
+prod.dif.cost.col <- function(data, title) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+    osw_fill +
+    labs(x = "Year", y = "Change in Electricity Production (PJ)",
+         title = title) +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+    zero +
+    yt +
+    facet_grid(emred~costred, labeller = labeller(emred = elab, costred = clab), scales = "free_y")
+}
+
+prod.dif.cost.bw <- function(data, title) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+    gray_fill +
+    labs(x = "Year", y = "Change in Electricity Production (PJ)",
+         title = title) +
+    theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
+    zero +
+    yt +
+    facet_grid(emred~costred, labeller = labeller(emred = elab, costred = clab), scales = "free_y")
 }
 
 ## ----Factors-----------------------------------------------
@@ -164,6 +217,9 @@ levels_emred <- c("BAU", "30", "40", "50", "60", "70", "80")
 levels_emissions <- c("CH4", "PM 2.5", "SO2", "NOx", "CO2")
 levels_sector <- c("Transportation", "Industrial", "Commercial", "Residential")
 
+## ----Labels-----------------------
+elab <- c("BAU" = "BAU", "30" = "E30", "40" = "E40",  "50" = "E50", "60" = "E60", "70" = "E70", "80" = "E80")
+clab <- c("40" = "C40",  "50" = "C50", "60" = "C60", "70" = "C70", "80" = "C80")
 
 ## ----Themes and Scales-----------------------------------------------
 bottom <- theme(legend.position = "bottom")

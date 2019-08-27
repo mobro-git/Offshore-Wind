@@ -218,56 +218,50 @@ newcap_allreg_bw_free <- do.call(lineplot.region, c(ncap.reg.bw.list,list(scale=
 
 
 ## ~ Maps ----
-r1 <- c("maine","new hampshire","vermont","massachusetts","rhode island","connecticut")
-r2 <- c("new york","pennsylvania","new jersey")
-r3 <- c("wisconsin", "michigan", "ohio", "indiana", "illinois")
-r4 <- c("north dakota","south dakota","nebraska", "kansas", "iowa","minnesota","missouri")
-r5 <- c("west virginia","maryland","delaware","virginia","north carolina","south carolina",
-        "georgia","florida","district of columbia")
-r6 <- c("kentucky","tennessee","alabama","mississippi")
-r7 <- c("louisiana","arkansas","oklahoma","texas")
-r8 <- c("montana","wyoming","idaho","colorado","nevada","utah","arizona","new mexico")
-r9 <-c("washington","oregon","california")
+r1 <- c("ME","NH","VT","MA","RI","CT")
+r2 <- c("NY","PA","NJ")
+r3 <- c("WI", "MI", "OH", "IN", "IL")
+r4 <- c("ND","SD","NE", "KS", "IA","MN","MO")
+r5 <- c("WV","MD","DE","VA","NC","SC",
+        "GA","FL","DC")
+r6 <- c("KY","TN","AL","MS")
+r7 <- c("LA","AR","OK","TX")
+r8 <- c("MT","WY","ID","CO","NV","UT","AZ","NM")
+r9 <-c("WA","OR","CA","HI","AK")
 
-us <-map_data("state") %>%
+state_map <- us_map(regions = "states") %>%
   mutate(censusRegion = case_when(
-    region %in% r1 ~ "R1",
-    region %in% r2 ~ "R2",
-    region %in% r3 ~ "R3",
-    region %in% r4 ~ "R4",
-    region %in% r5 ~ "R5",
-    region %in% r6 ~ "R6",
-    region %in% r7 ~ "R7",
-    region %in% r8 ~ "R8",
-    region %in% r9 ~ "R9"
+    abbr %in% r1 ~ "R1",
+    abbr %in% r2 ~ "R2",
+    abbr %in% r3 ~ "R3",
+    abbr %in% r4 ~ "R4",
+    abbr %in% r5 ~ "R5",
+    abbr %in% r6 ~ "R6",
+    abbr %in% r7 ~ "R7",
+    abbr %in% r8 ~ "R8",
+    abbr %in% r9 ~ "R9"
   )) %>%
   mutate(avgOSW = case_when(
-    region %in% r1 ~ 29.9,
-    region %in% r2 ~ 73.2,
-    region %in% r3 ~ 110.4,
-    region %in% r4 ~ 0.7,
-    region %in% r5 ~ 169.7,
-    region %in% r6 ~ 9.6,
-    region %in% r7 ~ 97.0,
-    region %in% r8 ~ 0.0,
-    region %in% r9 ~ 93.4
+    abbr %in% r1 ~ 29.9,
+    abbr %in% r2 ~ 73.2,
+    abbr %in% r3 ~ 110.4,
+    abbr %in% r4 ~ 0.7,
+    abbr %in% r5 ~ 169.7,
+    abbr %in% r6 ~ 9.6,
+    abbr %in% r7 ~ 97.0,
+    abbr %in% r8 ~ 0.0,
+    abbr %in% r9 ~ 93.4
   ))
 
-
-r1map <- subset(us, region %in% r1)
-r2map <- subset(us, region %in% r2)
-r3map <- subset(us, region %in% r3)
-r4map <- subset(us, region %in% r4)
-r5map <- subset(us, region %in% r5)
-r6map <- subset(us, region %in% r6)
-r7map <- subset(us, region %in% r7)
-r8map <- subset(us, region %in% r8)
-r9map <- subset(us, region %in% r9)
+r8map <- subset(state_map, abbr %in% r8)
 
 regOSW_map_col <- ggplot() + 
-  geom_polygon(data = us, aes(x = long, y = lat, group = group, fill = avgOSW),
+  geom_polygon(data = state_map, aes(x = long, y = lat, group = group, fill = avgOSW),
                color = "white") +
-  coord_fixed(1.3) +
+  geom_polygon(data = r8map, aes(x = long, y = lat, group = group),
+               color = "gray", fill = "white") +
+  geom_label(data = reg.names, aes(x = long, y = lat, label = region), size = 4) +
+  coord_fixed(1.2) +
   labs(title = "Average Offshore Wind Capacity",
        fill = "GW") +
   theme_bw() +
@@ -758,6 +752,8 @@ heatmap_bw <- grid.heatmap.bw(elc_long, "Grid Mix Production by Process")
 
 ## ~ Retirements and Additions----
 
+# baseline 
+
 base_retire <- retire_long %>%
   filter(emred == "BAU" & costred == "20") %>%
   filter(Process != "Other") %>%
@@ -778,53 +774,119 @@ base_retire_fill_bw <- base_retire +
   gray_fill +
   zero
 
-prod_dif_facet_col <- prod.dif.col(
+# diff summary 
+
+prod_dif_col <- prod.dif.col(
   (prod_dif %>% 
      filter(costred %in% c("40", "50", "70")) %>% 
      filter(emred %in% c("BAU", "40", "70"))),
-  "Changes in Grid Mix over Baseline") + 
-  facet_grid(costred~emred)
+  "Changes in Grid Mix over Baseline")
 
-prod_dif_facet_bw <- prod.dif.bw(
+prod_dif_bw <- prod.dif.bw(
   (prod_dif %>% 
      filter(costred %in% c("40", "50", "70")) %>% 
      filter(emred %in% c("BAU", "40", "70"))),
-  "Changes in Grid Mix over Baseline") + 
-  facet_grid(costred~emred)
+  "Changes in Grid Mix over Baseline") 
 
-prod_dif %>%
-  filter(emred == "BAU" & costred == "40") %>%
-  ggplot(aes(x = Year, y = diff, fill = Process)) +
-  geom_bar(stat = "identity", position = "stack", width = 0.9) +
-  osw_fill +
-  labs(x = "Year", y = "Change in Electricity Production (PJ)",
-       title = "Baseline Changes in Electricity Production") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  zero
+# diff by emissions
 
-prod_dif %>%
-  filter(emred == "40" & costred == "40") %>%
-  ggplot(aes(x = Year, y = diff, fill = Process)) +
-  geom_bar(stat = "identity", position = "stack", width = 0.9) +
-  scale_fill_manual(values = col_osw) +
-  labs(x = "Year", y = "Change in Electricity Production (PJ)",
-       title = "Baseline Changes in Electricity Production") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red")
+prod_dif_bau_col <- prod.dif.em.col(
+  (prod_dif %>% filter(emred == "BAU" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: BAU")
 
-prod_dif %>% 
-  filter(costred %in% c("40", "50", "70")) %>% 
-  filter(emred %in% c("BAU", "40", "70")) %>%
-  ggplot(aes(x = Year, y = diff, fill = Process)) +
-  geom_bar(stat = "identity", position = "stack", width = 0.9) +
-  scale_fill_manual(values = col_osw) +
-  labs(x = "Year", y = "Change in Electricity Production (PJ)",
-       title = "Baseline Changes in Electricity Production") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  facet_grid(costred~emred)
+prod_dif_bau_bw <- prod.dif.em.bw(
+  (prod_dif %>% filter(emred == "BAU" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: BAU")
 
+prod_dif_e30_col <- prod.dif.em.col(
+  (prod_dif %>% filter(emred == "30" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E30")
 
+prod_dif_e30_bw <- prod.dif.em.bw(
+  (prod_dif %>% filter(emred == "30" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E30")
+
+prod_dif_e40_col <- prod.dif.em.col(
+  (prod_dif %>% filter(emred == "40" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E40")
+
+prod_dif_e40_bw <- prod.dif.em.bw(
+  (prod_dif %>% filter(emred == "40" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E40")
+
+prod_dif_e50_col <- prod.dif.em.col(
+  (prod_dif %>% filter(emred == "50" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E50")
+
+prod_dif_e50_bw <- prod.dif.em.bw(
+  (prod_dif %>% filter(emred == "50" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E50")
+
+prod_dif_e60_col <- prod.dif.em.col(
+  (prod_dif %>% filter(emred == "60" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E60")
+
+prod_dif_e60_bw <- prod.dif.em.bw(
+  (prod_dif %>% filter(emred == "60" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E60")
+
+prod_dif_e70_col <- prod.dif.em.col(
+  (prod_dif %>% filter(emred == "70" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E70")
+
+prod_dif_e70_bw <- prod.dif.em.bw(
+  (prod_dif %>% filter(emred == "70" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E70")
+
+prod_dif_e80_col <- prod.dif.em.col(
+  (prod_dif %>% filter(emred == "80" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E80")
+
+prod_dif_e80_bw <- prod.dif.em.bw(
+  (prod_dif %>% filter(emred == "80" & costred %in% c("40", "50", "60", "70", "80"))),
+  "Changes in Grid Mix over Baseline: E80")
+
+# diff by costs
+
+prod_dif_c40_col <- prod.dif.cost.col(
+  (prod_dif %>% filter(costred == "40")),
+  "Changes in Grid Mix over Baseline: C40")
+
+prod_dif_c40_bw <- prod.dif.cost.bw(
+  (prod_dif %>% filter(costred == "40")),
+  "Changes in Grid Mix over Baseline: C40")
+
+prod_dif_c50_col <- prod.dif.cost.col(
+  (prod_dif %>% filter(costred == "50")),
+  "Changes in Grid Mix over Baseline: C50")
+
+prod_dif_c50_bw <- prod.dif.cost.bw(
+  (prod_dif %>% filter(costred == "50")),
+  "Changes in Grid Mix over Baseline: C50")
+
+prod_dif_c60_col <- prod.dif.cost.col(
+  (prod_dif %>% filter(costred == "60")),
+  "Changes in Grid Mix over Baseline: C60")
+
+prod_dif_c60_bw <- prod.dif.cost.bw(
+  (prod_dif %>% filter(costred == "60")),
+  "Changes in Grid Mix over Baseline: C60")
+
+prod_dif_c70_col <- prod.dif.cost.col(
+  (prod_dif %>% filter(costred == "70")),
+  "Changes in Grid Mix over Baseline: C70")
+
+prod_dif_c70_bw <- prod.dif.cost.bw(
+  (prod_dif %>% filter(costred == "70")),
+  "Changes in Grid Mix over Baseline: C70")
+
+prod_dif_c80_col <- prod.dif.cost.col(
+  (prod_dif %>% filter(costred == "80")),
+  "Changes in Grid Mix over Baseline: C80")
+
+prod_dif_c80_bw <- prod.dif.cost.bw(
+  (prod_dif %>% filter(costred == "80")),
+  "Changes in Grid Mix over Baseline: C80")
 
 ## Emissions ----
 
@@ -847,7 +909,7 @@ emissions_long %>% filter(Commodity == "CO2") %>%
   ggplot(aes(x = Year, y = Emissions)) +
   geom_line(aes(group = Scenario, color = costred)) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 7)) +
-  facet_wrap(~emred) +
+  facet_wrap(~emred, labeller = labeller(emred = elab, costred = clab)) +
   scale_color_brewer(palette = "Blues") +
   labs(x = "Year", y = "Emissions",
        title = "Electric Sector CO2 Emissions",
@@ -866,7 +928,7 @@ ggplot() +
             aes(x = Year, y = VAR_Cap*3, group = Scenario),
             color = "deepskyblue4") +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
-  facet_grid(costred~emred)
+  facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
 
 ggplot() +
   geom_line(data = emissions_long %>% filter(emred == "20" | emred == "50" | emred == "80") %>%
