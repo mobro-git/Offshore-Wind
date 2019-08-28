@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.8)  27 AUG 2019 11:06
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.8)  28 AUG 2019 09:46
 entering extended mode
 **./osw_Report.tex
 (osw_Report.tex
@@ -963,7 +963,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 164--166
 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-2-1.pdf, id=103, 469.755pt x 325.2
+<osw_Report_files/figure-latex/unnamed-chunk-2-1.pdf, id=111, 469.755pt x 325.2
 15pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type pd
 f)
@@ -971,7 +971,7 @@ f)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-2-1.pdf  u
 sed on input line 179.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-2-2.pdf, id=104, 469.755pt x 325.2
+<osw_Report_files/figure-latex/unnamed-chunk-2-2.pdf, id=112, 469.755pt x 325.2
 15pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-2-2.pdf Graphic file (type pd
 f)
@@ -1017,7 +1017,7 @@ Overfull \hbox (5.18768pt too wide) in paragraph at lines 219--219
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<osw_Report_files/figure-latex/unnamed-chunk-5-1.pdf, id=105, 469.755pt x 325.2
+<osw_Report_files/figure-latex/unnamed-chunk-5-1.pdf, id=113, 469.755pt x 325.2
 15pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pd
 f)
@@ -1025,7 +1025,7 @@ f)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-5-1.pdf  u
 sed on input line 236.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-5-2.pdf, id=106, 469.755pt x 325.2
+<osw_Report_files/figure-latex/unnamed-chunk-5-2.pdf, id=114, 469.755pt x 325.2
 15pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-5-2.pdf Graphic file (type pd
 f)
@@ -1040,7 +1040,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 236--238
 
 [2 <./osw_Report_files/figure-latex/unnamed-chunk-2-1.pdf> <./osw_Report_files/
 figure-latex/unnamed-chunk-2-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-8-1.pdf, id=134, 469.755pt x 325.2
+<osw_Report_files/figure-latex/unnamed-chunk-8-1.pdf, id=141, 469.755pt x 325.2
 15pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pd
 f)
@@ -1056,7 +1056,7 @@ as been already used, duplicate ignored
 l.266 \end{table}
                   <./osw_Report_files/figure-latex/unnamed-chunk-5-1.pdf> <./os
 w_Report_files/figure-latex/unnamed-chunk-5-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-10-1.pdf, id=152, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-10-1.pdf, id=159, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type p
 df)
@@ -1071,7 +1071,7 @@ as been already used, duplicate ignored
                                                   \fi \fi 
 l.298 \end{table}
                   <./osw_Report_files/figure-latex/unnamed-chunk-8-1.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-12-1.pdf, id=165, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-1.pdf, id=172, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-1.pdf Graphic file (type p
 df)
@@ -1079,7 +1079,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-1.pdf  
 used on input line 306.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-2.pdf, id=166, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-2.pdf, id=173, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-2.pdf Graphic file (type p
 df)
@@ -1087,7 +1087,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-2.pdf  
 used on input line 307.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-3.pdf, id=167, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-3.pdf, id=174, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-3.pdf Graphic file (type p
 df)
@@ -1095,7 +1095,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-3.pdf  
 used on input line 308.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-4.pdf, id=168, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-4.pdf, id=175, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-4.pdf Graphic file (type p
 df)
@@ -1103,7 +1103,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-4.pdf  
 used on input line 309.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-5.pdf, id=169, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-5.pdf, id=176, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-5.pdf Graphic file (type p
 df)
@@ -1111,7 +1111,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-5.pdf  
 used on input line 310.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-6.pdf, id=170, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-6.pdf, id=177, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-6.pdf Graphic file (type p
 df)
@@ -1119,7 +1119,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-6.pdf  
 used on input line 311.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-7.pdf, id=171, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-7.pdf, id=178, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-7.pdf Graphic file (type p
 df)
@@ -1127,7 +1127,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-7.pdf  
 used on input line 312.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-8.pdf, id=172, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-8.pdf, id=179, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-8.pdf Graphic file (type p
 df)
@@ -1135,7 +1135,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-8.pdf  
 used on input line 313.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-9.pdf, id=173, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-12-9.pdf, id=180, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-9.pdf Graphic file (type p
 df)
@@ -1143,7 +1143,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-9.pdf  
 used on input line 314.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-10.pdf, id=174, 469.755pt x 325
+<osw_Report_files/figure-latex/unnamed-chunk-12-10.pdf, id=181, 469.755pt x 325
 .215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-10.pdf Graphic file (type 
 pdf)
@@ -1151,7 +1151,7 @@ pdf)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-10.pdf 
  used on input line 315.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-11.pdf, id=175, 469.755pt x 325
+<osw_Report_files/figure-latex/unnamed-chunk-12-11.pdf, id=182, 469.755pt x 325
 .215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-11.pdf Graphic file (type 
 pdf)
@@ -1159,7 +1159,7 @@ pdf)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-11.pdf 
  used on input line 316.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-12.pdf, id=176, 469.755pt x 325
+<osw_Report_files/figure-latex/unnamed-chunk-12-12.pdf, id=183, 469.755pt x 325
 .215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-12.pdf Graphic file (type 
 pdf)
@@ -1167,7 +1167,7 @@ pdf)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-12.pdf 
  used on input line 317.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-13.pdf, id=177, 469.755pt x 325
+<osw_Report_files/figure-latex/unnamed-chunk-12-13.pdf, id=184, 469.755pt x 325
 .215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-13.pdf Graphic file (type 
 pdf)
@@ -1175,7 +1175,7 @@ pdf)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-13.pdf 
  used on input line 318.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-14.pdf, id=178, 469.755pt x 325
+<osw_Report_files/figure-latex/unnamed-chunk-12-14.pdf, id=185, 469.755pt x 325
 .215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-14.pdf Graphic file (type 
 pdf)
@@ -1183,7 +1183,7 @@ pdf)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-14.pdf 
  used on input line 319.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-15.pdf, id=179, 469.755pt x 325
+<osw_Report_files/figure-latex/unnamed-chunk-12-15.pdf, id=186, 469.755pt x 325
 .215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-15.pdf Graphic file (type 
 pdf)
@@ -1191,7 +1191,7 @@ pdf)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-12-15.pdf 
  used on input line 320.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-12-16.pdf, id=180, 469.755pt x 325
+<osw_Report_files/figure-latex/unnamed-chunk-12-16.pdf, id=187, 469.755pt x 325
 .215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-12-16.pdf Graphic file (type 
 pdf)
@@ -1255,7 +1255,7 @@ osw_Report_files/figure-latex/unnamed-chunk-12-8.pdf> <./osw_Report_files/figur
 e-latex/unnamed-chunk-12-9.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-
 12-10.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-12-11.pdf> <./osw_Rep
 ort_files/figure-latex/unnamed-chunk-12-12.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-14-1.pdf, id=261, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-14-1.pdf, id=268, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type p
 df)
@@ -1263,7 +1263,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-14-1.pdf  
 used on input line 326.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-14-2.pdf, id=262, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-14-2.pdf, id=269, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-14-2.pdf Graphic file (type p
 df)
@@ -1271,7 +1271,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-14-2.pdf  
 used on input line 327.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-14-3.pdf, id=263, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-14-3.pdf, id=270, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-14-3.pdf Graphic file (type p
 df)
@@ -1279,7 +1279,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-14-3.pdf  
 used on input line 328.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-14-4.pdf, id=264, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-14-4.pdf, id=271, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-14-4.pdf Graphic file (type p
 df)
@@ -1302,7 +1302,7 @@ s/figure-latex/unnamed-chunk-12-14.pdf> <./osw_Report_files/figure-latex/unname
 d-chunk-12-15.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-12-16.pdf> <.
 /osw_Report_files/figure-latex/unnamed-chunk-14-1.pdf> <./osw_Report_files/figu
 re-latex/unnamed-chunk-14-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-17-1.pdf, id=299, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-17-1.pdf, id=306, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file (type p
 df)
@@ -1324,7 +1324,7 @@ h the same identifier (name{table.5}) has been already used, duplicate ignored
 l.376 \section{Grid Mix}\label{grid-mix}}
                                           <./osw_Report_files/figure-latex/unna
 med-chunk-14-3.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-14-4.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-18-1.pdf, id=318, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-18-1.pdf, id=325, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-18-1.pdf Graphic file (type p
 df)
@@ -1332,7 +1332,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-18-1.pdf  
 used on input line 383.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-18-2.pdf, id=319, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-18-2.pdf, id=326, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-18-2.pdf Graphic file (type p
 df)
@@ -1345,7 +1345,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 383--385
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-20-1.pdf, id=320, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-20-1.pdf, id=327, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-20-1.pdf Graphic file (type p
 df)
@@ -1356,7 +1356,7 @@ used on input line 391.
 [10 <./osw_Report_files/figure-latex/unnamed-chunk-17-1.pdf> <./osw_Report_file
 s/figure-latex/unnamed-chunk-18-1.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-18-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-21-1.pdf, id=347, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-21-1.pdf, id=354, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-21-1.pdf Graphic file (type p
 df)
@@ -1365,7 +1365,7 @@ Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-21-1.pdf
 used on input line 395.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [11 <./osw_Report_files/figure-latex/unnamed-chunk-20-1.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-22-1.pdf, id=357, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-22-1.pdf, id=364, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-22-1.pdf Graphic file (type p
 df)
@@ -1373,7 +1373,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-22-1.pdf  
 used on input line 402.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-22-2.pdf, id=358, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-22-2.pdf, id=365, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-22-2.pdf Graphic file (type p
 df)
@@ -1386,7 +1386,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 402--404
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-24-1.pdf, id=359, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-24-1.pdf, id=366, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-24-1.pdf Graphic file (type p
 df)
@@ -1394,7 +1394,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-24-1.pdf  
 used on input line 407.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-24-2.pdf, id=360, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-24-2.pdf, id=367, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-24-2.pdf Graphic file (type p
 df)
@@ -1410,7 +1410,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 407--409
 [12 <./osw_Report_files/figure-latex/unnamed-chunk-21-1.pdf> <./osw_Report_file
 s/figure-latex/unnamed-chunk-22-1.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-22-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-26-1.pdf, id=381, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-26-1.pdf, id=388, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-26-1.pdf Graphic file (type p
 df)
@@ -1418,7 +1418,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-26-1.pdf  
 used on input line 412.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-26-2.pdf, id=382, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-26-2.pdf, id=389, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-26-2.pdf Graphic file (type p
 df)
@@ -1431,7 +1431,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 412--414
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-28-1.pdf, id=383, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-28-1.pdf, id=390, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-28-1.pdf Graphic file (type p
 df)
@@ -1439,7 +1439,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-28-1.pdf  
 used on input line 417.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-28-2.pdf, id=384, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-28-2.pdf, id=391, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-28-2.pdf Graphic file (type p
 df)
@@ -1452,7 +1452,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 417--419
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-30-1.pdf, id=385, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-30-1.pdf, id=392, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-30-1.pdf Graphic file (type p
 df)
@@ -1460,7 +1460,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-30-1.pdf  
 used on input line 422.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-30-2.pdf, id=386, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-30-2.pdf, id=393, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-30-2.pdf Graphic file (type p
 df)
@@ -1478,7 +1478,7 @@ s/figure-latex/unnamed-chunk-24-2.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-26-1.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-26-2.pdf> <./os
 w_Report_files/figure-latex/unnamed-chunk-28-1.pdf> <./osw_Report_files/figure-
 latex/unnamed-chunk-28-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-32-1.pdf, id=422, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-32-1.pdf, id=429, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-32-1.pdf Graphic file (type p
 df)
@@ -1486,7 +1486,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-32-1.pdf  
 used on input line 427.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-32-2.pdf, id=423, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-32-2.pdf, id=430, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-32-2.pdf Graphic file (type p
 df)
@@ -1499,7 +1499,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 427--429
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-34-1.pdf, id=424, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-34-1.pdf, id=431, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-34-1.pdf Graphic file (type p
 df)
@@ -1507,7 +1507,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-34-1.pdf  
 used on input line 432.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-34-2.pdf, id=425, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-34-2.pdf, id=432, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-34-2.pdf Graphic file (type p
 df)
@@ -1520,7 +1520,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 432--434
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-36-1.pdf, id=426, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-36-1.pdf, id=433, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-36-1.pdf Graphic file (type p
 df)
@@ -1528,7 +1528,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-36-1.pdf  
 used on input line 440.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-36-2.pdf, id=427, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-36-2.pdf, id=434, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-36-2.pdf Graphic file (type p
 df)
@@ -1546,7 +1546,7 @@ s/figure-latex/unnamed-chunk-30-2.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-32-1.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-32-2.pdf> <./os
 w_Report_files/figure-latex/unnamed-chunk-34-1.pdf> <./osw_Report_files/figure-
 latex/unnamed-chunk-34-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-38-1.pdf, id=463, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-38-1.pdf, id=470, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-38-1.pdf Graphic file (type p
 df)
@@ -1554,7 +1554,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-38-1.pdf  
 used on input line 445.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-38-2.pdf, id=464, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-38-2.pdf, id=471, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-38-2.pdf Graphic file (type p
 df)
@@ -1567,7 +1567,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 445--447
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-40-1.pdf, id=465, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-40-1.pdf, id=472, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-40-1.pdf Graphic file (type p
 df)
@@ -1575,7 +1575,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-40-1.pdf  
 used on input line 450.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-40-2.pdf, id=466, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-40-2.pdf, id=473, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-40-2.pdf Graphic file (type p
 df)
@@ -1588,7 +1588,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 450--452
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-42-1.pdf, id=467, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-42-1.pdf, id=474, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-42-1.pdf Graphic file (type p
 df)
@@ -1596,7 +1596,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-42-1.pdf  
 used on input line 455.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-42-2.pdf, id=468, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-42-2.pdf, id=475, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-42-2.pdf Graphic file (type p
 df)
@@ -1614,7 +1614,7 @@ s/figure-latex/unnamed-chunk-36-2.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-38-1.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-38-2.pdf> <./os
 w_Report_files/figure-latex/unnamed-chunk-40-1.pdf> <./osw_Report_files/figure-
 latex/unnamed-chunk-40-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-44-1.pdf, id=503, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-44-1.pdf, id=510, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-44-1.pdf Graphic file (type p
 df)
@@ -1622,7 +1622,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-44-1.pdf  
 used on input line 460.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-44-2.pdf, id=504, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-44-2.pdf, id=511, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-44-2.pdf Graphic file (type p
 df)
@@ -1635,7 +1635,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 460--462
 [][] [] 
  []
 
-<osw_Report_files/figure-latex/unnamed-chunk-46-1.pdf, id=505, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-46-1.pdf, id=512, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-46-1.pdf Graphic file (type p
 df)
@@ -1646,7 +1646,7 @@ used on input line 466.
 [16 <./osw_Report_files/figure-latex/unnamed-chunk-42-1.pdf> <./osw_Report_file
 s/figure-latex/unnamed-chunk-42-2.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-44-1.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-44-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-47-1.pdf, id=531, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-1.pdf, id=538, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-1.pdf Graphic file (type p
 df)
@@ -1654,7 +1654,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-47-1.pdf  
 used on input line 468.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-47-2.pdf, id=532, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-2.pdf, id=539, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-2.pdf Graphic file (type p
 df)
@@ -1662,7 +1662,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-47-2.pdf  
 used on input line 469.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-47-3.pdf, id=533, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-3.pdf, id=540, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-3.pdf Graphic file (type p
 df)
@@ -1670,7 +1670,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-47-3.pdf  
 used on input line 470.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-47-4.pdf, id=534, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-4.pdf, id=541, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-4.pdf Graphic file (type p
 df)
@@ -1678,7 +1678,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-47-4.pdf  
 used on input line 471.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-47-5.pdf, id=535, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-5.pdf, id=542, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-5.pdf Graphic file (type p
 df)
@@ -1686,7 +1686,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-47-5.pdf  
 used on input line 472.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-47-6.pdf, id=536, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-6.pdf, id=543, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-6.pdf Graphic file (type p
 df)
@@ -1694,7 +1694,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-47-6.pdf  
 used on input line 473.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-47-7.pdf, id=537, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-7.pdf, id=544, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-7.pdf Graphic file (type p
 df)
@@ -1702,7 +1702,7 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-47-7.pdf  
 used on input line 474.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-47-8.pdf, id=538, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-47-8.pdf, id=545, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-47-8.pdf Graphic file (type p
 df)
@@ -1733,7 +1733,7 @@ Overfull \hbox (2.22104pt too wide) in paragraph at lines 468--476
 [17 <./osw_Report_files/figure-latex/unnamed-chunk-46-1.pdf> <./osw_Report_file
 s/figure-latex/unnamed-chunk-47-1.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-47-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-49-1.pdf, id=561, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-49-1.pdf, id=568, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-49-1.pdf Graphic file (type p
 df)
@@ -1746,7 +1746,7 @@ s/figure-latex/unnamed-chunk-47-4.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-47-5.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-47-6.pdf> <./os
 w_Report_files/figure-latex/unnamed-chunk-47-7.pdf> <./osw_Report_files/figure-
 latex/unnamed-chunk-47-8.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-50-1.pdf, id=603, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-50-1.pdf, id=610, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-50-1.pdf Graphic file (type p
 df)
@@ -1754,159 +1754,182 @@ df)
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-50-1.pdf  
 used on input line 491.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[19 <./osw_Report_files/figure-latex/unnamed-chunk-49-1.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-51-1.pdf, id=615, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-51-1.pdf, id=611, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-51-1.pdf Graphic file (type p
 df)
 <use osw_Report_files/figure-latex/unnamed-chunk-51-1.pdf>
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-51-1.pdf  
-used on input line 495.
-(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-51-2.pdf, id=616, 469.755pt x 325.
-215pt>
-File: osw_Report_files/figure-latex/unnamed-chunk-51-2.pdf Graphic file (type p
-df)
-<use osw_Report_files/figure-latex/unnamed-chunk-51-2.pdf>
-Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-51-2.pdf  
-used on input line 496.
-(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-51-3.pdf, id=617, 469.755pt x 325.
-215pt>
-File: osw_Report_files/figure-latex/unnamed-chunk-51-3.pdf Graphic file (type p
-df)
-<use osw_Report_files/figure-latex/unnamed-chunk-51-3.pdf>
-Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-51-3.pdf  
-used on input line 497.
-(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-51-4.pdf, id=618, 469.755pt x 325.
-215pt>
-File: osw_Report_files/figure-latex/unnamed-chunk-51-4.pdf Graphic file (type p
-df)
-<use osw_Report_files/figure-latex/unnamed-chunk-51-4.pdf>
-Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-51-4.pdf  
-used on input line 498.
-(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-51-5.pdf, id=619, 469.755pt x 325.
-215pt>
-File: osw_Report_files/figure-latex/unnamed-chunk-51-5.pdf Graphic file (type p
-df)
-<use osw_Report_files/figure-latex/unnamed-chunk-51-5.pdf>
-Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-51-5.pdf  
-used on input line 499.
-(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-51-6.pdf, id=620, 469.755pt x 325.
-215pt>
-File: osw_Report_files/figure-latex/unnamed-chunk-51-6.pdf Graphic file (type p
-df)
-<use osw_Report_files/figure-latex/unnamed-chunk-51-6.pdf>
-Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-51-6.pdf  
-used on input line 500.
-(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-51-7.pdf, id=621, 469.755pt x 325.
-215pt>
-File: osw_Report_files/figure-latex/unnamed-chunk-51-7.pdf Graphic file (type p
-df)
-<use osw_Report_files/figure-latex/unnamed-chunk-51-7.pdf>
-Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-51-7.pdf  
-used on input line 501.
-(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+used on input line 492.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
-Overfull \hbox (2.22104pt too wide) in paragraph at lines 495--502
-[][] []
+Underfull \hbox (badness 10000) in paragraph at lines 491--493
+[][]
  []
 
-
-Overfull \hbox (2.22104pt too wide) in paragraph at lines 495--502
-[] []
- []
-
-
-Overfull \hbox (2.22104pt too wide) in paragraph at lines 495--502
-[] []
- []
-
-[20 <./osw_Report_files/figure-latex/unnamed-chunk-50-1.pdf> <./osw_Report_file
-s/figure-latex/unnamed-chunk-51-1.pdf> <./osw_Report_files/figure-latex/unnamed
--chunk-51-2.pdf>]
-<osw_Report_files/figure-latex/unnamed-chunk-52-1.pdf, id=641, 469.755pt x 325.
+[19 <./osw_Report_files/figure-latex/unnamed-chunk-49-1.pdf>] [20 <./osw_Report
+_files/figure-latex/unnamed-chunk-50-1.pdf>]
+<osw_Report_files/figure-latex/unnamed-chunk-52-1.pdf, id=632, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-52-1.pdf Graphic file (type p
 df)
 <use osw_Report_files/figure-latex/unnamed-chunk-52-1.pdf>
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-52-1.pdf  
-used on input line 505.
+used on input line 496.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-52-2.pdf, id=642, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-52-2.pdf, id=633, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-52-2.pdf Graphic file (type p
 df)
 <use osw_Report_files/figure-latex/unnamed-chunk-52-2.pdf>
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-52-2.pdf  
-used on input line 506.
+used on input line 497.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-52-3.pdf, id=643, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-52-3.pdf, id=634, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-52-3.pdf Graphic file (type p
 df)
 <use osw_Report_files/figure-latex/unnamed-chunk-52-3.pdf>
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-52-3.pdf  
-used on input line 507.
+used on input line 498.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-52-4.pdf, id=644, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-52-4.pdf, id=635, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-52-4.pdf Graphic file (type p
 df)
 <use osw_Report_files/figure-latex/unnamed-chunk-52-4.pdf>
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-52-4.pdf  
-used on input line 508.
+used on input line 499.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
-<osw_Report_files/figure-latex/unnamed-chunk-52-5.pdf, id=645, 469.755pt x 325.
+<osw_Report_files/figure-latex/unnamed-chunk-52-5.pdf, id=636, 469.755pt x 325.
 215pt>
 File: osw_Report_files/figure-latex/unnamed-chunk-52-5.pdf Graphic file (type p
 df)
 <use osw_Report_files/figure-latex/unnamed-chunk-52-5.pdf>
 Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-52-5.pdf  
-used on input line 509.
+used on input line 500.
+(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+<osw_Report_files/figure-latex/unnamed-chunk-52-6.pdf, id=637, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-52-6.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-52-6.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-52-6.pdf  
+used on input line 501.
+(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+<osw_Report_files/figure-latex/unnamed-chunk-52-7.pdf, id=638, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-52-7.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-52-7.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-52-7.pdf  
+used on input line 502.
 (pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
 
-Overfull \hbox (2.22104pt too wide) in paragraph at lines 505--510
+Overfull \hbox (2.22104pt too wide) in paragraph at lines 496--503
 [][] []
  []
 
 
-Overfull \hbox (2.22104pt too wide) in paragraph at lines 505--510
+Overfull \hbox (2.22104pt too wide) in paragraph at lines 496--503
 [] []
  []
 
-[21 <./osw_Report_files/figure-latex/unnamed-chunk-51-3.pdf> <./osw_Report_file
-s/figure-latex/unnamed-chunk-51-4.pdf> <./osw_Report_files/figure-latex/unnamed
--chunk-51-5.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-51-6.pdf> <./os
-w_Report_files/figure-latex/unnamed-chunk-51-7.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 512.
-[22 <./osw_Report_files/figure-latex/unnamed-chunk-52-1.pdf> <./osw_Report_file
-s/figure-latex/unnamed-chunk-52-2.pdf> <./osw_Report_files/figure-latex/unnamed
--chunk-52-3.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-52-4.pdf> <./os
-w_Report_files/figure-latex/unnamed-chunk-52-5.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 512.
+
+Overfull \hbox (2.22104pt too wide) in paragraph at lines 496--503
+[] []
+ []
+
+[21 <./osw_Report_files/figure-latex/unnamed-chunk-51-1.pdf> <./osw_Report_file
+s/figure-latex/unnamed-chunk-52-1.pdf> <./osw_Report_files/figure-latex/unnamed
+-chunk-52-2.pdf>]
+<osw_Report_files/figure-latex/unnamed-chunk-53-1.pdf, id=658, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-53-1.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-53-1.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-53-1.pdf  
+used on input line 506.
+(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+<osw_Report_files/figure-latex/unnamed-chunk-53-2.pdf, id=659, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-53-2.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-53-2.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-53-2.pdf  
+used on input line 507.
+(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+<osw_Report_files/figure-latex/unnamed-chunk-53-3.pdf, id=660, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-53-3.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-53-3.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-53-3.pdf  
+used on input line 508.
+(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+<osw_Report_files/figure-latex/unnamed-chunk-53-4.pdf, id=661, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-53-4.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-53-4.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-53-4.pdf  
+used on input line 509.
+(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+<osw_Report_files/figure-latex/unnamed-chunk-53-5.pdf, id=662, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-53-5.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-53-5.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-53-5.pdf  
+used on input line 510.
+(pdftex.def)             Requested size: 234.87692pt x 162.6071pt.
+
+Overfull \hbox (2.22104pt too wide) in paragraph at lines 506--511
+[][] []
+ []
+
+
+Overfull \hbox (2.22104pt too wide) in paragraph at lines 506--511
+[] []
+ []
+
+[22 <./osw_Report_files/figure-latex/unnamed-chunk-52-3.pdf> <./osw_Report_file
+s/figure-latex/unnamed-chunk-52-4.pdf> <./osw_Report_files/figure-latex/unnamed
+-chunk-52-5.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-52-6.pdf> <./os
+w_Report_files/figure-latex/unnamed-chunk-52-7.pdf>]
+<osw_Report_files/figure-latex/unnamed-chunk-54-1.pdf, id=692, 469.755pt x 325.
+215pt>
+File: osw_Report_files/figure-latex/unnamed-chunk-54-1.pdf Graphic file (type p
+df)
+<use osw_Report_files/figure-latex/unnamed-chunk-54-1.pdf>
+Package pdftex.def Info: osw_Report_files/figure-latex/unnamed-chunk-54-1.pdf  
+used on input line 522.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 525.
+[23 <./osw_Report_files/figure-latex/unnamed-chunk-53-1.pdf> <./osw_Report_file
+s/figure-latex/unnamed-chunk-53-2.pdf> <./osw_Report_files/figure-latex/unnamed
+-chunk-53-3.pdf> <./osw_Report_files/figure-latex/unnamed-chunk-53-4.pdf> <./os
+w_Report_files/figure-latex/unnamed-chunk-53-5.pdf>] [24 <./osw_Report_files/fi
+gure-latex/unnamed-chunk-54-1.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 525.
 (osw_Report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 512.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 512.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 525.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 525.
 Package rerunfilecheck Info: File `osw_Report.out' has not changed.
-(rerunfilecheck)             Checksum: F0FD9AFEBC8C116D61ECFB4C7291B5F0;1981.
+(rerunfilecheck)             Checksum: B5EBA2C8FDC99349D44ADCD822F82B64;2360.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 512.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 525.
  ) 
 Here is how much of TeX's memory you used:
- 14680 strings out of 492891
- 231988 string characters out of 3122156
- 349549 words of memory out of 3000000
- 18247 multiletter control sequences out of 15000+200000
- 52153 words of font info for 68 fonts, out of 3000000 for 9000
+ 14701 strings out of 492891
+ 232711 string characters out of 3122156
+ 349659 words of memory out of 3000000
+ 18261 multiletter control sequences out of 15000+200000
+ 56421 words of font info for 69 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 32i,17n,38p,975b,389s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 32i,17n,38p,975b,368s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/mbrownin/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec
 .enc}{C:/Users/mbrownin/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm
 -ts1.enc}<C:/Users/mbrownin/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publi
@@ -1917,10 +1940,11 @@ ts/type1/public/lm/lmr10.pfb><C:/Users/mbrownin/AppData/Local/Programs/MiKTeX 2
 KTeX 2.9/fonts/type1/public/lm/lmr7.pfb><C:/Users/mbrownin/AppData/Local/Progra
 ms/MiKTeX 2.9/fonts/type1/public/lm/lmri10.pfb><C:/Users/mbrownin/AppData/Local
 /Programs/MiKTeX 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Users/mbrownin/AppDat
-a/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb>
-Output written on osw_Report.pdf (22 pages, 865818 bytes).
+a/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmri7.pfb><C:/Users/mbrownin/
+AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb>
+Output written on osw_Report.pdf (24 pages, 928014 bytes).
 PDF statistics:
- 749 PDF objects out of 1000 (max. 8388607)
- 65 named destinations out of 1000 (max. 500000)
- 10767 words of extra memory for PDF output out of 12000 (max. 10000000)
+ 783 PDF objects out of 1000 (max. 8388607)
+ 71 named destinations out of 1000 (max. 500000)
+ 10793 words of extra memory for PDF output out of 12000 (max. 10000000)
 

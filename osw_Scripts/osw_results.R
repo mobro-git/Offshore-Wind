@@ -2,7 +2,7 @@
 
 ## ~ Cost ----
 
-cost_plot <- ggplot(scenario_cost) +
+costscen_plot <- ggplot(scenario_cost) +
   geom_label(data = . %>% filter(Year == last(Year)),
              aes(label = paste(CostCurve,"%"), x = Year, y = Costs), 
              size = 3, alpha = 0.5, nudge_y = 4) +
@@ -14,17 +14,17 @@ cost_plot <- ggplot(scenario_cost) +
   x_cont +
   nolegend
   
-cost_col <- cost_plot +
+costscen_col <- costscen_plot +
   geom_line(aes(x = Year, y = Costs, color = CostCurve, group = CostCurve), size = .75) +
   cost_color
 
-cost_bw <- cost_plot +
+costscen_bw <- costscen_plot +
   geom_line(aes(x = Year, y = Costs, linetype = CostCurve, group = CostCurve), size = .75)
 
 
 ## ~ Emissions ----
 
-emissions_plot <- ggplot(scenario_emissions) +
+emissionsscen_plot <- ggplot(scenario_emissions) +
   geom_label(data = . %>% filter(Year == last(Year)) %>% filter(Cap != "BAU"),
              aes(label = paste(Cap,"%"), x = Year, y = Emissions), 
              size = 3, alpha = 0.5, nudge_y = 80) +
@@ -39,11 +39,11 @@ emissions_plot <- ggplot(scenario_emissions) +
   x_disc +
   nolegend
   
-emissions_col <- emissions_plot + 
+emissionsscen_col <- emissionsscen_plot + 
   geom_line(aes(x = Year, y = Emissions, color = Cap, group = Cap), size = .75) + 
   em_color 
 
-emissions_bw <- emissions_plot +
+emissionsscen_bw <- emissionsscen_plot +
   geom_line(aes(x = Year, y = Emissions, linetype = Cap, group = Cap), size = .75)
 
 ## LCOE ----
@@ -265,6 +265,7 @@ regOSW_map_col <- ggplot() +
   labs(title = "Average Offshore Wind Capacity",
        fill = "GW") +
   theme_bw() +
+  scale_fill_gradient(low = "#A0B7F5", high = "#062B91") +
   noaxes
 
 regOSW_map_bw <- regOSW_map_col + gray_fill_cont
@@ -776,6 +777,10 @@ base_retire_fill_bw <- base_retire +
 
 # diff summary 
 
+prod_dif_all_col <- prod.dif.col(prod_dif,"Changes in Grid Mix over Baseline")
+
+prod_dif_all_bw <- prod.dif.bw(prod_dif,"Changes in Grid Mix over Baseline") 
+
 prod_dif_col <- prod.dif.col(
   (prod_dif %>% 
      filter(costred %in% c("40", "50", "70")) %>% 
@@ -892,18 +897,49 @@ prod_dif_c80_bw <- prod.dif.cost.bw(
 
 ## ~ Timelines ----
 
-emissions_long %>% filter(costred != "30" & costred != "20") %>%   
-  ggplot(aes(x = Year, y = Emissions)) +
-  geom_line(aes(group = Scenario, color = costred, linetype = emred)) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 7)) +
-  scale_color_manual(values = c(diverge_hcl(5, h = c(40,246), c = 96))) +
-  facet_wrap(~Commodity, scales = "free_y") +
-  theme_bw() +
-  labs(x = "Year", y = "Emissions",
+emis_bau <- ggplot(data = emissions_bau, aes(x = Year, y = Emissions, fill = Commodity)) +
+  labs(y = "Emissions (kt)*",
+       title = "Baseline Electric Sector Emissions",
+       caption = "*Units are Mt for CO2 and kt for all other emissions") +
+  yt +
+  bottom
+
+emis_bau_fill_col <- emis_bau +
+  geom_bar(stat = "identity", position = "stack", aes(fill = Commodity)) +
+  commodity_fill
+
+emis_bau_line_col <- emis_bau +
+  geom_line(aes(group = Commodity, color = Commodity)) +
+  commodity_color
+
+emis_bau_fill_bw <- emis_bau +
+  geom_bar(stat = "identity", position = "stack", color = "black", aes(fill = Commodity)) +
+  gray_fill
+
+emis_bau_line_bw <- emis_bau +
+  geom_line(aes(group = Commodity, linetype = Commodity))
+  
+emis_plot <- emissions_long %>% filter(!costred %in% c("30", "20")) %>%
+  ggplot(aes(x = Year, y= Emissions)) +
+  labs(x = "Year", y = "Emissions*",
        title = "Electric Sector Emissions Output",
-       linetype = "Emissions\nReduction\n(%)",
-       color = "Cost\nReduction\n(%)") +
-  scale_x_discrete(breaks = seq(2015,2050, by = 5)) 
+       caption = "*Units are Mt for CO2",
+       linetype = "Emissions Reduction (%)",
+       color = "Cost Reduction (%)") +
+  facet_wrap(~Commodity, scales = "free_y") +
+  yt +
+  x_disc +
+  bottom +
+  theme(legend.box = "vertical") +
+  guides(colour = guide_legend(nrow = 1))
+
+emis_col <- emis_plot +
+  geom_line(aes(x=Year, y=Emissions, color = costred, group = Scenario, linetype = emred)) +
+  costosw_color
+
+emis_bw <- emis_plot +
+  geom_line(aes(x=Year, y=Emissions, color = costred, group = Scenario, linetype = emred)) +
+  gray_color
 
 emissions_long %>% filter(Commodity == "CO2") %>%
   ggplot(aes(x = Year, y = Emissions)) +
@@ -917,14 +953,14 @@ emissions_long %>% filter(Commodity == "CO2") %>%
   scale_x_discrete(breaks = seq(2015,2050, by = 5))
 
 ggplot() +
-  geom_line(data = emissions_long %>% filter(Commodity == "CO2" & 
-                                               emred == "50" & 
-                                               costred != "20" & 
-                                               costred != "30"), 
+  geom_line(data = emissions_long %>% filter(Commodity == "CO2" &
+                                               emred == "50" &
+                                               costred != "20" &
+                                               costred != "30"),
             aes(x = Year, y = Emissions, group = Scenario), color = "gray50") +
-  geom_line(data = osw_varcap_long %>% filter(emred == "50" & 
-                                                costred != "20" & 
-                                                costred != "30"), 
+  geom_line(data = osw_varcap_long %>% filter(emred == "50" &
+                                                costred != "20" &
+                                                costred != "30"),
             aes(x = Year, y = VAR_Cap*3, group = Scenario),
             color = "deepskyblue4") +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
@@ -933,52 +969,31 @@ ggplot() +
 ggplot() +
   geom_line(data = emissions_long %>% filter(emred == "20" | emred == "50" | emred == "80") %>%
               filter(costred != "20" & costred != "30") %>%
-              filter(Commodity != "CH4" &  Commodity != "PM 2.5"), 
+              filter(Commodity != "CH4" &  Commodity != "PM 2.5"),
             aes(x = Year, y = Emissions, group = Commodity, color = Commodity)) +
   geom_line(data = osw_varcap_long %>% filter(emred == "20" |
                                                 emred == "50" |
                                                 emred == "80" &
-                                                costred != "20" & 
-                                                costred != "30"), 
+                                                costred != "20" &
+                                                costred != "30"),
             aes(x = Year, y = VAR_Cap*3, group = Scenario, color = "Offshore Wind")) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 7)) +
   scale_color_manual(breaks = c("CO2", "NOx", "SO2", "Offshore Wind"),
                      values = c("chartreuse4", "seashell4", "deepskyblue4", "darkgoldenrod3")) +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
   facet_grid(costred~emred, labeller = label_both) +
-  labs(y = "Emissions*", caption = "*Emissions units are kt for NOx and SO2 and Mt for CO2") 
+  labs(y = "Emissions*", caption = "*Emissions units are kt for NOx and SO2 and Mt for CO2")
 
 
-emissions_bau %>%
-  ggplot(aes(x = Year, y = Emissions, fill = Commodity)) +
-  geom_bar(stat = "identity", position = "stack") + 
-  scale_fill_manual(values = c("deepskyblue4", "firebrick", "darkgoldenrod3", "seashell4", "chartreuse4")) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
-        axis.text.y = element_text(size = 8),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) +
-  labs(title = "Baseline Electric Sector Emissions", 
-       caption = "*Emissions units are kt for NOx and SO2 and Mt for CO2") 
 
-emissions_bau %>%
-  ggplot(aes(x = Year, y = Emissions, color = Commodity)) +
-  geom_line(aes(group = Commodity)) + 
-  scale_color_manual(values = c("deepskyblue4", "firebrick", "darkgoldenrod3", "seashell4", "chartreuse4")) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
-        axis.text.y = element_text(size = 8),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) +
-  labs(title = "Baseline Electric Sector Emissions", 
-       caption = "*Emissions units are kt for NOx and SO2 and Mt for CO2", 
-       y = "Emissions*") 
 
 ## ~ Heatmaps ----
 
-emissions2050 %>% 
+emissions2050 %>%
   filter(Commodity == "CO2") %>%
   ggplot(aes(x = costred, y = emred, fill = Emissions)) +
   geom_tile(colour = "gray", size = 0.25) +
-  facet_wrap(~Commodity) + 
+  facet_wrap(~Commodity) +
   labs(x = "Cost Reduction (%)",
        y = "Emissions Reduction (%)",
        title = "Electric Sector CO2 Emissions: 2050",
@@ -988,11 +1003,11 @@ emissions2050 %>%
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))
 
-emissions2050 %>% 
+emissions2050 %>%
   filter(Commodity == "PM 2.5") %>%
   ggplot(aes(x = costred, y = emred, fill = Emissions)) +
   geom_tile(colour = "gray", size = 0.25) +
-  facet_wrap(~Commodity) + 
+  facet_wrap(~Commodity) +
   labs(x = "Cost Reduction (%)",
        y = "Emissions Reduction (%)",
        title = "Electric Sector PM 2.5 Emissions: 2050",
@@ -1000,13 +1015,13 @@ emissions2050 %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
         axis.text.y = element_text(size = 8),
         legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) 
+        legend.text = element_text(size = 9))
 
-emissions2050 %>% 
+emissions2050 %>%
   filter(Commodity == "SO2" | Commodity == "NOX") %>%
   ggplot(aes(x = costred, y = emred, fill = Emissions)) +
   geom_tile(colour = "gray", size = 0.25) +
-  facet_wrap(~Commodity) + 
+  facet_wrap(~Commodity) +
   labs(x = "Cost Reduction (%)",
        y = "Emissions Reduction (%)",
        title = "Electric Sector SO2 and NOx Emissions: 2050",
@@ -1014,13 +1029,13 @@ emissions2050 %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
         axis.text.y = element_text(size = 8),
         legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) 
+        legend.text = element_text(size = 9))
 
-emissions2050 %>% 
+emissions2050 %>%
   filter(Commodity == "CH4") %>%
   ggplot(aes(x = costred, y = emred, fill = Emissions)) +
   geom_tile(colour = "gray", size = 0.25) +
-  facet_wrap(~Commodity) + 
+  facet_wrap(~Commodity) +
   labs(x = "Cost Reduction (%)",
        y = "Emissions Reduction (%)",
        title = "Electric Sector Methane Emissions: 2050",
@@ -1033,7 +1048,7 @@ emissions2050 %>%
 
 ## Total Electricity Production ----
 
-elctotal_long %>% 
+elctotal_long %>%
   ggplot() +
   geom_line(aes(x=Year, y=VAR_FOut, color = emred, group = Scenario)) +
   em_color +
@@ -1042,9 +1057,9 @@ elctotal_long %>%
        title = "Electricity Production by Scenario",
        color = "Emissions\nReduction\n(%)") +
   yt +
-  scale_x_discrete(breaks = seq(2015,2050, by = 5)) 
+  scale_x_discrete(breaks = seq(2015,2050, by = 5))
 
-elctotal2050 %>% 
+elctotal2050 %>%
   ggplot() +
   geom_tile(aes(x = costred, y = emred, fill = VAR_FOut), colour = "gray", size = 0.25) +
   labs(x = "Offshore Wind Cost Reductions (%)",
@@ -1067,7 +1082,7 @@ enduse %>% filter(costred == "80" & emred == "40") %>%
 enduse %>% filter(costred == "80" & emred == "40") %>%
   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
   geom_bar(stat = "identity", position = "stack", colour = "black") +
-  gray_fill + 
+  gray_fill +
   yt +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
@@ -1081,31 +1096,39 @@ enduse %>%
   facet_wrap(~emred) +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 enduse %>%
-  filter(costred == "40") %>%
-  filter(Sector == "Transportation") %>% 
+  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+  geom_bar(stat = "identity", position = "stack") +
+  scale_fill_manual(values = col_sector) +
+  facet_grid(costred~emred) +
+  labs(x = "Year", y = "Electricity Consumption (PJ)",
+       title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+enduse %>%
+  filter(Sector == "Transportation") %>% filter(costred != "20") %>%
   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
   geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
-  facet_wrap(~emred) +
+  facet_grid(costred~emred) +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Transportation Electricity Consumption: 40% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 enduse %>%
   filter(costred == "40") %>%
-  filter(Sector == "Industrial") %>% 
+  filter(Sector == "Industrial") %>%
   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
   geom_bar(stat = "identity", position = "stack", fill = "firebrick") +
   facet_wrap(~emred) +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Industrial Electricity Consumption: 40% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 enduse %>%
   filter(costred == "80") %>%
-  filter(Sector == "Industrial") %>% 
+  filter(Sector == "Industrial") %>%
   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
   geom_bar(stat = "identity", position = "stack", fill = "firebrick") +
   facet_wrap(~emred) +
@@ -1121,7 +1144,7 @@ enduse %>%
   facet_wrap(~emred) +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1)) 
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 ## ~ Heatmaps ----
 
@@ -1135,7 +1158,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Commercial") %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
         axis.text.y = element_text(size = 8),
         legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) 
+        legend.text = element_text(size = 9))
 
 enduse %>% filter(Year == "2050") %>% filter(Sector == "Industrial") %>%
   ggplot(aes(x = costred, y = emred, fill = Consumption)) +
@@ -1147,7 +1170,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Industrial") %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
         axis.text.y = element_text(size = 8),
         legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) 
+        legend.text = element_text(size = 9))
 
 enduse %>% filter(Year == "2050") %>% filter(Sector == "Residential") %>%
   ggplot(aes(x = costred, y = emred, fill = Consumption)) +
@@ -1159,7 +1182,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Residential") %>%
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
         axis.text.y = element_text(size = 8),
         legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) 
+        legend.text = element_text(size = 9))
 
 enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
   ggplot(aes(x = costred, y = emred, fill = Consumption)) +
@@ -1188,7 +1211,7 @@ enduse %>% filter(Year == "2050") %>% filter(costred != "20") %>%
 
 ## Save Plots ----
 
-# plots <- 
+# plots <-
 
 # lapply(plots,function(x){ggsave(file=paste(x,"pdf",sep="."),get(x))})
 # https://stackoverflow.com/questions/20500706/saving-multiple-ggplots-from-ls-into-one-and-separate-files-in-r

@@ -255,7 +255,10 @@ col_osw <- c(`Terrestrial Wind` = "chartreuse4", `Hydro` = "skyblue3",
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
-col_cost <- sequential_hcl(7, h = c(260, 260), c = c(40,80), l = c(75,40))
+col_cost <- c("#BFD4FF", "#9DB9F3", "#7598E1", "#507BD5", "#3663C4", "#1847AC", "#002D8E")
+col_costosw <- c("#C9CDD6", "#9FAED0", "#728DCA", "#4A72CB", "#002D8E")
+col_commodity <-  c("CH4" = "deepskyblue4", "PM 2.5" = "firebrick", "SO2" = "darkgoldenrod3", 
+                    "NOx" = "seashell4", "CO2" = "chartreuse4")
 
 zero <- geom_hline(yintercept = 0, linetype = "dashed", color = "red")
 
@@ -266,8 +269,10 @@ gray_color <- scale_color_grey(start = 0.8, end = 0)
 gray_fill_cont <- scale_fill_gradient(low = "#AEAEAE", high = "#000000", na.value = "white")
 em_color <- scale_color_manual(values = col_em)
 cost_color <- scale_color_manual(values = col_cost)
+costosw_color <- scale_color_manual(values = col_costosw)
 sec_fill <- scale_fill_manual(values = col_sector)
 sec_color <- scale_color_manual(values = col_sector)
-
+commodity_fill <- scale_fill_manual(values = col_commodity)
+commodity_color <- scale_color_manual(values = col_commodity)
 
 

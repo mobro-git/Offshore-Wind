@@ -1,7 +1,7 @@
 ---
 title: "Offshore Wind Results and Analysis"
 author: "Morgan Browning"
-date: "21 August, 2019"
+date: "28 August, 2019"
 output:
   html_document:
     number_sections: yes
@@ -18,11 +18,13 @@ output:
 
 This document functions as an all-inclusive working directory for synthesis and graphical analysis of the results from the offshore wind research of Morgan Browning, an ORISE Fellow at the U.S. Environmental Protection Agency's Office of Research and Development. This document and its contents are not finalized nor are intended for publication. 
 
-It is annotated primarily for ease of reproducability and a general understanding of the results. Graphs are provided with many variations to meet criteria of different publication and presentation platforms.
+It is annotated primarily for ease of reproducability and a general understanding of the results. 
 
 # Setup
 
-Three scripts are loaded into this markdown document to allow for analysis of the data. The setup script loads the library, creates generalized functions, and creates global variables for color scales and factors. The data script loads the excel spreadsheet with all of the results data and performs the majority of data munging. The results script creates charts, graphs, and tables. This report functions as the annotated synthesis of the data and results.
+Three scripts are loaded into this markdown document to allow for analysis of the data. The setup script loads the library, creates generalized functions, and creates global variables for color scales and factors. The data script loads an excel spreadsheet with all of the results data and performs the majority of data munging. The results script creates charts, graphs, and tables. This report functions as the annotated synthesis of the data and results.
+
+Graphs are provided with many variations to meet criteria of different publication and presentation platforms. Formats may be chosen using the `colorcalls` toggles
 
 
 
@@ -32,9 +34,12 @@ Three scripts are loaded into this markdown document to allow for analysis of th
 
 The nested parametric sensitivity analysis was built on combinations of two sets of scenarios:
 
-1. Electric sector CO~2~ emissions caps, as a linear decrease to a given % decrease from 2010 emissions by 2050
+1. Electric sector CO~2~ emissions caps, as a linear decrease to a given % decrease from 2010 emissions by 2050  
+  + Business and usual emissions represent approximately a 20% reduction in CO~2~ emissions
 
-2. Cost reductions of offshore wind, as a linear decrease to a given % decrease from 2010 costs by 2035, then level costs to 2050
+2. Cost reductions of offshore wind, as a linear decrease to a given % decrease from 2010 costs by 2035, then level costs to 2050  
+  + A 20% cost reduction is used as the base case, assuming very conservative technological advancement and little benefit of economies of scale
+  + Cost curves are set to resolve by 2035 as estimated based on NREL LCOE cost projections for offshore wind
 
 <img src="osw_Report_files/figure-html/unnamed-chunk-2-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-2-2.png" width="50%" />
 
@@ -265,7 +270,7 @@ Total offshore wind capacity across all nine census regions in 2050, by cost and
 
 ## Output
 
-Total offshore wind electricity output across all nine census regions, by cost and emissions reduction scenario.
+Total offshore wind electricity output across all nine census regions, by cost and emissions reduction scenario. Results show almost identical trajectories for total capacity and output due to the non-dispatchable quality of offshore wind. All generated electricity is utilized in the modeled scenarios.
 
 ![](osw_Report_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 <table class="table" style="margin-left: auto; margin-right: auto;">
@@ -346,7 +351,7 @@ Total offshore wind electricity output across all nine census regions, by cost a
 
 ## Regions
 
-Cumulative and new addition offshore wind capacity by region.
+Cumulative and new addition offshore wind capacity by region. Regions are listed from least to highest electricity output.
 
 <img src="osw_Report_files/figure-html/unnamed-chunk-12-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-2.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-3.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-4.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-5.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-6.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-7.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-8.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-9.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-10.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-11.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-12.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-13.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-14.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-15.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-12-16.png" width="50%" />
 
@@ -444,104 +449,136 @@ Cumulative and new addition offshore wind capacity by region, emissions reductio
 </tbody>
 </table>
 
+Map of average total capacity 
+
+![](osw_Report_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
 # Grid Mix
 
 ## Baseline Production
 
 Grid mix without any offshore wind cost reduction or emissions cap.
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-17-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-17-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-18-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-18-2.png" width="50%" />
 
 
 ## All Scenarios
 
 Complete Set
 
-![](osw_Report_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](osw_Report_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 Parsed Set
 
-![](osw_Report_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+![](osw_Report_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 ## Emissions Cap
 
 BAU emissions
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-21-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-21-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-22-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-22-2.png" width="50%" />
 
 
 30% emissions reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-23-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-23-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-24-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-24-2.png" width="50%" />
 
 
 40% emissions reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-25-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-25-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-26-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-26-2.png" width="50%" />
 
 
 50% emissions reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-27-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-27-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-28-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-28-2.png" width="50%" />
 
 
 60% emissions reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-29-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-29-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-30-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-30-2.png" width="50%" />
 
 
 70% emissions reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-31-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-31-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-32-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-32-2.png" width="50%" />
 
 
 80% emissions reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-33-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-33-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-34-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-34-2.png" width="50%" />
 
 
 ## Cost Reductions
 
 40% cost reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-35-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-35-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-36-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-36-2.png" width="50%" />
 
 
 50% cost reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-37-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-37-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-38-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-38-2.png" width="50%" />
 
 
 60% cost reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-39-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-39-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-40-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-40-2.png" width="50%" />
 
 
 70% cost reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-41-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-41-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-42-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-42-2.png" width="50%" />
 
 
 80% cost reduction
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-43-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-43-2.png" width="50%" />
+<img src="osw_Report_files/figure-html/unnamed-chunk-44-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-44-2.png" width="50%" />
 
 
 ## Heatmaps
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-45-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-45-2.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-45-3.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-45-4.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-45-5.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-45-6.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-45-7.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-45-8.png" width="50%" />
+![](osw_Report_files/figure-html/unnamed-chunk-46-1.png)<!-- -->
+<img src="osw_Report_files/figure-html/unnamed-chunk-47-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-47-2.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-47-3.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-47-4.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-47-5.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-47-6.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-47-7.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-47-8.png" width="50%" />
 
 
 ## Retirements and Additions
 
-<img src="osw_Report_files/figure-html/unnamed-chunk-47-1.png" width="50%" />
+Basecase year-on-year changes in the grid mix. Shows the modeled fluctuations in generation. All following quantifications of grid mix changes are as compared to these changes in the basecase.
 
-## Grid Mix Changes Over Baseline
+![](osw_Report_files/figure-html/unnamed-chunk-49-1.png)<!-- -->
+
+## Changes Over Baseline
+
+Summary Graph 
 
 
+![](osw_Report_files/figure-html/unnamed-chunk-50-1.png)<!-- -->
+![](osw_Report_files/figure-html/unnamed-chunk-51-1.png)<!-- -->
+
+By Emissions Reduction %
+
+<img src="osw_Report_files/figure-html/unnamed-chunk-52-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-52-2.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-52-3.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-52-4.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-52-5.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-52-6.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-52-7.png" width="50%" />
+
+By Cost Reduction %
+
+<img src="osw_Report_files/figure-html/unnamed-chunk-53-1.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-53-2.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-53-3.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-53-4.png" width="50%" /><img src="osw_Report_files/figure-html/unnamed-chunk-53-5.png" width="50%" />
+
+# Emissions
+
+## Emissions considered in this study include:  
+
+*CO~2~  
+*CH~4~  
+*SO~2~  
+*NO~x~  
+*PM 2.5  
 
 
-# TEST
+<!-- # TEST -->
 
-![](osw_Report_files/figure-html/unnamed-chunk-50-1.png)<!-- -->![](osw_Report_files/figure-html/unnamed-chunk-50-2.png)<!-- -->
+<!-- ```{r} -->
+<!-- grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, layout_matrix = rbind(c(1,1,1),c(2,3,4))) -->
+<!-- grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, ncol = 2) -->
+<!-- ``` -->
 
