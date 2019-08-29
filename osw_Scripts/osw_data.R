@@ -264,6 +264,13 @@ prod_dif <- left_join(elc_long, basecase_production, by = c("Process", "Year"))
 prod_dif[is.na(prod_dif)] <- 0  
 prod_dif <- prod_dif %>% mutate(diff = VAR_FOut - baseprod)
 
+newcap <- as.data.frame(data_global$`New Capacity by Process Set`)
+newcap[is.na(newcap)] <- 0
+
+newcap_long_reg <- newcap %>%
+  gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
+         key = "Year", value = "Ncap")
+newcap_long_reg$Ncap <- round(newcap_long_reg$Ncap, 2)
 
 ## ----emissions----------------------------------------------------
 emissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
