@@ -61,7 +61,8 @@ categorize <- function(table) {
       TRUE ~ "BAU"
     )) %>% 
     mutate_if(is.numeric, ~round(.,2)) %>%
-    mutate_all(~replace(.,is.na(.),0))
+    mutate_all(~replace(.,is.na(.),0)) %>%
+    mutate(Scenario = paste("E", emred, "C", costred, sep = ''))
 }
 
 process <- function(table) {
@@ -248,10 +249,10 @@ noaxes <- theme(
 x_cont <- scale_x_continuous(breaks = seq(2020,2050, by = 10), expand = c(0,1))
 x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
-col_osw <- c(`Terrestrial Wind` = "chartreuse4", `Hydro` = "skyblue3", 
+col_osw <- c(`Terrestrial Wind` = "lightblue3", `Hydro` = "dodgerblue4", 
              `Solar` = "darkgoldenrod2", `Offshore Wind` = "deepskyblue4", 
-             `Nuclear` = "firebrick", `Coal` = "gray9", `Natural Gas` = "gray34", 
-             `Coal CCS` = "darkorange3")
+             `Nuclear` = "darkorange3", `Coal` = "gray9", `Natural Gas` = "darkslategray4", 
+             `Coal CCS` = "gray")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")

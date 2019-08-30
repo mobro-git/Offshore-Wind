@@ -893,6 +893,19 @@ prod_dif_c80_bw <- prod.dif.cost.bw(
   (prod_dif %>% filter(costred == "80")),
   "Changes in Grid Mix over Baseline: C80")
 
+## ~ New Capacity by Process Set----
+
+test <- newcap_total %>% filter(emred == "40")
+
+testplot <- ggplot(data = newcap_total) +
+  geom_bar(aes(x = 1, y = Ncap, fill = Process, group = Scenario), stat = "identity") +
+  facet_grid(costred~emred) +
+  osw_fill +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())
+
+
 ## Emissions ----
 
 ## ~ Timelines ----

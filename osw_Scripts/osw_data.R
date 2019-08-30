@@ -264,13 +264,30 @@ prod_dif <- left_join(elc_long, basecase_production, by = c("Process", "Year"))
 prod_dif[is.na(prod_dif)] <- 0  
 prod_dif <- prod_dif %>% mutate(diff = VAR_FOut - baseprod)
 
-newcap <- as.data.frame(data_global$`New Capacity by Process Set`)
-newcap[is.na(newcap)] <- 0
+newcap <- as.data.frame(data_global$`New Capacity by Process Set`) %>%
+  categorize() %>%
+  process()
 
 newcap_long_reg <- newcap %>%
   gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
-         key = "Year", value = "Ncap")
-newcap_long_reg$Ncap <- round(newcap_long_reg$Ncap, 2)
+         key = "Year", value = "Ncap") %>%
+  mutate(costred = factor(costred, levels = levels_costred)) %>%
+  mutate(emred = factor(emred, levels = levels_emred)) %>%
+  mutate(Process = factor(Process, levels = elc_levels))
+
+newcap_total_reg <- newcap_long_reg %>%
+  group_by(Scenario, Process, Region, costred, emred) %>%
+  summarize(Ncap = sum(Ncap))
+
+newcap_long <- newcap_long_reg %s>%
+  group_by(Scenario, Process, Year, emred, costred, Attribute) %>%
+  summarize(Ncap = sum(Ncap)) %>%
+  select(Scenario, Process, Year, Ncap, emred, costred, Attribute)
+
+newcap_total <- newcap_total_reg %>%
+  group_by(Scenario, Process, costred, emred) %>%
+  summarize(Ncap = sum(Ncap))
+  
 
 ## ----emissions----------------------------------------------------
 emissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
