@@ -3,13 +3,13 @@ title: "Offshore Wind Results and Analysis"
 author: "Morgan Browning"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
   html_document:
     number_sections: yes
     toc: yes
     keep_md: TRUE
-  pdf_document:
-    number_sections: yes
-    toc: yes
 ---
 
 ***

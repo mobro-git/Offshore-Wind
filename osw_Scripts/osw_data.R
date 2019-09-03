@@ -273,21 +273,44 @@ newcap_long_reg <- newcap %>%
          key = "Year", value = "Ncap") %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred)) %>%
-  mutate(Process = factor(Process, levels = elc_levels))
+  mutate(Process = factor(Process, levels = elc_levels)) %>%
+  ungroup
 
 newcap_total_reg <- newcap_long_reg %>%
   group_by(Scenario, Process, Region, costred, emred) %>%
   summarize(Ncap = sum(Ncap))
 
-newcap_long <- newcap_long_reg %s>%
+newcap_total_reg_bau <- newcap_total_reg %>% 
+  filter(emred == "BAU" & costred == "20") %>%
+  ungroup() %>%
+  select(Process, Region, Ncap)
+colnames(newcap_total_reg_bau)[3] <- c("BAUncap")
+
+newcap_total_reg_diff <- left_join(newcap_total_reg, newcap_total_reg_bau, by = c("Process", "Region"))
+newcap_total_reg_diff[is.na(newcap_total_reg_diff)] <- 0
+newcap_total_reg_diff <- newcap_total_reg_diff %>% mutate(diff = Ncap - BAUncap)
+newcap_total_reg_diff$diff <- round(newcap_total_reg_diff$diff,2)
+
+newcap_long <- newcap_long_reg %>%
   group_by(Scenario, Process, Year, emred, costred, Attribute) %>%
   summarize(Ncap = sum(Ncap)) %>%
   select(Scenario, Process, Year, Ncap, emred, costred, Attribute)
 
 newcap_total <- newcap_total_reg %>%
   group_by(Scenario, Process, costred, emred) %>%
-  summarize(Ncap = sum(Ncap))
+  summarize(Ncap = sum(Ncap)) 
+
+newcap_total_bau <- newcap_total %>% 
+  filter(emred == "BAU" & costred == "20") %>%
+  ungroup() %>%
+  select(Process, Ncap)
+colnames(newcap_total_bau)[2] <- c("BAUncap")
   
+newcap_total_diff <- left_join(newcap_total, newcap_total_bau, by = "Process")
+newcap_total_diff[is.na(newcap_total_diff)] <- 0
+newcap_total_diff <- newcap_total_diff %>% mutate(diff = Ncap - BAUncap)
+newcap_total_diff$diff <- round(newcap_total_diff$diff,2)
+
 
 ## ----emissions----------------------------------------------------
 emissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 

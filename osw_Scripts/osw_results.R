@@ -7,7 +7,7 @@ costscen_plot <- ggplot(scenario_cost) +
              aes(label = paste(CostCurve,"%"), x = Year, y = Costs), 
              size = 3, alpha = 0.5, nudge_y = 4) +
   scale_y_continuous(limits = c(0, 100), expand = c(.01, 0)) +
-  labs(x = "Year", y = "Cost Reduction (%)", 
+  labs(x = "Year", y = "Cost Reduction", 
        title = "OSW Cost Curves", 
        subtitle = "Percentage decrease from 2010 offshore wind CAPEX costs") +
   yt +
@@ -895,15 +895,16 @@ prod_dif_c80_bw <- prod.dif.cost.bw(
 
 ## ~ New Capacity by Process Set----
 
-test <- newcap_total %>% filter(emred == "40")
+test <- newcap_total_diff %>% filter(emred == "40")
 
-testplot <- ggplot(data = newcap_total) +
-  geom_bar(aes(x = 1, y = Ncap, fill = Process, group = Scenario), stat = "identity") +
+testplot <- ggplot(data = newcap_total_diff) +
+  geom_bar(aes(x = 1, y = diff, fill = Process, group = Scenario), stat = "identity") +
   facet_grid(costred~emred) +
   osw_fill +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
-        axis.ticks.x=element_blank())
+        axis.ticks.x=element_blank()) +
+  zero
 
 
 ## Emissions ----
