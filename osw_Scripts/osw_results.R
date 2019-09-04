@@ -1,3 +1,8 @@
+## Load Setup and Data Scripts ----
+
+source("osw_Scripts/osw_setup.R")
+source("osw_Scripts/osw_data.R")
+
 ## Scenarios ----
 
 ## ~ Cost ----
@@ -70,7 +75,8 @@ cap_plot <- ggplot(osw_varcap_long) +
        linetype = "Emissions Reduction (%)") + 
   facet_grid(~costred) +
   yt +
-  bottom +
+  bottom1 + 
+  bottom2 +
   x_disc
   
 cap_col_side <- cap_plot + 
@@ -92,9 +98,10 @@ cap_heatmap <- osw_varcap_long %>% filter(Year == "2050") %>%
        title = "2050 Offshore Wind Capacity",
        fill = "Capacity (GW)") +
   st +
-  bottom
+  bottom1 +
+  bottom2
   
-cap_col_heat <- cap_heatmap 
+cap_col_heat <- cap_heatmap
 
 cap_bw_heat <- cap_heatmap + gray_fill_cont 
 
@@ -107,7 +114,8 @@ newcap_plot <- ggplot(osw_varncap_long) +
        linetype = "Emissions Reduction (%)") + 
   facet_grid(costred~., scales = "free_y") +
   yt +
-  bottom +
+  bottom1 + 
+  bottom2 +
   x_disc
 
 newcap_col_top <- newcap_plot +
@@ -130,7 +138,7 @@ output_plot <- ggplot(osw_varfout_long) +
        linetype = "Emissions Reduction (%)") +
   facet_grid(~costred) +
   yt +
-  bottom +
+  bottom1 + bottom2 +
   x_disc
 
 output_col_side <- output_plot+
@@ -255,7 +263,7 @@ state_map <- us_map(regions = "states") %>%
 
 r8map <- subset(state_map, abbr %in% r8)
 
-regOSW_map_col <- ggplot() + 
+regOSW_map <- ggplot() + 
   geom_polygon(data = state_map, aes(x = long, y = lat, group = group, fill = avgOSW),
                color = "white") +
   geom_polygon(data = r8map, aes(x = long, y = lat, group = group),
@@ -265,10 +273,11 @@ regOSW_map_col <- ggplot() +
   labs(title = "Average Offshore Wind Capacity",
        fill = "GW") +
   theme_bw() +
-  scale_fill_gradient(low = "#A0B7F5", high = "#062B91") +
   noaxes
 
-regOSW_map_bw <- regOSW_map_col + gray_fill_cont
+regOSW_map_col <- regOSW_map + col_fill_cont
+
+regOSW_map_bw <- regOSW_map + gray_fill_cont
 
 
 ## ~ Tables ----
@@ -322,12 +331,12 @@ baseprod_line_bw <-baseprod +
 baseprod_fill_col <- baseprod +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process)) +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 baseprod_fill_bw <- baseprod +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 ## ~ Overall ----
 
@@ -386,21 +395,21 @@ bau_facetcost <-  embau %>%
 bau_facetcost_line_col <- bau_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 bau_facetcost_line_bw <- bau_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 bau_facetcost_fill_col <- bau_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill + 
-  bottom
+  bottom1 + bottom2
 
 bau_facetcost_fill_bw <- bau_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 em30_facetcost <-  em30 %>% 
   ggplot() +
@@ -414,21 +423,21 @@ em30_facetcost <-  em30 %>%
 em30_facetcost_line_col <- em30_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 em30_facetcost_line_bw <- em30_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 em30_facetcost_fill_col <- em30_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 em30_facetcost_fill_bw <- em30_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 em40_facetcost <-  em40 %>% 
   ggplot() +
@@ -442,21 +451,21 @@ em40_facetcost <-  em40 %>%
 em40_facetcost_line_col <- em40_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 em40_facetcost_line_bw <- em40_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 em40_facetcost_fill_col <- em40_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 em40_facetcost_fill_bw <- em40_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 em50_facetcost <-  em50 %>% 
   ggplot() +
@@ -470,21 +479,21 @@ em50_facetcost <-  em50 %>%
 em50_facetcost_line_col <- em50_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 em50_facetcost_line_bw <- em50_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 em50_facetcost_fill_col <- em50_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 em50_facetcost_fill_bw <- em50_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 em60_facetcost <-  em60 %>% 
   ggplot() +
@@ -498,21 +507,21 @@ em60_facetcost <-  em60 %>%
 em60_facetcost_line_col <- em60_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 em60_facetcost_line_bw <- em60_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 em60_facetcost_fill_col <- em60_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 em60_facetcost_fill_bw <- em60_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 em70_facetcost <-  em70 %>% 
   ggplot() +
@@ -526,21 +535,21 @@ em70_facetcost <-  em70 %>%
 em70_facetcost_line_col <- em70_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 em70_facetcost_line_bw <- em70_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom 
+  bottom1 + bottom2
 
 em70_facetcost_fill_col <- em70_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 em70_facetcost_fill_bw <- em70_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 em80_facetcost <-  em80 %>% 
   ggplot() +
@@ -554,21 +563,21 @@ em80_facetcost <-  em80 %>%
 em80_facetcost_line_col <- em80_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 em80_facetcost_line_bw <- em80_facetcost +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 em80_facetcost_fill_col <- em80_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 em80_facetcost_fill_bw <- em80_facetcost +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 ## ~ Cost Reductions ----
 
@@ -590,21 +599,21 @@ cost40_facetem <-  cost40 %>%
 cost40_facetem_line_col <- cost40_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 cost40_facetem_line_bw <- cost40_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 cost40_facetem_fill_col <- cost40_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 cost40_facetem_fill_bw <- cost40_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 cost50_facetem <-  cost50 %>% 
   ggplot() +
@@ -618,21 +627,21 @@ cost50_facetem <-  cost50 %>%
 cost50_facetem_line_col <- cost50_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 cost50_facetem_line_bw <- cost50_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 cost50_facetem_fill_col <- cost50_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 cost50_facetem_fill_bw <- cost50_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 cost60_facetem <-  cost60 %>% 
   ggplot() +
@@ -646,21 +655,21 @@ cost60_facetem <-  cost60 %>%
 cost60_facetem_line_col <- cost60_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 cost60_facetem_line_bw <- cost60_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 cost60_facetem_fill_col <- cost60_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 cost60_facetem_fill_bw <- cost60_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 cost70_facetem <-  cost70 %>% 
   ggplot() +
@@ -674,21 +683,21 @@ cost70_facetem <-  cost70 %>%
 cost70_facetem_line_col <- cost70_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 cost70_facetem_line_bw <- cost70_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 cost70_facetem_fill_col <- cost70_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 cost70_facetem_fill_bw <- cost70_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 cost80_facetem <-  cost80 %>% 
   ggplot() +
@@ -702,21 +711,21 @@ cost80_facetem <-  cost80 %>%
 cost80_facetem_line_col <- cost80_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
   osw_color +
-  bottom
+  bottom1 + bottom2
 
 cost80_facetem_line_bw <- cost80_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom
+  bottom1 + bottom2
 
 cost80_facetem_fill_col <- cost80_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   osw_fill +
-  bottom
+  bottom1 + bottom2
 
 cost80_facetem_fill_bw <- cost80_facetem +
   geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
   gray_fill +
-  bottom
+  bottom1 + bottom2
 
 ## ~ Heat Maps ----
 
@@ -916,7 +925,7 @@ emis_bau <- ggplot(data = emissions_bau, aes(x = Year, y = Emissions, fill = Com
        title = "Baseline Electric Sector Emissions",
        caption = "*Units are Mt for CO2 and kt for all other emissions") +
   yt +
-  bottom
+  bottom1 + bottom2
 
 emis_bau_fill_col <- emis_bau +
   geom_bar(stat = "identity", position = "stack", aes(fill = Commodity)) +
@@ -943,7 +952,7 @@ emis_plot <- emissions_long %>% filter(!costred %in% c("30", "20")) %>%
   facet_wrap(~Commodity, scales = "free_y") +
   yt +
   x_disc +
-  bottom +
+  bottom1 + bottom2 +
   theme(legend.box = "vertical") +
   guides(colour = guide_legend(nrow = 1))
 
@@ -1062,24 +1071,34 @@ emissions2050 %>%
 
 ## Total Electricity Production ----
 
-elctotal_long %>%
-  ggplot() +
-  geom_line(aes(x=Year, y=VAR_FOut, color = emred, group = Scenario)) +
-  em_color +
-  facet_wrap(~costred, ncol = 4) +
-  labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Scenario",
-       color = "Emissions\nReduction\n(%)") +
-  yt +
-  scale_x_discrete(breaks = seq(2015,2050, by = 5))
+elcdata <- elctotal_long %>% filter(costred != "20")
 
-elctotal2050 %>%
-  ggplot() +
-  geom_tile(aes(x = costred, y = emred, fill = VAR_FOut), colour = "gray", size = 0.25) +
+elctotal_line <- ggplot(elcdata) +
+  facet_grid(~costred) +
+  labs(x = "Year", y = "Electricity Production (PJ)",
+       title = "Total Electricity Production by Scenario",
+       color = "Emissions Reduction (%)",
+       linetype = "Emissions Reduction (%)") +
+  yt +
+  bottom1 + bottom2
+
+elctotal_line_col <- elctotal_line +
+  geom_line(aes(x = Year, y = VAR_FOut, color = emred, group = Scenario)) +
+  em_color
+
+elctotal_line_bw <- elctotal_line +
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = emred, group = Scenario))
+
+elctotal_heat <- ggplot(elcdata, aes(x = costred, y = emred)) +
+  geom_tile(aes(fill = VAR_FOut), colour = "gray", size = 0.25) +
   labs(x = "Offshore Wind Cost Reductions (%)",
        y = "Emissions Reduction (%)",
-       title = "Total Electricity Produced: 2050",
+       title = "Total Electricity Production: 2050",
        fill = "Electricity\nProduced\n(PJ)")
+
+elctotal_heat_col <- elctotal_heat + col_fill_cont
+  
+elctotal_heat_bw <- elctotal_heat + gray_fill_cont
 
 ## End Uses ----
 
@@ -1089,6 +1108,14 @@ enduse %>% filter(costred == "80" & emred == "40") %>%
   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
   geom_bar(stat = "identity", position = "stack") +
   scale_fill_manual(values = col_sector) +
+  labs(x = "Year", y = "Electricity Consumption (PJ)",
+       title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+enduse %>% filter(costred == "80" & emred == "40") %>%
+  ggplot(aes(x = Year, y = Consumption, color = Sector)) +
+  geom_line(aes(group = Sector)) +
+  scale_color_manual(values = col_sector) +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
@@ -1150,53 +1177,7 @@ enduse %>%
        title = "Industrial Electricity Consumption: 80% Cost Reduction") +
   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
-enduse %>%
-  filter(costred == "40") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "fill") +
-  scale_fill_manual(values = col_sector) +
-  facet_wrap(~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
 ## ~ Heatmaps ----
-
-enduse %>% filter(Year == "2050") %>% filter(Sector == "Commercial") %>%
-  ggplot(aes(x = costred, y = emred, fill = Consumption)) +
-  geom_tile(colour = "gray", size = 0.25) +
-  labs(x = "Offshore Wind Cost Reductions (%)",
-       y = "Emissions Reduction (%)",
-       title = "Commercial Sector Electricity Consumption: 2050",
-       fill = "Electricity\nConsumed\n(PJ)") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
-        axis.text.y = element_text(size = 8),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))
-
-enduse %>% filter(Year == "2050") %>% filter(Sector == "Industrial") %>%
-  ggplot(aes(x = costred, y = emred, fill = Consumption)) +
-  geom_tile(colour = "gray", size = 0.25) +
-  labs(x = "Offshore Wind Cost Reductions (%)",
-       y = "Emissions Reduction (%)",
-       title = "Industrial Sector Electricity Consumption: 2050",
-       fill = "Electricity\nConsumed\n(PJ)") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
-        axis.text.y = element_text(size = 8),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))
-
-enduse %>% filter(Year == "2050") %>% filter(Sector == "Residential") %>%
-  ggplot(aes(x = costred, y = emred, fill = Consumption)) +
-  geom_tile(colour = "gray", size = 0.25) +
-  labs(x = "Offshore Wind Cost Reductions (%)",
-       y = "Emissions Reduction (%)",
-       title = "Residential Sector Electricity Consumption: 2050",
-       fill = "Electricity\nConsumed\n(PJ)") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
-        axis.text.y = element_text(size = 8),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9))
 
 enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
   ggplot(aes(x = costred, y = emred, fill = Consumption)) +
@@ -1210,18 +1191,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))
 
-enduse %>% filter(Year == "2050") %>% filter(costred != "20") %>%
-  ggplot(aes(x = costred, y = emred, fill = Consumption)) +
-  geom_tile(colour = "gray", size = 0.25) +
-  labs(x = "Offshore Wind Cost Reductions (%)",
-       y = "Emissions Reduction (%)",
-       title = "Transportation Sector Electricity Consumption: 2050",
-       fill = "Electricity\nConsumed\n(PJ)") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 8),
-        axis.text.y = element_text(size = 8),
-        legend.title = element_text(size = 10),
-        legend.text = element_text(size = 9)) +
-  facet_grid(~Sector, scales = "free")
+
 
 ## Save Plots ----
 

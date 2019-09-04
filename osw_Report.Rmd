@@ -454,10 +454,46 @@ if(color > 0) emis_col
 if(bw > 0) emis_bw
 ```
 
-<!-- # TEST -->
 
-<!-- ```{r} -->
-<!-- grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, layout_matrix = rbind(c(1,1,1),c(2,3,4))) -->
-<!-- grid.arrange(cost_col, cost_bw, emissions_col, emissions_bw, ncol = 2) -->
-<!-- ``` -->
+# Total Electricity Production
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) elctotal_line_col
+if(color > 0) elctotal_heat_col
+if(bw > 0) elctotal_line_bw
+if(bw > 0) elctotal_heat_bw
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

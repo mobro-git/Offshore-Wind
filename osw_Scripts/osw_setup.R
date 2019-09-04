@@ -46,6 +46,10 @@ categorize <- function(table) {
       str_detect(Scenario, "CostRed60") ~ "60",
       str_detect(Scenario, "CostRed70") ~ "70",
       str_detect(Scenario, "CostRed80") ~ "80",
+      str_detect(Scenario, "CostRed45") ~ "45",
+      str_detect(Scenario, "CostRed55") ~ "55",
+      str_detect(Scenario, "CostRed40to50") ~ "50s",
+      str_detect(Scenario, "CostRed50to60") ~ "60s",
       TRUE ~ "20"
     )) %>%
     mutate(emred = case_when(
@@ -124,13 +128,13 @@ grid.heatmap.col <- function(data, title) {
        y = "Emissions Reduction (%)",
        title = title,
        fill = "Electricity\nProduced\n(PJ)") +
-  scale_fill_gradient(na.value = "white") +
+  col_fill_cont +
   st
 }
 
 grid.heatmap.bw <- function(data, title) {
   ggplot(data = data, aes(x = costred, y = emred, fill = VAR_FOut)) +
-    geom_tile(colour = "gray", size = 0.25) +
+    geom_tile(colour = "white", size = 0.25) +
     facet_grid(Process ~ .) + 
     labs(x = "Offshore Wind Cost Reductions (%)",
          y = "Emissions Reduction (%)",
@@ -223,7 +227,8 @@ elab <- c("BAU" = "BAU", "30" = "E30", "40" = "E40",  "50" = "E50", "60" = "E60"
 clab <- c("40" = "C40",  "50" = "C50", "60" = "C60", "70" = "C70", "80" = "C80")
 
 ## ----Themes and Scales-----------------------------------------------
-bottom <- theme(legend.position = "bottom")
+bottom1 <- theme(legend.position = "bottom")
+bottom2 <- guides(color = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
 
 yt <- theme_bw() + 
   theme(strip.background = element_rect(colour = "black", fill = "white"),
@@ -267,7 +272,8 @@ osw_fill <- scale_fill_manual(values = col_osw)
 osw_color <- scale_color_manual(values = col_osw)
 gray_fill <- scale_fill_grey(start = 0.9, end = 0)
 gray_color <- scale_color_grey(start = 0.8, end = 0)
-gray_fill_cont <- scale_fill_gradient(low = "#AEAEAE", high = "#000000", na.value = "white")
+col_fill_cont <- scale_fill_gradient(low = "#d7e8fa", high = "#04488c", na.value = "white")
+gray_fill_cont <- scale_fill_gradient(low = "#bababa", high = "#08090a", na.value = "white")
 em_color <- scale_color_manual(values = col_em)
 cost_color <- scale_color_manual(values = col_cost)
 costosw_color <- scale_color_manual(values = col_costosw)
