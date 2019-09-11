@@ -24,6 +24,7 @@ library(usmap)
 library(ggmap)
 library(maptools)
 library(sf)
+library(PerformanceAnalytics)
 
 
 ## ----Functions-------------------------------------------
@@ -117,7 +118,8 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
          title = title,
          color = "Emissions Reduction (%)",
          linetype = "Emissions Reduction (%)") +
-    bottom
+    bottom1 +
+    bottom2
 }
 
 grid.heatmap.col <- function(data, title) {
@@ -225,6 +227,22 @@ levels_sector <- c("Transportation", "Industrial", "Commercial", "Residential")
 ## ----Labels-----------------------
 elab <- c("BAU" = "BAU", "30" = "E30", "40" = "E40",  "50" = "E50", "60" = "E60", "70" = "E70", "80" = "E80")
 clab <- c("40" = "C40",  "50" = "C50", "60" = "C60", "70" = "C70", "80" = "C80")
+
+costlabels <- c(
+  "40" = "40% Cost Red.",  
+  "50" = "50% Cost Red.", 
+  "60" = "60% Cost Red.", 
+  "70" = "70% Cost Red.", 
+  "80" = "80% Cost Red.")
+
+emissionlabels <- c(
+  "BAU" = "Business as usual", 
+  "30" = "30% CO2 Cap", 
+  "40" = "40% CO2 Cap",  
+  "50" = "50% CO2 Cap", 
+  "60" = "60% CO2 Cap", 
+  "70" = "70% CO2 Cap", 
+  "80" = "80% CO2 Cap")
 
 ## ----Themes and Scales-----------------------------------------------
 bottom1 <- theme(legend.position = "bottom")

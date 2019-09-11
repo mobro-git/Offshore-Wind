@@ -14,17 +14,17 @@ costscen_plot <- ggplot(scenario_cost) +
   scale_y_continuous(limits = c(0, 100), expand = c(.01, 0)) +
   labs(x = "Year", y = "Cost Reduction", 
        title = "OSW Cost Curves", 
-       subtitle = "Percentage decrease from 2010 offshore wind CAPEX costs") +
+       subtitle = "Percentage decrease from 2018 offshore wind CAPEX costs") +
   yt +
   x_cont +
   nolegend
   
 costscen_col <- costscen_plot +
-  geom_line(aes(x = Year, y = Costs, color = CostCurve, group = CostCurve), size = .75) +
+  geom_line(aes(x = Year, y = Costs, color = CostCurve, group = CostCurve), size = 1) +
   cost_color
 
 costscen_bw <- costscen_plot +
-  geom_line(aes(x = Year, y = Costs, linetype = CostCurve, group = CostCurve), size = .75)
+  geom_line(aes(x = Year, y = Costs, linetype = CostCurve, group = CostCurve), size = 1) 
 
 
 ## ~ Emissions ----
@@ -45,11 +45,11 @@ emissionsscen_plot <- ggplot(scenario_emissions) +
   nolegend
   
 emissionsscen_col <- emissionsscen_plot + 
-  geom_line(aes(x = Year, y = Emissions, color = Cap, group = Cap), size = .75) + 
+  geom_line(aes(x = Year, y = Emissions, color = Cap, group = Cap), size = 1) + 
   em_color 
 
 emissionsscen_bw <- emissionsscen_plot +
-  geom_line(aes(x = Year, y = Emissions, linetype = Cap, group = Cap), size = .75)
+  geom_line(aes(x = Year, y = Emissions, linetype = Cap, group = Cap), size = 1)
 
 ## LCOE ----
 
@@ -73,14 +73,14 @@ cap_plot <- ggplot(osw_varcap_long) +
        title = "Offshore Wind Capacity",
        color = "Emissions Reduction (%)",
        linetype = "Emissions Reduction (%)") + 
-  facet_grid(~costred) +
+  facet_grid(~costred, labeller=labeller(costred = costlabels)) +
   yt +
   bottom1 + 
   bottom2 +
   x_disc
   
 cap_col_side <- cap_plot + 
-  geom_line(aes(x=Year, y=VAR_Cap, color = emred, group = Scenario)) + 
+  geom_line(aes(x=Year, y=VAR_Cap, color = emred, group = Scenario), size = 1) + 
   em_color
    
 cap_bw_side <- cap_plot +
@@ -366,8 +366,21 @@ gridmix <- elc_long %>%
   x_disc
 
 gridmix_col <- gridmix +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process)) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
   osw_color
+
+gridmix_poster <- elc_long %>% 
+  filter(!costred %in% c("20", "30", "80")) %>%
+  filter(emred %in% c("BAU", "40", "60")) %>%
+  ggplot() +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
+  labs(x = "Year", y = "Electricity Production (PJ)",
+       title = "Electricity Production by Process") +
+  facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+  yt +
+  x_disc +
+  osw_color +
+  theme(legend.title=element_blank())
 
 gridmix_bw <- gridmix + 
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process))
@@ -944,12 +957,12 @@ emis_bau_line_bw <- emis_bau +
   
 emis_plot <- emissions_long %>% filter(!costred %in% c("30", "20")) %>%
   ggplot(aes(x = Year, y= Emissions)) +
-  labs(x = "Year", y = "Emissions*",
+  labs(x = "Year", y = "Emissions (kt)*",
        title = "Electric Sector Emissions Output",
-       caption = "*Units are Mt for CO2",
+       subtitle = "*Units are Mt for CO2",
        linetype = "Emissions Reduction (%)",
        color = "Cost Reduction (%)") +
-  facet_wrap(~Commodity, scales = "free_y") +
+  facet_wrap(~Commodity, scales = "free_y", nrow = 1) +
   yt +
   x_disc +
   bottom1 + bottom2 +
@@ -1072,6 +1085,7 @@ emissions2050 %>%
 ## Total Electricity Production ----
 
 elcdata <- elctotal_long %>% filter(costred != "20")
+elcdata_c80 <- elcdata %>% filter(costred == "80")
 
 elctotal_line <- ggplot(elcdata) +
   facet_grid(~costred) +
@@ -1190,6 +1204,36 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
         axis.text.y = element_text(size = 8),
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))
+
+
+## Correlations ----
+
+oswcor <- osw_varcap_2050total 
+names(oswcor)[1] <- "emred"
+oswcor <- oswcor %>% 
+  gather("40", "50", "60", "70", "80", key = "costred", value = "cap2050")
+oswcor <- left_join(oswcor, emissions2050, by = c("emred", "costred")) %>%
+  spread(key = Commodity, value = Emissions) %>%
+  select(emred, costred, CO2, SO2, CH4, `PM 2.5`, NOx, `cap2050`)
+oswcor[] <- lapply(oswcor, as.character)
+oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
+  mutate(emred = as.numeric(emred)) %>%
+  mutate(costred = as.numeric(costred)) %>%
+  mutate(CO2 = as.numeric(CO2)) %>%
+  mutate(SO2 = as.numeric(SO2)) %>%
+  mutate(NOx = as.numeric(NOx)) %>%
+  mutate(`PM 2.5` = as.numeric(`PM 2.5`)) %>%
+  mutate(CH4 = as.numeric(CH4)) %>%
+  mutate(`cap2050` = as.numeric(`cap2050`))
+
+correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswcor$`cap2050`)
+
+correlations$statistic
+
+
+
+
+
 
 
 
