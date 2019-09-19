@@ -1,11 +1,16 @@
 ## Load Setup and Data Scripts ----
 
+# allows me to quickly run my two previous scripts when I make changes in them or
+# if I'm just going to work with results and need to pull in the data
+
 source("osw_Scripts/osw_setup.R")
 source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
 ## ~ Cost ----
+
+# creates the graphs showing the different cost scenarios used
 
 costscen_plot <- ggplot(scenario_cost) +
   geom_label(data = . %>% filter(Year == last(Year)),
@@ -28,6 +33,8 @@ costscen_bw <- costscen_plot +
 
 
 ## ~ Emissions ----
+
+# creates the graphs showing the different co2 cap scenarios used
 
 emissionsscen_plot <- ggplot(scenario_emissions) +
   geom_label(data = . %>% filter(Year == last(Year)) %>% filter(Cap != "BAU"),
@@ -53,6 +60,8 @@ emissionsscen_bw <- emissionsscen_plot +
 
 ## LCOE ----
 
+# kable table to show 2018 AEO LCOE for comparison between osw and other technologies
+
 lcoe_table <- lcoe %>% 
   kable(booktabs = T, caption = "Estimated LCOE capacity-weighted average for new generation 
         resources entering service in 2023 (2018 \\$/MWh)", linesep = "") %>% 
@@ -67,6 +76,8 @@ lcoe_table <- lcoe %>%
 ## Offshore Wind ----
 
 ## ~ Total Capacity ----
+
+# total osw by scenario, co2 caps are multicolor lines and cost scenarios are facets
 
 cap_plot <- ggplot(osw_varcap_long) +
   labs(x = "Year", y = "Total Installed Capacity (GW)",
@@ -90,6 +101,8 @@ cap_gray_side <- cap_plot +
   geom_line(aes(x=Year, y=VAR_Cap, color = emred, group = Scenario)) + 
   gray_color
 
+# heatmaps of 2050 total osw capacity, cumulative
+
 cap_heatmap <- osw_varcap_long %>% filter(Year == "2050") %>%
   ggplot(aes(x = costred, y = emred)) +
   geom_tile(aes(fill = VAR_Cap), colour = "gray") +
@@ -106,6 +119,8 @@ cap_col_heat <- cap_heatmap
 cap_bw_heat <- cap_heatmap + gray_fill_cont 
 
 ## ~ New Capacity ----
+
+# new osw by scenario, co2 caps are multicolor lines and cost scenarios are facets
 
 newcap_plot <- ggplot(osw_varncap_long) +
   labs(x = "Year", y = "New Installed Capacity (GW)",
@@ -131,6 +146,8 @@ newcap_gray_top <- newcap_plot +
 
 ## ~ Production ----
 
+# osw elc production by scenario, co2 caps are multicolor lines and cost scenarios are facets
+
 output_plot <- ggplot(osw_varfout_long) + 
   labs(x = "Year", y = "Offshore Wind Output (PJ)",
        title = "Offshore Wind Output",
@@ -154,6 +171,8 @@ output_gray_side <- output_plot+
 
 ## ~ Regions ----
 
+# REGIONAL total osw by scenario, co2 caps are multicolor lines and cost scenarios are facets
+
 cap.reg.col.list <- list(data = osw_varcap_long_reg, yvar = "VAR_Cap", colvar = "emred",
                           coltheme = em_color, title = "Offshore Wind Total Capacity", 
                           ylab = "Capacity (GW)")
@@ -167,10 +186,33 @@ cap_reg6_col <- do.call(lineplot.region, c(cap.reg.col.list,list(region = "R6"))
 cap_reg7_col <- do.call(lineplot.region, c(cap.reg.col.list,list(region = "R7")))
 cap_reg9_col <- do.call(lineplot.region, c(cap.reg.col.list,list(region = "R9")))
 
+# facetgrid with all regions shown in one plot
+
 cap_allreg_col <- do.call(lineplot.region, cap.reg.col.list)
 cap_allreg_col_free <- do.call(lineplot.region, c(cap.reg.col.list,list(scale="free_y"))) +
   theme(axis.text.y = element_text(face = "bold")) +
   labs(caption = "*Capacity scales are not fixed")
+
+cap.reg.bw.list <- list(data = osw_varcap_long_reg, yvar = "VAR_Cap", typevar = "emred",
+                        title = "Offshore Wind Total Capacity", ylab = "Capacity (GW)")
+
+cap_reg1_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R1")))
+cap_reg2_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R2")))
+cap_reg3_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R3")))
+cap_reg4_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R4")))
+cap_reg5_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R5")))
+cap_reg6_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R6")))
+cap_reg7_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R7")))
+cap_reg9_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R9")))
+
+# facetgrid with all regions shown in one plot
+
+cap_allreg_bw <- do.call(lineplot.region, cap.reg.bw.list)
+cap_allreg_bw_free <- do.call(lineplot.region, c(cap.reg.bw.list,list(scale="free_y"))) +
+  theme(axis.text.y = element_text(face = "bold")) +
+  labs(caption = "*Capacity scales are not fixed")
+
+# REGIONAL new osw by scenario, co2 caps are multicolor lines and cost scenarios are facets
 
 ncap.reg.col.list <- list(data = osw_varncap_long_reg, yvar = "VAR_Ncap", colvar = "emred",
             coltheme = em_color, title = "Offshore Wind New Capacity", 
@@ -185,25 +227,10 @@ newcap_reg6_col <- do.call(lineplot.region, c(ncap.reg.col.list,list(region = "R
 newcap_reg7_col <- do.call(lineplot.region, c(ncap.reg.col.list,list(region = "R7")))
 newcap_reg9_col <- do.call(lineplot.region, c(ncap.reg.col.list,list(region = "R9")))
 
+# facetgrid with all regions shown in one plot
+
 newcap_allreg_col <- do.call(lineplot.region, ncap.reg.col.list)
 newcap_allreg_col_free <- do.call(lineplot.region, c(ncap.reg.col.list,list(scale="free_y"))) +
-  theme(axis.text.y = element_text(face = "bold")) +
-  labs(caption = "*Capacity scales are not fixed")
-
-cap.reg.bw.list <- list(data = osw_varcap_long_reg, yvar = "VAR_Cap", typevar = "emred",
-                         title = "Offshore Wind Total Capacity", ylab = "Capacity (GW)")
-
-cap_reg1_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R1")))
-cap_reg2_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R2")))
-cap_reg3_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R3")))
-cap_reg4_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R4")))
-cap_reg5_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R5")))
-cap_reg6_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R6")))
-cap_reg7_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R7")))
-cap_reg9_bw <- do.call(lineplot.region, c(cap.reg.bw.list,list(region = "R9")))
-
-cap_allreg_bw <- do.call(lineplot.region, cap.reg.bw.list)
-cap_allreg_bw_free <- do.call(lineplot.region, c(cap.reg.bw.list,list(scale="free_y"))) +
   theme(axis.text.y = element_text(face = "bold")) +
   labs(caption = "*Capacity scales are not fixed")
 
@@ -219,6 +246,8 @@ newcap_reg6_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R6"
 newcap_reg7_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R7")))
 newcap_reg9_bw <- do.call(lineplot.region, c(ncap.reg.bw.list,list(region = "R9")))
 
+# facetgrid with all regions shown in one plot
+
 newcap_allreg_bw <- do.call(lineplot.region, ncap.reg.bw.list)
 newcap_allreg_bw_free <- do.call(lineplot.region, c(ncap.reg.bw.list,list(scale="free_y"))) +
   theme(axis.text.y = element_text(face = "bold")) +
@@ -226,6 +255,9 @@ newcap_allreg_bw_free <- do.call(lineplot.region, c(ncap.reg.bw.list,list(scale=
 
 
 ## ~ Maps ----
+
+# sets variables for which states are in which census region
+
 r1 <- c("ME","NH","VT","MA","RI","CT")
 r2 <- c("NY","PA","NJ")
 r3 <- c("WI", "MI", "OH", "IN", "IL")
@@ -236,6 +268,9 @@ r6 <- c("KY","TN","AL","MS")
 r7 <- c("LA","AR","OK","TX")
 r8 <- c("MT","WY","ID","CO","NV","UT","AZ","NM")
 r9 <-c("WA","OR","CA","HI","AK")
+
+# pulls in the states map from the us_map package and adds columns for census region
+# and avg osw capacity in each region (needs to be manually updated)
 
 state_map <- us_map(regions = "states") %>%
   mutate(censusRegion = case_when(
@@ -261,7 +296,13 @@ state_map <- us_map(regions = "states") %>%
     abbr %in% r9 ~ 93.4
   ))
 
+# singles out region 8 because no offshore wind is available in 8 - dont want it to
+# skew the heatmap 
+
 r8map <- subset(state_map, abbr %in% r8)
+
+# map showing average osw capacity over all scenarios - for comparison between regions
+# total osw capacity
 
 regOSW_map <- ggplot() + 
   geom_polygon(data = state_map, aes(x = long, y = lat, group = group, fill = avgOSW),
@@ -282,6 +323,8 @@ regOSW_map_bw <- regOSW_map + gray_fill_cont
 
 ## ~ Tables ----
 
+# kable tables for osw capacity and elc generation by region
+
 cap_region_table <- osw_varcap_regiontotals %>% 
   kable(booktabs = T, caption = "Average Installed Capacity (GW)", linesep = "") %>% 
   kable_styling(latex_options = c("striped", "hold_position"))
@@ -290,17 +333,19 @@ output_region_table <- osw_varfout_regiontotals %>%
   kable(booktabs = T, caption = "Average Electricity Output (PJ)", linesep = "") %>% 
   kable_styling(latex_options = c("striped", "hold_position"))
 
+# matrix kable tables for total osw capacity and elc production in 2050
+
 cap_2050_table <- osw_varcap_2050total %>% 
   kable(booktabs = T, caption = "Offshore Wind Total Installed Capacity (GW): 2050", 
         digits = 1, linesep = "") %>% 
   kable_styling(latex_options = c("striped", "hold_position")) %>% 
-  add_header_above(c("Emissions\nReduction (%)", "Cost Reduction (%)" = 5)) 
+  add_header_above(c("Emissions\nReduction (%)", "Cost Reduction (%)" = 9)) 
 
 output_2050_table <- osw_varfout_2050total %>% 
   kable(booktabs = T, caption = "Offshore Wind Total Output (PJ): 2050", 
         digits = 1, linesep = "") %>%
   kable_styling(latex_options = c("striped", "hold_position")) %>% 
-  add_header_above(c("Emissions\nReduction (%)", "Cost Reduction (%)" = 5)) 
+  add_header_above(c("Emissions\nReduction (%)", "Cost Reduction (%)" = 9)) 
 
 ## Grid Mix ----
 
@@ -962,7 +1007,7 @@ emis_plot <- emissions_long %>% filter(!costred %in% c("30", "20")) %>%
        subtitle = "*Units are Mt for CO2",
        linetype = "Emissions Reduction (%)",
        color = "Cost Reduction (%)") +
-  facet_wrap(~Commodity, scales = "free_y", nrow = 1) +
+  facet_wrap(~Commodity, scales = "free_y", nrow = 1, labeller = label_parsed) +
   yt +
   x_disc +
   bottom1 + bottom2 +
@@ -977,49 +1022,48 @@ emis_bw <- emis_plot +
   geom_line(aes(x=Year, y=Emissions, color = costred, group = Scenario, linetype = emred)) +
   gray_color
 
-emissions_long %>% filter(Commodity == "CO2") %>%
+co2_plot <- emissions_long %>% filter(Commodity == "CO[2]") %>%
   ggplot(aes(x = Year, y = Emissions)) +
-  geom_line(aes(group = Scenario, color = costred)) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 7)) +
-  facet_wrap(~emred, labeller = labeller(emred = elab, costred = clab)) +
-  scale_color_brewer(palette = "Blues") +
+  facet_grid(~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   labs(x = "Year", y = "Emissions",
-       title = "Electric Sector CO2 Emissions",
+       title = bquote("Electric Sector"~CO[2]~"Emissions"),
        color = "Cost\nReduction\n(%)") +
-  scale_x_discrete(breaks = seq(2015,2050, by = 5))
+  yt
+
+co2_col <- co2_plot +
+  geom_line(aes(group = Scenario, color = costred)) +
+  cost_color
+
+
 
 ggplot() +
   geom_line(data = emissions_long %>% filter(Commodity == "CO2" &
                                                emred == "50" &
                                                costred != "20" &
                                                costred != "30"),
-            aes(x = Year, y = Emissions, group = Scenario), color = "gray50") +
+            aes(x = Year, y = Emissions, group = Scenario), color = "black") +
   geom_line(data = osw_varcap_long %>% filter(emred == "50" &
                                                 costred != "20" &
                                                 costred != "30"),
             aes(x = Year, y = VAR_Cap*3, group = Scenario),
             color = "deepskyblue4") +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
-  facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
+  facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels))
 
 ggplot() +
   geom_line(data = emissions_long %>% filter(emred == "20" | emred == "50" | emred == "80") %>%
-              filter(costred != "20" & costred != "30") %>%
+              filter(costred == "50" & costred == "70") %>%
               filter(Commodity != "CH4" &  Commodity != "PM 2.5"),
             aes(x = Year, y = Emissions, group = Commodity, color = Commodity)) +
-  geom_line(data = osw_varcap_long %>% filter(emred == "20" |
-                                                emred == "50" |
-                                                emred == "80" &
-                                                costred != "20" &
-                                                costred != "30"),
+  geom_line(data = osw_varcap_long %>% filter(emred == "20" | emred == "50" | emred == "80") %>%
+              filter(costred == "50" & costred == "70"),
             aes(x = Year, y = VAR_Cap*3, group = Scenario, color = "Offshore Wind")) +
   theme(axis.text.x = element_text(angle = 60, hjust = 1, size = 7)) +
   scale_color_manual(breaks = c("CO2", "NOx", "SO2", "Offshore Wind"),
-                     values = c("chartreuse4", "seashell4", "deepskyblue4", "darkgoldenrod3")) +
+                     values = c("chartreuse4", "seashell4", "deepskyblue4", "darkgoldenrod3", "black", "blue")) +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
   facet_grid(costred~emred, labeller = label_both) +
   labs(y = "Emissions*", caption = "*Emissions units are kt for NOx and SO2 and Mt for CO2")
-
 
 
 
@@ -1205,33 +1249,11 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))
 
-
 ## Correlations ----
 
-oswcor <- osw_varcap_2050total 
-names(oswcor)[1] <- "emred"
-oswcor <- oswcor %>% 
-  gather("40", "50", "60", "70", "80", key = "costred", value = "cap2050")
-oswcor <- left_join(oswcor, emissions2050, by = c("emred", "costred")) %>%
-  spread(key = Commodity, value = Emissions) %>%
-  select(emred, costred, CO2, SO2, CH4, `PM 2.5`, NOx, `cap2050`)
-oswcor[] <- lapply(oswcor, as.character)
-oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
-  mutate(emred = as.numeric(emred)) %>%
-  mutate(costred = as.numeric(costred)) %>%
-  mutate(CO2 = as.numeric(CO2)) %>%
-  mutate(SO2 = as.numeric(SO2)) %>%
-  mutate(NOx = as.numeric(NOx)) %>%
-  mutate(`PM 2.5` = as.numeric(`PM 2.5`)) %>%
-  mutate(CH4 = as.numeric(CH4)) %>%
-  mutate(`cap2050` = as.numeric(`cap2050`))
-
 correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswcor$`cap2050`)
-
-correlations$statistic
-
-
-
+correlations.chart <- chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
+correlations.table <- as.data.frame(correlations)
 
 
 

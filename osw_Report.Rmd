@@ -462,11 +462,14 @@ if(color > 0) elctotal_line_col
 if(color > 0) elctotal_heat_col
 if(bw > 0) elctotal_line_bw
 if(bw > 0) elctotal_heat_bw
-testtable
 ```
 
 
+# Correlation
 
+```{r}
+correlations.chart
+```
 
 
 

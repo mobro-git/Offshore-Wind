@@ -1,4 +1,8 @@
 ## ----Library----------------------------------------
+
+# load all packages into the environment. there are more packages here than I ended up using,
+# but the list just kept getting longer over time. could clean this up but doesnt seem worth
+# the effort because no harm done
 library(graphics)
 library(colorspace)
 library(tidyverse)
@@ -28,6 +32,10 @@ library(PerformanceAnalytics)
 
 
 ## ----Functions-------------------------------------------
+
+# function to pull in all sheets from an excel spreadsheet and turn them into 
+# separate data frames. should make for easier data analysis and manipulation 
+
 ReadAllSheets <- function(filename, tibble = FALSE) {
   sheets <- readxl::excel_sheets(filename)
   x <- lapply(sheets, function(X) readxl::read_excel(filename, 
@@ -38,9 +46,15 @@ ReadAllSheets <- function(filename, tibble = FALSE) {
   x
 }
 
+# function to turn my scenario titles (which are very convoluted and long) into 
+# intelligible combinations of variables that I can filter on to better sort the 
+# data and results
+
 categorize <- function(table) {
   x <- table %>%
     mutate(costred = case_when(
+      str_detect(Scenario, "CostRed40to50") ~ "40s",
+      str_detect(Scenario, "CostRed50to60") ~ "50s",
       str_detect(Scenario, "CostRed30") ~ "30",
       str_detect(Scenario, "CostRed40") ~ "40",
       str_detect(Scenario, "CostRed50") ~ "50",
@@ -49,8 +63,6 @@ categorize <- function(table) {
       str_detect(Scenario, "CostRed80") ~ "80",
       str_detect(Scenario, "CostRed45") ~ "45",
       str_detect(Scenario, "CostRed55") ~ "55",
-      str_detect(Scenario, "CostRed40to50") ~ "50s",
-      str_detect(Scenario, "CostRed50to60") ~ "60s",
       TRUE ~ "20"
     )) %>%
     mutate(emred = case_when(
@@ -70,6 +82,9 @@ categorize <- function(table) {
     mutate(Scenario = paste("E", emred, "C", costred, sep = ''))
 }
 
+# function to reformat names of processes to more intelligable names and consolidate
+# those that I dont need to analyze (petroleum, msw, biomass) into "other"
+
 process <- function(table) {
   x <- table %>%
     mutate(Process = case_when(
@@ -84,16 +99,22 @@ process <- function(table) {
     )) 
 }
 
+# function to reformat names of emissions for a nicer look. labels section below formats
+# the subscripts for the molecular emissions so they look nicer in the graphs and tables
+
 emission <- function(table) {
   x <- table %>%
     mutate(Commodity = case_when(
-      str_detect(Commodity, "CH4") ~ "CH4",
-      str_detect(Commodity, "CO2") ~ "CO2",
-      str_detect(Commodity, "NOX") ~ "NOx",
-      str_detect(Commodity, "SO2") ~ "SO2",
-      str_detect(Commodity, "PM25") ~ "PM 2.5"
+      str_detect(Commodity, "CH4") ~ "CH[4]",
+      str_detect(Commodity, "CO2") ~ "CO[2]",
+      str_detect(Commodity, "NOX") ~ "NO[X]",
+      str_detect(Commodity, "SO2") ~ "SO[2]",
+      str_detect(Commodity, "PM25") ~ "PM[2.5]"
     )) 
 }
+
+# function to more easily filter and select columns from a dataframe. ended up not really
+# using this function that much, but could probably repurpose it for something else
 
 filter_osw <- function(table,attribute,ridcol1=NULL,ridcol2=NULL, 
                        ridcol3=NULL,ridcol4=NULL,ridcol5=NULL,ridcol6=NULL) {
@@ -101,6 +122,8 @@ filter_osw <- function(table,attribute,ridcol1=NULL,ridcol2=NULL,
     filter(Attribute == enexpr(attribute)) %>%
     select(-c(ridcol1, ridcol2, ridcol3, ridcol4, ridcol5, ridcol6))
 }
+
+# function to reduce code copying and pasting when duplicating the same graph for each region
 
 lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
                             scale=NULL, typevar=NULL, colvar=NULL, 
@@ -121,6 +144,8 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
     bottom1 +
     bottom2
 }
+
+# function to reduce code copying and pasting when duplicating heat maps
 
 grid.heatmap.col <- function(data, title) {
   ggplot(data = data, aes(x = costred, y = emred, fill = VAR_FOut)) +
@@ -146,6 +171,8 @@ grid.heatmap.bw <- function(data, title) {
     gray_fill_cont
 }
 
+# functions to reduce code copying and pasting when duplicating addition/retirement summary graphs
+
 prod.dif.col <- function(data, title) {
   ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
     geom_bar(stat = "identity", position = "stack", width = 0.9) +
@@ -170,6 +197,8 @@ prod.dif.bw <- function(data, title) {
     facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
 }
 
+# functions to reduce code copying and pasting when duplicating addition/retirement by emissions scen
+
 prod.dif.em.col <- function(data, title) {
   ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
     geom_bar(stat = "identity", position = "stack", width = 0.9) +
@@ -193,6 +222,8 @@ prod.dif.em.bw <- function(data, title) {
     yt + 
     facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
 }
+
+# functions to reduce code copying and pasting when duplicating addition/retirement by cost scen
 
 prod.dif.cost.col <- function(data, title) {
   ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
@@ -219,13 +250,23 @@ prod.dif.cost.bw <- function(data, title) {
 }
 
 ## ----Factors-----------------------------------------------
-levels_costred <- c("20", "30", "40", "50", "60", "70", "80")
+
+# creates levels to be used when factoring the scenarios so they appear in the correct
+# order in graphs (eg from lowest to highest cost and least to most stringent emissions)
+
+levels_costred <- c("20", "30", "40", "40s", "45", "50", "50s", "55", "60", "70", "80")
 levels_emred <- c("BAU", "30", "40", "50", "60", "70", "80")
-levels_emissions <- c("CH4", "PM 2.5", "SO2", "NOx", "CO2")
+levels_emissions <- c("CH[4]", "PM[2.5]", "SO[2]", "NO[X]", "CO[2]")
 levels_sector <- c("Transportation", "Industrial", "Commercial", "Residential")
 
 ## ----Labels-----------------------
-elab <- c("BAU" = "BAU", "30" = "E30", "40" = "E40",  "50" = "E50", "60" = "E60", "70" = "E70", "80" = "E80")
+
+# creates labels to be used on graphs instead of the variable name or value. looks nicer
+# and can write out things (eg "business as usual") that I wouldnt otherwise want to type
+# out when filtering through data or greating graphics
+
+elab <- c("BAU" = "BAU", "30" = "E30", "40" = "E40",  "50" = "E50", "60" = "E60",
+          "70" = "E70", "80" = "E80")
 clab <- c("40" = "C40",  "50" = "C50", "60" = "C60", "70" = "C70", "80" = "C80")
 
 costlabels <- c(
@@ -233,7 +274,11 @@ costlabels <- c(
   "50" = "50% Cost Red.", 
   "60" = "60% Cost Red.", 
   "70" = "70% Cost Red.", 
-  "80" = "80% Cost Red.")
+  "80" = "80% Cost Red.",
+  "45" = "45% Cost Red.", 
+  "55" = "55% Cost Red.",
+  "40s" = "Slow 50% Cost Red.", 
+  "50s" = "Slow 60% Cost Red.")
 
 emissionlabels <- c(
   "BAU" = "Business as usual", 
@@ -244,7 +289,20 @@ emissionlabels <- c(
   "70" = "70% CO2 Cap", 
   "80" = "80% CO2 Cap")
 
+airlabels <- c(
+  "CO[2]" = expression(CO[2]),
+  "SO[2]" = expression(SO[2]),
+  "NO[X]" = expression(NO[X]),
+  "CH[4]" = expression(CH[4]),
+  "PM[2.5]" = expression(PM[2.5])
+)
+
 ## ----Themes and Scales-----------------------------------------------
+
+# creates templates for use in ggplot2 graphics to reduce code redundancy. some elements 
+# create templates for axis scales and formatting, others set color scales for certain 
+# groups of graphs, and others format the graph themes
+
 bottom1 <- theme(legend.position = "bottom")
 bottom2 <- guides(color = guide_legend(nrow = 1), linetype = guide_legend(nrow = 1))
 
@@ -279,10 +337,12 @@ col_osw <- c(`Terrestrial Wind` = "lightblue3", `Hydro` = "dodgerblue4",
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
-col_cost <- c("#BFD4FF", "#9DB9F3", "#7598E1", "#507BD5", "#3663C4", "#1847AC", "#002D8E")
-col_costosw <- c("#C9CDD6", "#9FAED0", "#728DCA", "#4A72CB", "#002D8E")
-col_commodity <-  c("CH4" = "deepskyblue4", "PM 2.5" = "firebrick", "SO2" = "darkgoldenrod3", 
-                    "NOx" = "seashell4", "CO2" = "chartreuse4")
+col_cost <- c("#BFD4FF", "#9DB9F3", "#7598E1", "#5d7bba", "#5da4ba", "#507BD5", "#476ebf", "#47a3bf", 
+              "#3663C4", "#1847AC", "#002D8E")
+col_costosw <- c("#BFD4FF", "#9DB9F3", "#7598E1", "#5da4ba", "#507BD5", "#47a3bf", 
+                 "#3663C4", "#1847AC", "#002D8E")
+col_commodity <-  c("CH[4]" = "deepskyblue4", "PM[2.5]" = "firebrick", "SO[2]" = "darkgoldenrod3", 
+                    "NO[X]" = "seashell4", "CO[2]" = "chartreuse4")
 
 zero <- geom_hline(yintercept = 0, linetype = "dashed", color = "red")
 
@@ -297,7 +357,7 @@ cost_color <- scale_color_manual(values = col_cost)
 costosw_color <- scale_color_manual(values = col_costosw)
 sec_fill <- scale_fill_manual(values = col_sector)
 sec_color <- scale_color_manual(values = col_sector)
-commodity_fill <- scale_fill_manual(values = col_commodity)
-commodity_color <- scale_color_manual(values = col_commodity)
+commodity_fill <- scale_fill_manual(values = col_commodity, labels = airlabels)
+commodity_color <- scale_color_manual(values = col_commodity, labels = airlabels)
 
 

@@ -1,10 +1,18 @@
 ## ----import data------------------------------------------
+
+# points to the excel file of output from VEDA_BE, reads in the names of the sheets,
+# and plugs the spreadsheet into the function I created to turn all sheets into
+# separate dataframes in the current environment
+
 results <- c("osw_data/OffshoreWind_Resultsdata_08152019.xlsx")
 sheets <- readxl::excel_sheets(results)
 data_global <- ReadAllSheets(results)
 
 
 ## ----scenarios------------------------------------------
+
+# reads in the two scenario tables and turns them into data frames for graphing
+
 scenario_cost <- as.data.frame(data_global$`Cost Reductions`) %>% 
   select(-`2011`, -`2010`) %>%
   gather(`2015`, `2020`, `2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
@@ -21,14 +29,22 @@ scenario_emissions <- as.data.frame(data_global$`Emissions Caps`) %>%
 
 
 ## ----LCOE------------------------------------------------------
+
+# pulls in the 2018 AEO LCOE table to display in my report/paper
+
 lcoe <- as.data.frame(data_global$LCOE)
 
 
 ## ----offshore wind------------------------------------------------------
+
+# pulls in OSW data  
+
 osw <- as.data.frame(data_global$`Offshore Wind`) %>%
   categorize() %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred))
+
+# sets map information for the regional map with avg OSW buildout
 
 reg.names <- structure(list(lat = c(447343.4,27443.77,-300000,-87448.23,-904151.5,-1060878,
                                     -1348881,-536203.6,-118611,-2118611,-2094320), 
@@ -39,7 +55,14 @@ reg.names <- structure(list(lat = c(447343.4,27443.77,-300000,-87448.23,-904151.
                        row.names = c(NA, -11L), class = "data.frame")
 
 
-## ----~osw varcap----------------------------------------------------------
+## ----~osw total capacity (var_cap)----------------------------------------------------------
+
+# filter down osw data to only look at var_cap. make it "long" for easier filtering
+# and also because ggplot works much better with long data. create one dataframe that
+# has regions associated and one that sums over regions. levels pulled based on the
+# total amount of osw in each region, used to order graphs and data from
+# least to most amount of osw
+
 osw_varcap <- osw %>% 
   filter_osw(VAR_Cap, "Vintage", "-", "Attribute")
 
@@ -65,7 +88,12 @@ osw_varcap_long_reg <- osw_varcap_long_reg %>%
   ungroup()
  
 
-## ----~osw varncap---------------------------------------------------------
+## ----~osw new capacity (var_ncap)---------------------------------------------------------
+
+# filter down osw data to only look at var_ncap. make it "long" for easier filtering
+# and also because ggplot works much better with long data. create one dataframe that
+# has regions associated and one that sums over regions. 
+
 osw_varncap <- osw %>% 
   filter_osw(VAR_Ncap, "Vintage", "-", "Attribute")
 
@@ -85,7 +113,12 @@ osw_varncap_long_reg <- osw_varncap_long_reg %>%
   ungroup()
 
 
-## ----~osw varfout---------------------------------------------------------
+## ----~osw elc production (var_fout)---------------------------------------------------------
+
+# filter down osw data to only look at var_cap. make it "long" for easier filtering
+# and also because ggplot works much better with long data. create one dataframe that
+# has regions associated and one that sums over regions. 
+
 osw_varfout <- osw %>% 
   filter_osw(VAR_FOut, "Vintage", "-", "Attribute")
 
@@ -106,6 +139,10 @@ osw_varfout_long_reg <- osw_varfout_long_reg %>%
 
 
 ## ----~osw 2050 totals-----------------------------------------------------
+
+# creates matrix tables for total osw capacity and total osw elc produced 
+# snapshot of 2050, end of modeling time horizon, summed over all regions
+
 osw_varcap_2050total <- osw %>% 
   filter(Attribute == "VAR_Cap") %>%
   group_by(Scenario) %>%
@@ -114,7 +151,7 @@ osw_varcap_2050total <- osw %>%
   select(emred, costred, `2050 Total`) %>% 
   distinct() %>%
   spread(key = costred, value = `2050 Total`)
-names(osw_varcap_2050total) <- c("", "40", "50", "60", "70", "80")
+names(osw_varcap_2050total)[1] <- c("")
 
 osw_varfout_2050total <- osw %>% 
   filter(Attribute == "VAR_FOut") %>%
@@ -124,10 +161,14 @@ osw_varfout_2050total <- osw %>%
   select(emred, costred, `2050 Total`) %>% 
   distinct() %>%
   spread(key = costred, value = `2050 Total`)
-names(osw_varfout_2050total) <- c("", "40", "50", "60", "70", "80")
+names(osw_varfout_2050total)[1] <- c("")
 
 
 ## ----~osw regional totals-------------------------------------------------
+
+# creates values to compare regions osw capacities, mean var_cap for each region
+# across all scenarios. same process for var_fout
+
 osw_varcap_regiontotals <- osw %>% 
   filter(Attribute == "VAR_Cap") %>%
   group_by(Region) %>%
@@ -143,10 +184,20 @@ osw_varfout_regiontotals <- osw %>%
   arrange(`2050 Total`)
 
 
-## ----elc process--------------------------------------------------
+## ----grid mix--------------------------------------------------
+
+# pull in elc produced by process set data
+
 elc <- as.data.frame(data_global$`ELC Produced by Process Set`) %>% 
   select(-`2011`, -`2010`, -Commodity, -Attribute) %>%
   process()
+
+## ----~ccs--------------------------------------------------
+
+# calculations for coal CCS 
+# pull in coal retrofits sheet, has total coal and coal CCS processes - find the % of
+# fuel that goes from CCS process to coal and applies that % to coal elc production to 
+# get a value to add as coal with CCS to the grid mix
 
 ccs <- as.data.frame(data_global$`CO2 Retrofits for Coal`) %>%
   select(-`2011`, -`2010`) %>%
@@ -188,11 +239,23 @@ coal_calculations <- elc %>%
   spread(key = Year, value = VAR_FOut) %>%
   select(Scenario, Process, Region, everything())
 
+# add coal CCS rows to the elc data frame 
+
 elc <- elc %>% filter(Process != "Coal") %>%
   bind_rows(., coal_calculations) %>% 
   categorize()
 
+# duplicate the current elc dataframe to calculate retirements - pull now before 
+# all of the changes below are made
+
 retirements <- elc
+
+# ----~elc production----
+
+# make elc data "long" for easier filtering and also because ggplot works 
+# much better with long data. create one dataframe that has regions associated 
+# and one that sums over regions. levels for factoring pulled to order from
+# least to highest contribution to grid mix
 
 elc_long_reg <- elc %>% 
   gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
@@ -216,6 +279,13 @@ elc_long <- elc_long_reg %>%
   group_by(Scenario, emred, costred, Process, Year) %>%
   summarize(VAR_FOut = sum(VAR_FOut)) %>%
   ungroup()
+
+# ----~retirements------------------------------
+
+# calculates retirements based on difference between one time period's elc prod in 
+# each process set to the next. separate dataframe for the base case and all other scenarios
+# other scenarios are all in reference to the base case, showing just the capacity
+# additions and subtractions over what already happens in the base case
 
 retirements <- retirements %>% 
   mutate("2020r" = `2020`-`2015`) %>%
@@ -264,6 +334,14 @@ prod_dif <- left_join(elc_long, basecase_production, by = c("Process", "Year"))
 prod_dif[is.na(prod_dif)] <- 0  
 prod_dif <- prod_dif %>% mutate(diff = VAR_FOut - baseprod)
 
+# ----~new capacity------------------------------
+
+# pulls in the new capacity by process set from the excel workbook. this represents actual
+# new capacity added, not changes in production, which is what is reflected in "retirements"
+# separate dataframe for the base case and all other scenarios
+# other scenarios are all in reference to the base case, showing just the capacity
+# additions over what already happens in the base case
+
 newcap <- as.data.frame(data_global$`New Capacity by Process Set`) %>%
   categorize() %>%
   process()
@@ -311,8 +389,41 @@ newcap_total_diff[is.na(newcap_total_diff)] <- 0
 newcap_total_diff <- newcap_total_diff %>% mutate(diff = Ncap - BAUncap)
 newcap_total_diff$diff <- round(newcap_total_diff$diff,2)
 
+# ----~rps------------------------------
+
+# calculating the % of renewables in each time period, regionally and nationally
+# renewables defined as solar, terrestrial wind, and offshore wind
+
+renewables <- c("Solar", "Terrestrial Wind", "Offshore Wind")
+
+rps_reg <- elc_long_reg %>%
+  mutate(RPS = case_when(
+    Process %in% renewables ~ "Renewable",
+    TRUE ~ "Other")) %>%
+  group_by(Scenario, Region, Year, RPS, costred, emred) %>%
+  summarise(Output = sum(VAR_FOut)) %>%
+  spread(key = RPS, value = Output) %>%
+  mutate(Total = sum(Other, Renewable)) %>%
+  mutate(perRenew = Renewable/Total) %>% 
+  mutate(perOther = Other/Total) %>%
+  ungroup()
+
+rps <- elc_long %>% 
+  mutate(RPS = case_when(
+    Process %in% renewables ~ "Renewable",
+    TRUE ~ "Other")) %>%
+  group_by(Scenario, Year, RPS, costred, emred) %>%
+  spread(key = RPS, value = Output) %>%
+  mutate(Total = sum(Other, Renewable)) %>%
+  mutate(perRenew = Renewable/Total) %>% 
+  mutate(perOther = Other/Total) %>%
+  ungroup()
 
 ## ----emissions----------------------------------------------------
+
+# pulls in emissions data for CO2, NOx, SO2, CH4, PM 2.5. both regional and cumulative
+# sets of data produced
+
 emissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
   emission() %>%
   categorize() %>%
@@ -333,7 +444,11 @@ emissions_long <- emissions_long_reg %>%
 emissions_bau <- emissions_long %>% filter(emred == "BAU" & costred == "20")
 
 
-## ----2050 emissions totals----------------------------------------
+## ----~2050 emissions totals----------------------------------------
+
+# pulls just the 2050 totals for each emission, both regional and cumulative
+# data sets produced
+
 emissions2050_reg <- emissions_long_reg %>% filter(Year == "2050") 
 emissions2050 <- emissions2050_reg %>%
   group_by(Scenario,emred,costred,Year,Commodity) %>%
@@ -341,6 +456,10 @@ emissions2050 <- emissions2050_reg %>%
 
 
 ## ----elc total----------------------------------------------------
+
+# total electricity produced in each scenario, agnostic of process. both regional
+# and cumulative data sets produced
+
 elctotal <- as.data.frame(data_global$`ELC All Production`) %>%
   select(-Commodity, -Attribute, -`2010`, -`2011`) %>%
   categorize()
@@ -360,7 +479,10 @@ elctotal_long <- elctotal_long_reg %>%
   summarize(VAR_FOut = sum(VAR_FOut))
 
 
-## ----2050 elc total-----------------------------------------------
+## ----~2050 elc total-----------------------------------------------
+
+# pulls just the 2050 total elc produced, regional and cumulative
+
 elctotal2050_reg <- elctotal_long_reg %>% filter(Year == "2050")
 elctotal2050 <- elctotal2050_reg %>%
   group_by(Scenario,emred,costred,Year) %>%
@@ -368,6 +490,12 @@ elctotal2050 <- elctotal2050_reg %>%
 
 
 ## ----end use------------------------------------------------------
+
+# creates a dataframe with all of the end use elc consumption. data pulled in from
+# VBE by sector (commercial, industrial, residential, transportation) and combined
+# into one larger enduse dataframe. 
+# separate dataframes made for regional and cumulative
+
 com <- as.data.frame(data_global$`Electricity to Commercial`) %>%  
   mutate(Sector = "Commercial")
 ind <- as.data.frame(data_global$`Electricity to Industrial`) %>% 
@@ -392,17 +520,35 @@ enduse <- enduse_reg %>%
   ungroup
 
 
+## ----correlation------------------------------------------------------
 
+# pulls osw total capacity, emissions amounts, and total elc produced into one
+# dataframe and formats the data (primarily into numeric values instead of categorical)
+# so that it can be plugged into a correlation function
 
-
-
-
-
-
-
-
-
-
-
+oswcor <- osw_varcap_2050total 
+names(oswcor)[1] <- "emred"
+oswcor <- oswcor %>%
+  gather("40", "50", "60", "70", "80", "45", "55", "40s", "50s", 
+         key = "costred", value = "cap2050")
+oswcor <- left_join(oswcor, emissions2050, by = c("emred", "costred")) %>%
+  spread(key = Commodity, value = Emissions) 
+oswcor <- left_join(oswcor, elctotal2050, 
+                    by = c("emred", "costred", "Scenario", "Year")) %>%
+  rename("Total Elc" = "VAR_FOut") %>%
+  mutate(costred = replace(costred, costred == "40s", "40.5")) %>%
+  mutate(costred = replace(costred, costred == "50s", "50.5")) %>%
+  select(`cap2050`, emred, costred, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`)
+oswcor[] <- lapply(oswcor, as.character)
+oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
+  mutate(emred = as.numeric(emred)) %>%
+  mutate(costred = as.numeric(costred)) %>%
+  mutate(`CO[2]` = as.numeric(`CO[2]`)) %>%
+  mutate(`SO[2]` = as.numeric(`SO[2]`)) %>%
+  mutate(`NO[X]` = as.numeric(`NO[X]`)) %>%
+  mutate(`PM[2.5]` = as.numeric(`PM[2.5]`)) %>%
+  mutate(`CH[4]` = as.numeric(`CH[4]`)) %>%
+  mutate(`cap2050` = as.numeric(`cap2050`)) %>%
+  mutate(`Total Elc` = as.numeric(`Total Elc`))
 
 
