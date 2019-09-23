@@ -1025,7 +1025,7 @@ emis_bw <- emis_plot +
 co2_plot <- emissions_long %>% filter(Commodity == "CO[2]") %>%
   ggplot(aes(x = Year, y = Emissions)) +
   facet_grid(~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
-  labs(x = "Year", y = "Emissions",
+  labs(x = "Year", y = "Emissions (Mt)",
        title = bquote("Electric Sector"~CO[2]~"Emissions"),
        color = "Cost\nReduction\n(%)") +
   yt
@@ -1034,10 +1034,72 @@ co2_col <- co2_plot +
   geom_line(aes(group = Scenario, color = costred)) +
   cost_color
 
+co2_bw <- co2_plot +
+  geom_line(aes(group = Scenario, linetype = costred))
+
+so2_plot <- emissions_long %>% filter(Commodity == "SO[2]") %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+  facet_grid(~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+  labs(x = "Year", y = "Emissions (kt)",
+       title = bquote("Electric Sector"~SO[2]~"Emissions"),
+       color = "Cost\nReduction\n(%)") +
+  yt
+
+so2_col <- so2_plot +
+  geom_line(aes(group = Scenario, color = costred)) +
+  cost_color
+
+so2_bw <- so2_plot +
+  geom_line(aes(group = Scenario, linetype = costred))
+
+nox_plot <- emissions_long %>% filter(Commodity == "NO[X]") %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+  facet_grid(~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+  labs(x = "Year", y = "Emissions (kt)",
+       title = bquote("Electric Sector"~NO[X]~"Emissions"),
+       color = "Cost\nReduction\n(%)") +
+  yt
+
+nox_col <- nox_plot +
+  geom_line(aes(group = Scenario, color = costred)) +
+  cost_color
+
+nox_bw <- nox_plot +
+  geom_line(aes(group = Scenario, linetype = costred))
+
+ch4_plot <- emissions_long %>% filter(Commodity == "CH[4]") %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+  facet_grid(~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+  labs(x = "Year", y = "Emissions (kt)",
+       title = bquote("Electric Sector"~CH[4]~"Emissions"),
+       color = "Cost\nReduction\n(%)") +
+  yt
+
+ch4_col <- ch4_plot +
+  geom_line(aes(group = Scenario, color = costred)) +
+  cost_color
+
+ch4_bw <- ch4_plot +
+  geom_line(aes(group = Scenario, linetype = costred))
+
+pm2.5_plot <- emissions_long %>% filter(Commodity == "PM[2.5]") %>%
+  ggplot(aes(x = Year, y = Emissions)) +
+  facet_grid(~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+  labs(x = "Year", y = "Emissions (kt)",
+       title = bquote("Electric Sector"~PM[2.5]~"Emissions"),
+       color = "Cost\nReduction\n(%)") +
+  yt
+
+pm2.5_col <- pm2.5_plot +
+  geom_line(aes(group = Scenario, color = costred)) +
+  cost_color
+
+pm2.5_bw <- pm2.5_plot +
+  geom_line(aes(group = Scenario, linetype = costred))
 
 
 ggplot() +
-  geom_line(data = emissions_long %>% filter(Commodity == "CO2" &
+  geom_line(data = emissions_long %>% filter(Commodity == "CO[2]" &
                                                emred == "50" &
                                                costred != "20" &
                                                costred != "30"),
