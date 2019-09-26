@@ -4,7 +4,7 @@
 # and plugs the spreadsheet into the function I created to turn all sheets into
 # separate dataframes in the current environment
 
-results <- c("osw_data/OffshoreWind_Resultsdata_08152019.xlsx")
+results <- c("osw_data/OffshoreWind_Resultsdata_09242019.xlsx")
 sheets <- readxl::excel_sheets(results)
 data_global <- ReadAllSheets(results)
 
@@ -41,6 +41,7 @@ lcoe <- as.data.frame(data_global$LCOE)
 
 osw <- as.data.frame(data_global$`Offshore Wind`) %>%
   categorize() %>%
+  mutate_all(~replace(.,is.na(.), 0)) %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred))
 
@@ -67,7 +68,7 @@ osw_varcap <- osw %>%
   filter_osw(VAR_Cap, "Vintage", "-", "Attribute")
 
 osw_varcap_long_reg <- osw_varcap %>%
-  gather(`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
+  gather(`2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "VAR_Cap") %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred))
@@ -98,7 +99,7 @@ osw_varncap <- osw %>%
   filter_osw(VAR_Ncap, "Vintage", "-", "Attribute")
 
 osw_varncap_long_reg <- osw_varncap %>%
-  gather(`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
+  gather(`2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "VAR_Ncap") %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred))
@@ -123,7 +124,7 @@ osw_varfout <- osw %>%
   filter_osw(VAR_FOut, "Vintage", "-", "Attribute")
 
 osw_varfout_long_reg <- osw_varfout %>%
-  gather(`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
+  gather(`2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "VAR_FOut") %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred))
@@ -190,7 +191,8 @@ osw_varfout_regiontotals <- osw %>%
 
 elc <- as.data.frame(data_global$`ELC Produced by Process Set`) %>% 
   select(-`2011`, -`2010`, -Commodity, -Attribute) %>%
-  process()
+  process() %>%
+  categorize()
 
 ## ----~ccs--------------------------------------------------
 
@@ -208,42 +210,44 @@ ccs_base <- ccs %>% filter(Category == "ELC-COAL")
 
 ccs_retro <- ccs %>% 
   filter(Category == "CO2 RETROFITS - COAL" & Attribute == "VAR_FOut") %>%
-  select(-`2015`, -`2020`, -`2025`, -Attribute) %>%
-  gather(`2030`, `2035`, `2040`, `2045`, `2050`, key = "Year", value = "VAR_FOut") %>%
-  group_by(Scenario, Region, Year) %>%
+  select(-`2015`, -`2020`, -`2025`, -`2030`, -`2035`, -`2040`, -Attribute) %>%
+  gather(`2045`, `2050`, key = "Year", value = "VAR_FOut") %>%
+  group_by(Scenario, Region, Year, emred, costred) %>%
   summarize("Coal CCS" = sum(VAR_FOut))
 
 ccs_base <- ccs %>% 
   filter(Category == "ELC-COAL" & Attribute == "VAR_FIn") %>%
-  select(-`2015`, -`2020`, -`2025`, -Attribute) %>%
-  gather(`2030`, `2035`, `2040`, `2045`, `2050`, key = "Year", value = "VAR_FIn") %>%
-  group_by(Scenario, Region, Year) %>%
+  select(-`2015`, -`2020`, -`2025`, -`2030`, -`2035`, -`2040`, -Attribute) %>%
+  gather(`2045`, `2050`, key = "Year", value = "VAR_FIn") %>%
+  group_by(Scenario, Region, Year, emred, costred) %>%
   summarize("Coal" = sum(VAR_FIn)) %>%
   ungroup()
   
-ccs_percent <- left_join(ccs_retro, ccs_base, by = c("Scenario", "Region", "Year")) %>%
+ccs_percent <- left_join(ccs_retro, ccs_base, 
+                         by = c("Scenario", "Region", "Year", "emred", "costred")) %>%
   mutate(CCSpercent = round((`Coal CCS` / Coal), 2)) %>%
   filter(CCSpercent > 0) %>%
-  select(Scenario, Region, Year, CCSpercent)
+  select(Scenario, Region, Year, CCSpercent, emred, costred)
 
 coal_calculations <- elc %>%
   filter(Process == "Coal") %>%
   gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "VAR_FOut") %>%
-  left_join(., ccs_percent, by = c("Scenario", "Region", "Year")) %>%
+  left_join(., ccs_percent, by = c("Scenario", "Region", "Year", "emred", "costred")) %>%
   mutate_all(~replace(.,is.na(.), 0)) %>%
   mutate(`Coal CCS` = VAR_FOut * CCSpercent) %>%
   mutate(`Coal` = VAR_FOut - `Coal CCS`) %>%
-  select(Scenario, Region, Year, `Coal CCS`, Coal) %>%
+  select(Scenario, Region, Year, `Coal CCS`, Coal, emred, costred) %>%
   gather(`Coal CCS`, Coal, key = "Process", value = "VAR_FOut") %>%
   spread(key = Year, value = VAR_FOut) %>%
-  select(Scenario, Process, Region, everything())
+  select(Scenario, Process, Region, 
+         `2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`,
+         costred, emred)
 
 # add coal CCS rows to the elc data frame 
 
 elc <- elc %>% filter(Process != "Coal") %>%
-  bind_rows(., coal_calculations) %>% 
-  categorize()
+  bind_rows(., coal_calculations)
 
 # duplicate the current elc dataframe to calculate retirements - pull now before 
 # all of the changes below are made
@@ -413,7 +417,7 @@ rps <- elc_long %>%
     Process %in% renewables ~ "Renewable",
     TRUE ~ "Other")) %>%
   group_by(Scenario, Year, RPS, costred, emred) %>%
-  spread(key = RPS, value = Output) %>%
+  spread(key = RPS, value = VAR_FOut) %>%
   mutate(Total = sum(Other, Renewable)) %>%
   mutate(perRenew = Renewable/Total) %>% 
   mutate(perOther = Other/Total) %>%
@@ -526,18 +530,17 @@ enduse <- enduse_reg %>%
 # dataframe and formats the data (primarily into numeric values instead of categorical)
 # so that it can be plugged into a correlation function
 
+## ----~only osw scenarios (28)----
+
 oswcor <- osw_varcap_2050total 
 names(oswcor)[1] <- "emred"
 oswcor <- oswcor %>%
-  gather("40", "50", "60", "70", "80", "45", "55", "40s", "50s", 
-         key = "costred", value = "cap2050")
+  gather("50", "60", "70", "80", key = "costred", value = "cap2050")
 oswcor <- left_join(oswcor, emissions2050, by = c("emred", "costred")) %>%
   spread(key = Commodity, value = Emissions) 
 oswcor <- left_join(oswcor, elctotal2050, 
                     by = c("emred", "costred", "Scenario", "Year")) %>%
   rename("Total Elc" = "VAR_FOut") %>%
-  mutate(costred = replace(costred, costred == "40s", "40.5")) %>%
-  mutate(costred = replace(costred, costred == "50s", "50.5")) %>%
   select(`cap2050`, emred, costred, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`)
 oswcor[] <- lapply(oswcor, as.character)
 oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
@@ -549,6 +552,53 @@ oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
   mutate(`PM[2.5]` = as.numeric(`PM[2.5]`)) %>%
   mutate(`CH[4]` = as.numeric(`CH[4]`)) %>%
   mutate(`cap2050` = as.numeric(`cap2050`)) %>%
-  mutate(`Total Elc` = as.numeric(`Total Elc`))
+  mutate(`Total Elc` = as.numeric(`Total Elc`)) %>%
+  mutate_all(~replace(.,is.na(.), 0))
+
+## ----~all scenarios (42)----
+
+oswscen <- osw_varcap_2050total 
+names(oswscen)[1] <- "emred"
+oswscen <- oswscen %>%
+  gather("50", "60", "70", "80", key = "costred", value = "cap2050")
+
+allcor <- emissions2050
+allcor <- left_join(allcor, oswscen, by = c("emred", "costred")) %>%
+  spread(key = Commodity, value = Emissions) 
+allcor <- left_join(allcor, elctotal2050, 
+                    by = c("emred", "costred", "Scenario", "Year")) %>%
+  rename("Total Elc" = "VAR_FOut") %>%
+  select(`cap2050`, emred, costred, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`)
+allcor[] <- lapply(allcor, as.character)
+allcor <- allcor %>% ungroup() %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
+  mutate(emred = as.numeric(emred)) %>%
+  mutate(costred = as.numeric(costred)) %>%
+  mutate(`CO[2]` = as.numeric(`CO[2]`)) %>%
+  mutate(`SO[2]` = as.numeric(`SO[2]`)) %>%
+  mutate(`NO[X]` = as.numeric(`NO[X]`)) %>%
+  mutate(`PM[2.5]` = as.numeric(`PM[2.5]`)) %>%
+  mutate(`CH[4]` = as.numeric(`CH[4]`)) %>%
+  mutate(`cap2050` = as.numeric(`cap2050`)) %>%
+  mutate(`Total Elc` = as.numeric(`Total Elc`)) %>%
+  mutate_all(~replace(.,is.na(.), 0)) %>%
+  select(-Scenario, -Year)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

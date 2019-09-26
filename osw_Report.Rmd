@@ -122,39 +122,31 @@ output_2050_table
 Cumulative and new addition offshore wind capacity by region. Regions are listed from least to highest electricity output.
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cap_reg4_col
-if(color > 0) newcap_reg4_col
-if(color > 0) cap_reg6_col
-if(color > 0) newcap_reg6_col
+if(color > 0) cap_reg7_col
+if(color > 0) newcap_reg7_col
 if(color > 0) cap_reg1_col
 if(color > 0) newcap_reg1_col
 if(color > 0) cap_reg2_col
 if(color > 0) newcap_reg2_col
-if(color > 0) cap_reg9_col
-if(color > 0) newcap_reg9_col
-if(color > 0) cap_reg7_col
-if(color > 0) newcap_reg7_col
 if(color > 0) cap_reg3_col
 if(color > 0) newcap_reg3_col
+if(color > 0) cap_reg9_col
+if(color > 0) newcap_reg9_col
 if(color > 0) cap_reg5_col
 if(color > 0) newcap_reg5_col
 ```
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cap_reg4_bw
-if(bw > 0) newcap_reg4_bw
-if(bw > 0) cap_reg6_bw
-if(bw > 0) newcap_reg6_bw
+if(bw > 0) cap_reg7_bw
+if(bw > 0) newcap_reg7_bw
 if(bw > 0) cap_reg1_bw
 if(bw > 0) newcap_reg1_bw
 if(bw > 0) cap_reg2_bw
 if(bw > 0) newcap_reg2_bw
-if(bw > 0) cap_reg9_bw
-if(bw > 0) newcap_reg9_bw
-if(bw > 0) cap_reg7_bw
-if(bw > 0) newcap_reg7_bw
 if(bw > 0) cap_reg3_bw
 if(bw > 0) newcap_reg3_bw
+if(bw > 0) cap_reg9_bw
+if(bw > 0) newcap_reg9_bw
 if(bw > 0) cap_reg5_bw
 if(bw > 0) newcap_reg5_bw
 ```
@@ -297,17 +289,6 @@ if(bw > 0) em80_facetcost_fill_bw
 
 ## Cost Reductions
 
-40% cost reduction
-
-```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(color > 0) cost40_facetem_line_col
-if(color > 0) cost40_facetem_fill_col
-```
-```{r, out.width=c('50%', '50%'), fig.show='hold'}
-if(bw > 0) cost40_facetem_line_bw
-if(bw > 0) cost40_facetem_fill_bw
-```
-
 50% cost reduction
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
@@ -392,7 +373,6 @@ if(bw > 0) base_retire_fill_bw
 
 Summary Graph 
 
-
 ```{r}
 if (color > 0) prod_dif_all_col
 if(bw > 0) prod_dif_all_bw
@@ -454,6 +434,30 @@ if(color > 0) emis_col
 if(bw > 0) emis_bw
 ```
 
+## Emissions by Commodity
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) co2_col
+if(color > 0) co2_hm_col
+if(color > 0) so2_col
+if(color > 0) so2_hm_col
+if(color > 0) nox_col
+if(color > 0) nox_hm_col
+if(color > 0) ch4_col
+if(color > 0) ch4_hm_col
+if(color > 0) pm2.5_col
+if(color > 0) pm2.5_hm_col
+if(bw > 0) co2_bw
+if(bw > 0) co2_hm_bw
+if(bw > 0) so2_bw
+if(bw > 0) so2_hm_bw
+if(bw > 0) nox_bw
+if(bw > 0) nox_hm_bw
+if(bw > 0) ch4_bw
+if(bw > 0) ch4_hm_bw
+if(bw > 0) pm2.5_bw
+if(bw > 0) pm2.5_hm_bw
+```
 
 # Total Electricity Production
 
@@ -468,7 +472,10 @@ if(bw > 0) elctotal_heat_bw
 # Correlation
 
 ```{r}
-correlations.chart
+osw.correlations.chart
+```
+```{r, results = 'asis'}
+model.table
 ```
 
 

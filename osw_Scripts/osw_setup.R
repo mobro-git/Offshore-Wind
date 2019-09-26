@@ -29,6 +29,9 @@ library(ggmap)
 library(maptools)
 library(sf)
 library(PerformanceAnalytics)
+library(jtools)
+library(ggstance)
+library(huxtable)
 
 
 ## ----Functions-------------------------------------------
@@ -53,9 +56,6 @@ ReadAllSheets <- function(filename, tibble = FALSE) {
 categorize <- function(table) {
   x <- table %>%
     mutate(costred = case_when(
-      str_detect(Scenario, "CostRed40to50") ~ "40s",
-      str_detect(Scenario, "CostRed50to60") ~ "50s",
-      str_detect(Scenario, "CostRed30") ~ "30",
       str_detect(Scenario, "CostRed40") ~ "40",
       str_detect(Scenario, "CostRed50") ~ "50",
       str_detect(Scenario, "CostRed60") ~ "60",
@@ -66,9 +66,6 @@ categorize <- function(table) {
       TRUE ~ "20"
     )) %>%
     mutate(emred = case_when(
-      str_detect(Scenario, "EmRedG0") ~ "0",
-      str_detect(Scenario, "EmRedG10") ~ "10",
-      str_detect(Scenario, "EmRedG20") ~ "20",
       str_detect(Scenario, "EmRedG30") ~ "30",
       str_detect(Scenario, "EmRedG40") ~ "40",
       str_detect(Scenario, "EmRedG50") ~ "50",
@@ -133,7 +130,7 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
   p <- ggplot(data = datas, aes_string(x = "Year", y = yvar)) +
     geom_line(aes_string(group = "Scenario", 
                          linetype = typevar, 
-                         color = colvar)) +
+                         color = colvar), size = 1) +
     facet_grid(facet, scales = scale) +
     yt +
     coltheme +
@@ -249,12 +246,34 @@ prod.dif.cost.bw <- function(data, title) {
     facet_grid(emred~costred, labeller = labeller(emred = elab, costred = clab), scales = "free_y")
 }
 
+em.heatmap.col <- function(data, em, title) {
+  ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = Emissions)) +
+    geom_tile(colour = "gray", size = 0.25) +
+    labs(x = "Offshore Wind Cost Reductions (%)",
+         y = "Emissions Reduction (%)",
+         title = title,
+         fill = "Emissions") +
+    col_fill_cont +
+    st
+}
+
+em.heatmap.bw <- function(data, em, title) {
+  ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = Emissions)) +
+    geom_tile(colour = "white", size = 0.25) +
+    labs(x = "Offshore Wind Cost Reductions (%)",
+         y = "Emissions Reduction (%)",
+         title = title,
+         fill = "Emissions") +
+    gray_fill_cont +
+    st
+}
+
 ## ----Factors-----------------------------------------------
 
 # creates levels to be used when factoring the scenarios so they appear in the correct
 # order in graphs (eg from lowest to highest cost and least to most stringent emissions)
 
-levels_costred <- c("20", "30", "40", "40s", "45", "50", "50s", "55", "60", "70", "80")
+levels_costred <- c("20", "30", "40", "50", "60", "70", "80")
 levels_emred <- c("BAU", "30", "40", "50", "60", "70", "80")
 levels_emissions <- c("CH[4]", "PM[2.5]", "SO[2]", "NO[X]", "CO[2]")
 levels_sector <- c("Transportation", "Industrial", "Commercial", "Residential")
@@ -267,27 +286,26 @@ levels_sector <- c("Transportation", "Industrial", "Commercial", "Residential")
 
 elab <- c("BAU" = "BAU", "30" = "E30", "40" = "E40",  "50" = "E50", "60" = "E60",
           "70" = "E70", "80" = "E80")
-clab <- c("40" = "C40",  "50" = "C50", "60" = "C60", "70" = "C70", "80" = "C80")
+clab <- c("20" = "C20", "30" = "C30", "40" = "C40",  "50" = "C50", "60" = "C60", "70" = "C70", 
+          "80" = "C80")
 
 costlabels <- c(
+  "20" = "20% Cost Red.",
+  "30" = "30% Cost Red.",
   "40" = "40% Cost Red.",  
   "50" = "50% Cost Red.", 
   "60" = "60% Cost Red.", 
   "70" = "70% Cost Red.", 
-  "80" = "80% Cost Red.",
-  "45" = "45% Cost Red.", 
-  "55" = "55% Cost Red.",
-  "40s" = "Slow 50% Cost Red.", 
-  "50s" = "Slow 60% Cost Red.")
+  "80" = "80% Cost Red.")
 
 emissionlabels <- c(
   "BAU" = "Business as usual", 
-  "30" = "30% CO2 Cap", 
-  "40" = "40% CO2 Cap",  
-  "50" = "50% CO2 Cap", 
-  "60" = "60% CO2 Cap", 
-  "70" = "70% CO2 Cap", 
-  "80" = "80% CO2 Cap")
+  "30" = "30% CO2 Red.", 
+  "40" = "40% CO2 Red.",  
+  "50" = "50% CO2 Red.", 
+  "60" = "60% CO2 Red.", 
+  "70" = "70% CO2 Red.", 
+  "80" = "80% CO2 Red.")
 
 airlabels <- c(
   "CO[2]" = expression(CO[2]),
@@ -327,8 +345,9 @@ noaxes <- theme(
   axis.title = element_blank()
 )
 
-x_cont <- scale_x_continuous(breaks = seq(2020,2050, by = 10), expand = c(0,1))
-x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
+x_cont <- scale_x_continuous(breaks = seq(2020,2050, by = 5), expand = c(0,1))
+x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 5), expand = c(0,.2))
+x_disc_l <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
 col_osw <- c(`Terrestrial Wind` = "lightblue3", `Hydro` = "dodgerblue4", 
              `Solar` = "darkgoldenrod2", `Offshore Wind` = "deepskyblue4", 
@@ -337,10 +356,9 @@ col_osw <- c(`Terrestrial Wind` = "lightblue3", `Hydro` = "dodgerblue4",
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
-col_cost <- c("#BFD4FF", "#9DB9F3", "#7598E1", "#5d7bba", "#5da4ba", "#507BD5", "#476ebf", "#47a3bf", 
-              "#3663C4", "#1847AC", "#002D8E")
-col_costosw <- c("#BFD4FF", "#9DB9F3", "#7598E1", "#5da4ba", "#507BD5", "#47a3bf", 
-                 "#3663C4", "#1847AC", "#002D8E")
+col_cost <- c("20" = "#C2DFF8", "30" = "#98C1E3", "40" = "#6FAADB", "50" = "#4596DA", 
+              "60" = "#4579DA", "70" = "#2054B5", "80" = "#032F82")
+col_costosw <- c("50" = "#C2DFF8", "60" = "#6FAADB", "70" = "#4579DA", "80" = "#032F82")
 col_commodity <-  c("CH[4]" = "deepskyblue4", "PM[2.5]" = "firebrick", "SO[2]" = "darkgoldenrod3", 
                     "NO[X]" = "seashell4", "CO[2]" = "chartreuse4")
 
