@@ -1,0 +1,60 @@
+---
+title: Applying methodology for examining potential technology breakthroughs for mitigating
+  electric sector emissions to offshore wind [[DRAFT]]
+author: "Morgan Browning"
+date: "July 8, 2019"
+output:
+  word_document: default
+  html_document: default
+---
+
+### Abstract
+
+### Introduction and Objectives
+
+While offshore wind is an established technology in Europe, as the second largest source of power generation with over 189 GW of installed capacity[^1], it has not yet gained market share in the United States (US). There is, however, increasing interest in and action supporting offshore wind development from many coastal states, predominantly along the Atlantic coast.
+
+With the growth of the industry in the US in mind, this research seeks to explore potential energy futures that include offshore wind and the resulting changes to the energy mix and grid emissions. Two primary drivers for offshore wind development will be explored: (1) offshore wind costs and (2) carbon mitigation stringency. 
+
+Offshore Wind Costs: Supply chains are not yet developed in the US for offshore wind and the development and transmission costs associated with sea-based projects are high. This results in a comparably high cost for offshore wind as compared to other technologies. However, offshore wind has a high capacity factor  
+
+Carbon Mitigation Stringency: 
+
+
+### Background
+
+***talk about the pros and cons of offshore wind, why is it a technology that is worth exploring***
+
+Below are some of the recent state advancements in the offshore wind field supporting offshore wind projects and supply chain[^2]:
+
+* Masachusetts: 2016 law requiring procurement of 1,600 MW of offshore wind by 2027
+* New York: 2017 Governor commitment to develop up to 2.4 HW of offshore wind by 2030; 2018 soliciation of at least 800 MW in two RFPs; $15 million investment to train for offshore wind jobs and develop port infrastructure
+* New Jersey: 2018 law outlining target to develop 3,500 MW of offshore wind by 2030, the first 1,100 of which have just been won by Orstead[^3]
+* Maryland: 2013 Offshore Wind Energy Act developed Offshore Wind Renewable Energy Credits (ORECs), which can be applied to the state's renewable portfolio standard (RPS)
+* Connecticut: 2018 Connecticut Department of Energy and Environmental Protection generation-based RFP for renewable energy, including offshore wind; $15 million investment to revitalize a shipping pier
+* Rhode Island: 2018 competitive procurement for 400 MW of offshore wind, in collaboration with Massachusetts
+* Virginia: 2018 submission of plans for the 12 MW Coastal Virginia Offshore Wind Project (CVOWP); 2018 order from Siemens Gamesa for two 6-MW turbines for CVOWP  
+
+There is only one current operational wind project in the US, the Block Island Wind Farm, which is a 5 turbine, 30 MW installation. The large market in the US is at a tipping point, with a project pipeline of 25,434 MW of offshore wind energy as of June 3018[^4]. Specific projects account for 3,892 MW of that capacity and the remaining 21,542 MW are comprised of undeveloped lease area. Of the project-based capacity, 2,000 MW is expected to be built and online by 2023. The US Bureau of Ocean Energy Management (BOEM), the agency responsible for offshore wind leasing areas, announced in June of 2019 that it would publish a "request for competitive interest" to build a transmission line for offshore wind off the coasts of New York and New Jersey[^5].  A planned transmission system for offshore wind would promote long-term success and interest in the offshore wind market. 
+
+### Energy System Modeling with TIMES 
+
+### Analysis and Discussion
+
+### Conclusions
+
+### Notes on modeling
+
+
+[^1]:  https://windeurope.org/about-wind/statistics/european/wind-energy-in-europe-in-2018/
+[^2]:  https://www.awea.org/Awea/media/About-AWEA/U-S-Offshore-Wind-Fact-Sheet-September-2018_2.pdf
+[^3]:  https://www.greentechmedia.com/articles/read/breaking-rsted-wins-new-jerseys-first-offshore-wind-solicitation#gs.kmsg2u
+[^4]:  https://www.awea.org/Awea/media/About-AWEA/U-S-Offshore-Wind-Fact-Sheet-September-2018_2.pdf
+[^5]:  https://www.njspotlight.com/stories/19/06/18/big-question-for-offshore-wind-who-gets-power-to-the-customers/
+[^6]:  https://iea-etsap.org/
+[^7]:  https://iea-etsap.org/docs/Documentation_for_the_TIMES_Model-Part-I_July-2016.pdf
+[^8]:  https://qz.com/1650433/hywind-scotland-makes-floating-wind-farms-a-serious-business/
+[^9]:  https://www.powerengineeringint.com/articles/2018/11/solar-and-wind-now-the-cheapest-power-source-says-bloombergnef.html
+[^10]:  https://www.nytimes.com/2019/06/21/climate/states-climate-change.html?te=1&nl=morning-briefing&emc=edit_NN_p_20190624&section=whatElse?campaign_id=9&instance_id=10431&segment_id=14587&user_id=07e337c92d7509a1a44a6b315a1629e6&regi_id=74019397ion=whatElse
+[^11]:  http://www.ceoe.udel.edu/File%20Library/About/SIOW/SIOW-White-Paper---Supply-Chain-Contracting-Forecast-for-US-Offshore-Wind-Power-FINAL.pdf
+
