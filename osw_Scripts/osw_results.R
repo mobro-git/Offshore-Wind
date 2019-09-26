@@ -1089,7 +1089,8 @@ ggplot() +
   geom_bar(data = osw_varcap_long, stat = "identity",
             aes(x = Year, y = VAR_Cap*3), alpha = 0.5) +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
-  facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+  facet_grid(costred~emred, labeller = (labeller(emred = emissionlabels, costred = costlabels),
+                                        labeller(label_wrap_gen(width = 10)))) +
   yt +
   x_disc_l
 
