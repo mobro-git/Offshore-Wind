@@ -3,8 +3,8 @@
 # allows me to quickly run my two previous scripts when I make changes in them or
 # if I'm just going to work with results and need to pull in the data
 
-source("osw_Scripts/osw_setup.R")
-source("osw_Scripts/osw_data.R")
+# source("osw_Scripts/osw_setup.R")
+# source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
@@ -1081,18 +1081,65 @@ pm2.5_bw <- pm2.5_plot +
   geom_line(aes(group = Scenario, linetype = costred))
 
 
+idx_em <- match(emissions_long$emred, names(emissionlabels))
+emissions_long1 <- emissions_long
+emissions_long1$emred <- emissionlabels[idx_em]
+idx_osw <- match(osw_varcap_long$emred, names(emissionlabels))
+osw_varcap_long1 <- osw_varcap_long
+osw_varcap_long1$emred <- emissionlabels[idx_osw]
+
+
 ggplot() +
-  geom_line(data = emissions_long %>% 
+  geom_line(data = emissions_long1 %>% 
               filter(Commodity == "CO[2]") %>%
               filter(!costred %in% c("20","30","40")),
             aes(x = Year, y = Emissions, group = Scenario), color = "black") +
-  geom_bar(data = osw_varcap_long, stat = "identity",
+  geom_bar(data = osw_varcap_long1, stat = "identity",
             aes(x = Year, y = VAR_Cap*3), alpha = 0.5) +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
-  facet_grid(costred~emred, labeller = (labeller(emred = emissionlabels, costred = costlabels),
-                                        labeller(label_wrap_gen(width = 10)))) +
+  facet_grid(emred~costred, 
+             labeller = labeller(emred = label_wrap_gen(width = 10),
+                                 costred = costlabels)) +
   yt +
   x_disc_l
+
+ggplot() +
+  geom_line(data = emissions_long1 %>% 
+              filter(Commodity != "PM[2.5]" & Commodity != "CH[4]") %>%
+              filter(!costred %in% c("20","30","40")),
+            aes(x = Year, y = Emissions, group = Commodity, color = Commodity)) +
+  geom_bar(data = osw_varcap_long1, stat = "identity",
+           aes(x = Year, y = VAR_Cap*3), alpha = 0.5) +
+  scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
+  facet_grid(emred~costred, 
+             labeller = labeller(emred = label_wrap_gen(width = 10),
+                                 costred = costlabels)) +
+  yt +
+  x_disc_l +
+  bottom1 +
+  bottom2 +
+  commodity_color
+
+ggplot() +
+  geom_line(data = emissions_long1 %>% 
+              filter(Commodity == "PM[2.5]" | Commodity == "CH[4]") %>%
+              filter(!costred %in% c("20","30","40")),
+            aes(x = Year, y = Emissions, group = Commodity, color = Commodity)) +
+  geom_bar(data = osw_varcap_long1, stat = "identity",
+           aes(x = Year, y = VAR_Cap*.25), alpha = 0.5) +
+  scale_y_continuous(sec.axis = sec_axis(~./.25, name = "Offshore Wind Capacity (GW)")) +
+  facet_grid(emred~costred, scales = "free_y",
+             labeller = labeller(emred = label_wrap_gen(width = 10),
+                                 costred = costlabels)) +
+  yt +
+  x_disc_l +
+  bottom1 +
+  bottom2 +
+  commodity_color
+
+
+
+
 
 ggplot() +
   geom_line(data = emissions_long %>% filter(Commodity == "CO[2]" &
@@ -1295,7 +1342,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
 
 osw.correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswcor$`cap2050`)
 osw.correlations.table <- as.data.frame(osw.correlations)
-osw.correlations.chart <- chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
+chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
 
 lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Total Elc`,
           data = oswcor)
@@ -1306,17 +1353,41 @@ osw.cap2050.fit.sum <- summary(osw.cap2050.fit)
 osw.totalelc.fit <- lm(`Total Elc`~emred+costred+cap2050, data = oswcor)
 osw.totalelc.fit.sum <- summary(osw.totalelc.fit)
 
-osw.co2.fit <- lm(`CO[2]`~emred+cap2050, data = oswcor)
+osw.co2.fit <- lm(`CO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
 osw.co2.fit.sum <- summary(osw.co2.fit)
 
+osw.so2.fit <- lm(`SO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
+osw.so2.fit.sum <- summary(osw.so2.fit)
+
+osw.nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`, data = oswcor)
+osw.nox.fit.sum <- summary(osw.nox.fit)
+
+osw.pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`, data = oswcor)
+osw.pm2.5.fit.sum <- summary(osw.pm2.5.fit)
+
+osw.ch4.fit <- lm(`CH[4]`~emred+cap2050+`Total Elc`, data = oswcor)
+osw.ch4.fit.sum <- summary(osw.ch4.fit)
+
+gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred", "OSW Capacity" = "cap2050")
+gridmodel_names <- c("osw.cap2050.fit" = "OSW Capacity", "osw.totalelc.fit" = "Total Elc")
+emissioncoef_names <- c("CO2 Cap" = "emred", "OSW Capacity" = "cap2050", "Total Elc" = "`Total Elc`")
+emissionmodel_names <- c("osw.co2.fit" = expression(CO[2]), "osw.so2.fit" = expression(SO[2]),
+                     "osw.nox.fit" = expression(NO[X]), "osw.pm2.5.fit" = expression(PM[2.5]), 
+                     "osw.ch4.fit" = expression(CH[4]))
+
+grid.modeltable <- export_summs(osw.cap2050.fit, osw.totalelc.fit,
+                            scale = TRUE, coefs = gridcoef_names, model.names = gridmodel_names)
+emission.modeltable <- export_summs(osw.co2.fit, osw.so2.fit, osw.nox.fit, 
+                                    osw.ch4.fit, osw.pm2.5.fit,
+                                scale = TRUE, coefs = emissioncoef_names, model.names = emissionmodel_names)
 
 ## ~ All Scenarios (42)
 
 correlations <- sapply(allcor, cor.test, method="spearman", exact = F, y = allcor$`cap2050`)
 correlations.table <- as.data.frame(correlations)
-correlations.chart <- chart.Correlation(allcor, histogram = FALSE, method = "spearman")
+chart.Correlation(allcor, histogram = FALSE, method = "spearman")
 
-model.table <- export_summs(osw.cap2050.fit, osw.totalelc.fit, osw.co2.fit, scale = TRUE)
+
 
 
 

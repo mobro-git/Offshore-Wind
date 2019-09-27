@@ -1,5 +1,5 @@
 ---
-title: "Offshore Wind Results and Analysis"
+title: "Modeling the Contribution of Offshore Wind to the Grid Mix and Air Quality Implications:\nNational Approach Results and Analysis"
 author: "Morgan Browning"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
@@ -30,7 +30,7 @@ Graphs are provided with many variations to meet criteria of different publicati
 # Sets global knit options and loads the setup and data import scripts for the project. Code is hidden for ease of reading. Was running into issues when cacheing results, so have set cache to false. Time to knit <5 minutes, so it does not cause much of an issue. Will consider cacheing in the future if the issue is resolved.
 knitr::opts_chunk$set(echo = FALSE, include = TRUE, warning = FALSE, message = FALSE, tidy = TRUE, cache = FALSE)
 ```
-```{r}
+```{r, include = FALSE}
 source("osw_Scripts/osw_setup.R")
 source("osw_Scripts/osw_data.R")
 source("osw_Scripts/osw_results.R")
@@ -472,10 +472,11 @@ if(bw > 0) elctotal_heat_bw
 # Correlation
 
 ```{r}
-osw.correlations.chart
+chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
 ```
 ```{r, results = 'asis'}
-model.table
+grid.modeltable
+emission.modeltable
 ```
 
 
