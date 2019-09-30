@@ -429,12 +429,14 @@ if(bw > 0) emis_bau_fill_bw
 
 ## Emissions by Scenario and Commodity
 
-```{r}
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(color > 0) emis_col
+if(color > 0) emis_perc_col
 if(bw > 0) emis_bw
+if(bw > 0) emis_perc_bw
 ```
 
-## Emissions by Commodity
+## Emissions by Commodity - Values
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(color > 0) co2_col
@@ -458,6 +460,22 @@ if(bw > 0) ch4_hm_bw
 if(bw > 0) pm2.5_bw
 if(bw > 0) pm2.5_hm_bw
 ```
+
+## Emissions by Commodity - Percent Reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) co2_hm_per_col
+if(color > 0) so2_hm_per_col
+if(color > 0) nox_hm_per_col
+if(color > 0) ch4_hm_per_col
+if(color > 0) pm2.5_hm_per_col
+if(bw > 0) co2_hm_per_bw
+if(bw > 0) so2_hm_per_bw
+if(bw > 0) nox_hm_per_bw
+if(bw > 0) ch4_hm_per_bw
+if(bw > 0) pm2.5_hm_per_bw
+```
+
 
 # Total Electricity Production
 

@@ -418,15 +418,15 @@ gridmix_col <- gridmix +
   osw_color
 
 gridmix_poster <- elc_long %>% 
-  filter(!costred %in% c("20", "30", "80")) %>%
-  filter(emred %in% c("BAU", "40", "60")) %>%
+  filter(!costred %in% c("20", "30", "40")) %>%
+  filter(emred %in% c("BAU", "40", "70")) %>%
   ggplot() +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process") +
   facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
-  x_disc +
+  x_disc_l +
   osw_color +
   theme(legend.title=element_blank())
 
@@ -978,7 +978,7 @@ emis_bau_fill_bw <- emis_bau +
 emis_bau_line_bw <- emis_bau +
   geom_line(aes(group = Commodity, linetype = Commodity))
   
-emis_plot <- emissions_long %>% filter(!costred %in% c("40", "30", "20")) %>%
+emis_plot <- testemissions %>% filter(!costred %in% c("40", "30", "20")) %>%
   ggplot(aes(x = Year, y= Emissions)) +
   labs(x = "Year", y = "Emissions (kt)*",
        title = "Electric Sector Emissions Output",
@@ -987,17 +987,38 @@ emis_plot <- emissions_long %>% filter(!costred %in% c("40", "30", "20")) %>%
        color = "Cost Reduction (%)") +
   facet_wrap(~Commodity, scales = "free_y", nrow = 1, labeller = label_parsed) +
   yt +
-  x_disc +
+  #x_disc_l +
   bottom1 + bottom2 +
   theme(legend.box = "vertical") +
   guides(colour = guide_legend(nrow = 1))
 
 emis_col <- emis_plot +
-  geom_line(aes(x=Year, y=Emissions, color = costred, group = Scenario, linetype = emred)) +
+  geom_line(aes(x=Year, y=Emissions, color = costred, group = Scenario, linetype = emred), size = 1) +
   costosw_color
 
 emis_bw <- emis_plot +
   geom_line(aes(x=Year, y=Emissions, color = costred, group = Scenario, linetype = emred)) +
+  gray_color
+
+emis_perc_plot <- emissions_percent %>% filter(!costred %in% c("40", "30", "20")) %>%
+  ggplot(aes(x = Year, y= percent.red)) +
+  labs(x = "Year", y = "Percent Reduction from 2010",
+       title = "Electric Sector Emissions Output",
+       linetype = "Emissions Reduction (%)",
+       color = "Cost Reduction (%)") +
+  facet_wrap(~Commodity, nrow = 1, labeller = label_parsed) +
+  yt +
+  x_disc_l +
+  bottom1 + bottom2 +
+  theme(legend.box = "vertical") +
+  guides(colour = guide_legend(nrow = 1))
+
+emis_perc_col <- emis_perc_plot +
+  geom_line(aes(x=Year, y=percent.red, color = costred, group = Scenario, linetype = emred), size = 1) +
+  costosw_color
+
+emis_perc_bw <- emis_perc_plot +
+  geom_line(aes(x=Year, y=percent.red, color = costred, group = Scenario, linetype = emred)) +
   gray_color
 
 co2_plot <- emissions_long %>% filter(Commodity == "CO[2]") %>%
@@ -1174,6 +1195,8 @@ ggplot() +
 
 ## ~ Heatmaps ----
 
+# emissions data 
+
 co2_hm_col <- em.heatmap.col(emissions2050, "CO[2]", "Electric Sector CO2 Emissions (Mt): 2050")
 so2_hm_col <- em.heatmap.col(emissions2050, "SO[2]", "Electric Sector SO2 Emissions (kt): 2050")
 nox_hm_col <- em.heatmap.col(emissions2050, "NO[X]", "Electric Sector NOx Emissions (kt): 2050")
@@ -1185,6 +1208,20 @@ so2_hm_bw <- em.heatmap.bw(emissions2050, "SO[2]", "Electric Sector SO2 Emission
 nox_hm_bw <- em.heatmap.bw(emissions2050, "NO[X]", "Electric Sector NOx Emissions (kt): 2050")
 ch4_hm_bw <- em.heatmap.bw(emissions2050, "CH[4]", "Electric Sector CH4 Emissions (kt): 2050")
 pm2.5_hm_bw <- em.heatmap.bw(emissions2050, "PM[2.5]", "Electric Sector PM 2.5 Emissions (kt): 2050")
+
+# percent reduction emissions
+
+co2_hm_per_col <- em.heatmap.per.col(emissions2050_percent, "CO[2]", "Electric Sector CO2 Emissions: 2050")
+so2_hm_per_col <- em.heatmap.per.col(emissions2050_percent, "SO[2]", "Electric Sector SO2 Emissions: 2050")
+nox_hm_per_col <- em.heatmap.per.col(emissions2050_percent, "NO[X]", "Electric Sector NOx Emissions: 2050")
+ch4_hm_per_col <- em.heatmap.per.col(emissions2050_percent, "CH[4]", "Electric Sector CH4 Emissions: 2050")
+pm2.5_hm_per_col <- em.heatmap.per.col(emissions2050_percent, "PM[2.5]", "Electric Sector PM 2.5 Emissions: 2050")
+
+co2_hm_per_bw <- em.heatmap.per.bw(emissions2050_percent, "CO[2]", "Electric Sector CO2 Emissions: 2050")
+so2_hm_per_bw <- em.heatmap.per.bw(emissions2050_percent, "SO[2]", "Electric Sector SO2 Emissions: 2050")
+nox_hm_per_bw <- em.heatmap.per.bw(emissions2050_percent, "NO[X]", "Electric Sector NOx Emissions: 2050")
+ch4_hm_per_bw <- em.heatmap.per.bw(emissions2050_percent, "CH[4]", "Electric Sector CH4 Emissions: 2050")
+pm2.5_hm_per_bw <- em.heatmap.per.bw(emissions2050_percent, "PM[2.5]", "Electric Sector PM 2.5 Emissions: 2050")
 
 
 ## Total Electricity Production ----
@@ -1340,51 +1377,57 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
 
 ## ~ OSW Only Scenarios (28)
 
-osw.correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswcor$`cap2050`)
-osw.correlations.table <- as.data.frame(osw.correlations)
+correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswcor$`cap2050`)
+correlations.table <- as.data.frame(correlations)
 chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
 
-lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Total Elc`,
-          data = oswcor)
+summary(lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Total Elc`,
+          data = oswcor))
 
-osw.cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
-osw.cap2050.fit.sum <- summary(osw.cap2050.fit)
+cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
+cap2050.fit.sum <- summary(cap2050.fit)
 
-osw.totalelc.fit <- lm(`Total Elc`~emred+costred+cap2050, data = oswcor)
-osw.totalelc.fit.sum <- summary(osw.totalelc.fit)
+totalelc.fit <- lm(`Total Elc`~emred+costred+cap2050, data = oswcor)
+totalelc.fit.sum <- summary(totalelc.fit)
 
-osw.co2.fit <- lm(`CO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
-osw.co2.fit.sum <- summary(osw.co2.fit)
+rps.fit <- lm(`perRenew`~emred+costred, data = oswcor)
+rps.fit.sum <- summary(rps.fit)
 
-osw.so2.fit <- lm(`SO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
-osw.so2.fit.sum <- summary(osw.so2.fit)
+co2.fit <- lm(`CO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
+co2.fit.sum <- summary(co2.fit)
 
-osw.nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`, data = oswcor)
-osw.nox.fit.sum <- summary(osw.nox.fit)
+so2.fit <- lm(`SO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
+so2.fit.sum <- summary(so2.fit)
 
-osw.pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`, data = oswcor)
-osw.pm2.5.fit.sum <- summary(osw.pm2.5.fit)
+nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`, data = oswcor)
+nox.fit.sum <- summary(nox.fit)
 
-osw.ch4.fit <- lm(`CH[4]`~emred+cap2050+`Total Elc`, data = oswcor)
-osw.ch4.fit.sum <- summary(osw.ch4.fit)
+pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`, data = oswcor)
+pm2.5.fit.sum <- summary(pm2.5.fit)
+
+ch4.fit <- lm(`CH[4]`~emred+cap2050+`Total Elc`, data = oswcor)
+ch4.fit.sum <- summary(ch4.fit)
 
 gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred", "OSW Capacity" = "cap2050")
-gridmodel_names <- c("osw.cap2050.fit" = "OSW Capacity", "osw.totalelc.fit" = "Total Elc")
+gridmodel_names <- c("cap2050.fit" = "OSW Capacity", "totalelc.fit" = "Total Elc")
 emissioncoef_names <- c("CO2 Cap" = "emred", "OSW Capacity" = "cap2050", "Total Elc" = "`Total Elc`")
-emissionmodel_names <- c("osw.co2.fit" = expression(CO[2]), "osw.so2.fit" = expression(SO[2]),
-                     "osw.nox.fit" = expression(NO[X]), "osw.pm2.5.fit" = expression(PM[2.5]), 
-                     "osw.ch4.fit" = expression(CH[4]))
+emissionmodel_names <- c("co2.fit" = expression(CO[2]), "so2.fit" = expression(SO[2]),
+                     "nox.fit" = expression(NO[X]), "pm2.5.fit" = expression(PM[2.5]), 
+                     "ch4.fit" = expression(CH[4]))
 
-grid.modeltable <- export_summs(osw.cap2050.fit, osw.totalelc.fit,
+grid.modeltable <- export_summs(cap2050.fit, totalelc.fit,
                             scale = TRUE, coefs = gridcoef_names, model.names = gridmodel_names)
-emission.modeltable <- export_summs(osw.co2.fit, osw.so2.fit, osw.nox.fit, 
-                                    osw.ch4.fit, osw.pm2.5.fit,
+emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit, 
+                                    ch4.fit, pm2.5.fit,
                                 scale = TRUE, coefs = emissioncoef_names, model.names = emissionmodel_names)
+
+### STILL NEED TO CHECK FOR HETEROSKEDASTICITY
+
 
 ## ~ All Scenarios (42)
 
-correlations <- sapply(allcor, cor.test, method="spearman", exact = F, y = allcor$`cap2050`)
-correlations.table <- as.data.frame(correlations)
+all.correlations <- sapply(allcor, cor.test, method="spearman", exact = F, y = allcor$`cap2050`)
+all.correlations.table <- as.data.frame(all.correlations)
 chart.Correlation(allcor, histogram = FALSE, method = "spearman")
 
 

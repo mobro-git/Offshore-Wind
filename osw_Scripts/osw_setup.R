@@ -32,6 +32,7 @@ library(PerformanceAnalytics)
 library(jtools)
 library(ggstance)
 library(huxtable)
+library(broom)
 
 
 ## ----Functions-------------------------------------------
@@ -264,6 +265,30 @@ em.heatmap.bw <- function(data, em, title) {
          y = "Emissions Reduction (%)",
          title = title,
          fill = "Emissions") +
+    gray_fill_cont +
+    st
+}
+
+em.heatmap.per.col <- function(data, em, title) {
+  ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = percent.red)) +
+    geom_tile(colour = "gray", size = 0.25) +
+    geom_text(aes(label = paste(percent.red*100, "%")), color = "black", size = 5) +
+    labs(x = "Offshore Wind Cost Reductions (%)",
+         y = "Emissions Reduction (%)",
+         title = title,
+         fill = "Emissions\nReduction (%)") +
+    col_fill_cont +
+    st
+}
+
+em.heatmap.per.bw <- function(data, em, title) {
+  ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = percent.red)) +
+    geom_tile(colour = "white", size = 0.25) +
+    geom_text(aes(label = paste(percent.red*100, "%")), color = "white", size = 5) +
+    labs(x = "Offshore Wind Cost Reductions (%)",
+         y = "Emissions Reduction (%)",
+         title = title,
+         fill = "Emissions\nReduction (%)") +
     gray_fill_cont +
     st
 }

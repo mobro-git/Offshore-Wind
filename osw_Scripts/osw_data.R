@@ -408,8 +408,8 @@ rps_reg <- elc_long_reg %>%
   summarise(Output = sum(VAR_FOut)) %>%
   spread(key = RPS, value = Output) %>%
   mutate(Total = sum(Other, Renewable)) %>%
-  mutate(perRenew = Renewable/Total) %>% 
-  mutate(perOther = Other/Total) %>%
+  mutate(perRenew = round(Renewable/Total, 2)) %>% 
+  mutate(perOther = round(Other/Total, 2)) %>%
   ungroup()
 
 rps <- elc_long %>% 
@@ -417,7 +417,8 @@ rps <- elc_long %>%
     Process %in% renewables ~ "Renewable",
     TRUE ~ "Other")) %>%
   group_by(Scenario, Year, RPS, costred, emred) %>%
-  spread(key = RPS, value = VAR_FOut) %>%
+  summarise(Output = sum(VAR_FOut)) %>%
+  spread(key = RPS, value = Output) %>%
   mutate(Total = sum(Other, Renewable)) %>%
   mutate(perRenew = Renewable/Total) %>% 
   mutate(perOther = Other/Total) %>%
@@ -427,6 +428,21 @@ rps <- elc_long %>%
 
 # pulls in emissions data for CO2, NOx, SO2, CH4, PM 2.5. both regional and cumulative
 # sets of data produced
+
+testemissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
+  emission() %>%
+  categorize() %>% 
+  gather(`2010`, `2011`, `2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
+                          key = "Year", value = "Emissions") %>%
+  mutate(costred = factor(costred, levels = levels_costred)) %>%
+  mutate(emred = factor(emred, levels = levels_emred)) %>%
+  mutate(Commodity = factor(Commodity, levels = levels_emissions)) %>%
+  group_by(Scenario, emred, costred, Commodity, Year) %>%
+  summarize(Emissions = sum(Emissions)) %>%
+  ungroup() %>%
+  mutate(costred = factor(costred, levels = levels_costred)) %>%
+  mutate(emred = factor(emred, levels = levels_emred)) %>%
+  mutate(Commodity = factor(Commodity, levels = levels_emissions))
 
 emissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
   emission() %>%
@@ -443,9 +459,26 @@ emissions_long_reg <- emissions %>%
 emissions_long <- emissions_long_reg %>%
   group_by(Scenario, emred, costred, Commodity, Year) %>%
   summarize(Emissions = sum(Emissions)) %>%
-  ungroup() 
+  ungroup() %>%
+  mutate(costred = factor(costred, levels = levels_costred)) %>%
+  mutate(emred = factor(emred, levels = levels_emred)) %>%
+  mutate(Commodity = factor(Commodity, levels = levels_emissions))
 
+emissions_bau_reg <- emissions_long_reg %>% filter(emred == "BAU" & costred == "20")
 emissions_bau <- emissions_long %>% filter(emred == "BAU" & costred == "20")
+
+emissions2010_long_reg <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
+  emission() %>%
+  categorize() %>%
+  select(Scenario, emred, costred, Commodity, Region, `2010`) %>%
+  mutate(Year = 2010) %>%
+  filter(emred == "BAU" & costred == "20") %>%
+  mutate(Commodity = factor(Commodity, levels = levels_emissions))
+colnames(emissions2010_long_reg)[6] <- c("Emissions2010")
+
+emissions2010_long <- emissions2010_long_reg %>%
+  group_by(emred, costred, Commodity, Year) %>%
+  summarize(Emissions2010 = sum(Emissions2010))
 
 
 ## ----~2050 emissions totals----------------------------------------
@@ -458,6 +491,27 @@ emissions2050 <- emissions2050_reg %>%
   group_by(Scenario,emred,costred,Year,Commodity) %>%
   summarize(Emissions = sum(Emissions))
 
+## ----~% emissions reduction----------------------------------------
+
+# calculates % reduction from baseline for each emission
+
+emissions_percent_reg <- emissions2010_long_reg %>% select(Commodity, Region, Emissions2010) %>%
+  left_join(emissions_long_reg, emissions_percent_reg, by = c("Commodity", "Region")) %>%
+  select(Scenario, emred, costred, Commodity, Region, Year, Emissions2010, Emissions) %>%
+  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010), 2))
+
+emissions_percent <- emissions2010_long %>% ungroup() %>% select(Commodity, Emissions2010) %>%
+  left_join(emissions_long, emissions_percent, by = "Commodity") %>%
+  select(Scenario, emred, costred, Commodity, Year, Emissions2010, Emissions) %>%
+  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010), 2))
+
+## ----~2050 % emissions reductions----------------------------------------
+
+# pulls just the 2050 reductions for each emission, both regional and cumulative
+# data sets produced
+
+emissions2050_percent_reg <- emissions_percent_reg %>% filter(Year == "2050") 
+emissions2050_percent <- emissions_percent %>% filter(Year == "2050")
 
 ## ----elc total----------------------------------------------------
 
@@ -532,16 +586,15 @@ enduse <- enduse_reg %>%
 
 ## ----~only osw scenarios (28)----
 
-oswcor <- osw_varcap_2050total 
-names(oswcor)[1] <- "emred"
-oswcor <- oswcor %>%
-  gather("50", "60", "70", "80", key = "costred", value = "cap2050")
-oswcor <- left_join(oswcor, emissions2050, by = c("emred", "costred")) %>%
-  spread(key = Commodity, value = Emissions) 
-oswcor <- left_join(oswcor, elctotal2050, 
-                    by = c("emred", "costred", "Scenario", "Year")) %>%
+oswcor <- osw_varcap_2050total %>%
+  rename("emred" = "") %>%
+  gather("50", "60", "70", "80", key = "costred", value = "cap2050") %>% 
+  left_join(., emissions2050, by = c("emred", "costred")) %>%
+  spread(key = Commodity, value = Emissions) %>% 
+  left_join(., elctotal2050, by = c("emred", "costred", "Scenario", "Year")) %>%
   rename("Total Elc" = "VAR_FOut") %>%
-  select(`cap2050`, emred, costred, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`)
+  left_join(., rps, by = c("Scenario", "emred", "costred", "Year")) %>%
+  select(emred, costred, `cap2050`, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`, perRenew)
 oswcor[] <- lapply(oswcor, as.character)
 oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
   mutate(emred = as.numeric(emred)) %>%
@@ -553,22 +606,25 @@ oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
   mutate(`CH[4]` = as.numeric(`CH[4]`)) %>%
   mutate(`cap2050` = as.numeric(`cap2050`)) %>%
   mutate(`Total Elc` = as.numeric(`Total Elc`)) %>%
-  mutate_all(~replace(.,is.na(.), 0))
+  mutate(perRenew = as.numeric(perRenew)) %>%
+  mutate_all(~replace(.,is.na(.), 0)) %>% 
+  mutate_if(is.numeric, ~round(.,2))
 
 ## ----~all scenarios (42)----
 
-oswscen <- osw_varcap_2050total 
-names(oswscen)[1] <- "emred"
-oswscen <- oswscen %>%
+oswscen <- osw_varcap_2050total %>%
+  rename("emred" = "") %>%
   gather("50", "60", "70", "80", key = "costred", value = "cap2050")
 
-allcor <- emissions2050
-allcor <- left_join(allcor, oswscen, by = c("emred", "costred")) %>%
-  spread(key = Commodity, value = Emissions) 
-allcor <- left_join(allcor, elctotal2050, 
+allcor <- emissions2050 %>%
+  spread(key = Commodity, value = Emissions) %>% 
+  left_join(., oswscen, by = c("emred", "costred")) %>%
+  left_join(., elctotal2050, 
                     by = c("emred", "costred", "Scenario", "Year")) %>%
   rename("Total Elc" = "VAR_FOut") %>%
-  select(`cap2050`, emred, costred, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`)
+  left_join(., rps, by = c("Scenario", "emred", "costred", "Year")) %>%
+  ungroup() %>%
+  select(emred, costred, `cap2050`, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`, perRenew)
 allcor[] <- lapply(allcor, as.character)
 allcor <- allcor %>% ungroup() %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
   mutate(emred = as.numeric(emred)) %>%
@@ -580,8 +636,9 @@ allcor <- allcor %>% ungroup() %>% mutate(emred = replace(emred, emred == "BAU",
   mutate(`CH[4]` = as.numeric(`CH[4]`)) %>%
   mutate(`cap2050` = as.numeric(`cap2050`)) %>%
   mutate(`Total Elc` = as.numeric(`Total Elc`)) %>%
+  mutate(perRenew = as.numeric(perRenew)) %>%
   mutate_all(~replace(.,is.na(.), 0)) %>%
-  select(-Scenario, -Year)
+  mutate_if(is.numeric, ~round(.,2))
 
 
 
