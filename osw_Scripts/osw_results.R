@@ -1425,6 +1425,8 @@ nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 nox.sum <- summary(nox.fit)
 nox.relimp <- calc.relimp(nox.fit, type  = "lmg", rela=TRUE)
 nox.het <- bptest(nox.fit) # FAIL p < 0.05
+nox.robustSE <- coeftest(nox.fit, vcov = vcovHC(nox.fit, "HC1"))
+## NEED TO RESOLVE HETEROSKEDASTICITY
 
 pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 pm2.5.sum <- summary(pm2.5.fit)
