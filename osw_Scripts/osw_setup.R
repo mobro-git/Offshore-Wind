@@ -3,18 +3,13 @@
 # load all packages into the environment. there are more packages here than I ended up using,
 # but the list just kept getting longer over time. could clean this up but doesnt seem worth
 # the effort because no harm done
+library(relaimpo)
 library(graphics)
 library(colorspace)
-library(tidyverse)
-library(readxl)
-library(knitr)
-library(kableExtra)
-library(forcats)
 library(scales)
 library(ggrepel)
 library(here)
 # library(ggtextures)
-library(tibble)
 library(gridExtra)
 library(ggpubr)
 library(patternplot)
@@ -32,8 +27,10 @@ library(PerformanceAnalytics)
 library(jtools)
 library(ggstance)
 library(huxtable)
-library(broom)
-
+library(readxl)
+library(knitr)
+library(kableExtra)
+library(tidyverse)
 
 ## ----Functions-------------------------------------------
 

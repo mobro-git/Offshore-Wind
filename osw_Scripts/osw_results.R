@@ -1259,105 +1259,105 @@ elctotal_heat_bw <- elctotal_heat + gray_fill_cont
 
 ## ~ Timelines ----
 
-enduse %>% filter(costred == "80" & emred == "40") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack") +
-  scale_fill_manual(values = col_sector) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>% filter(costred == "80" & emred == "40") %>%
-  ggplot(aes(x = Year, y = Consumption, color = Sector)) +
-  geom_line(aes(group = Sector)) +
-  scale_color_manual(values = col_sector) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>% filter(costred == "80" & emred == "40") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack", colour = "black") +
-  gray_fill +
-  yt +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  filter(costred == "40") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack") +
-  scale_fill_manual(values = col_sector) +
-  facet_wrap(~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack") +
-  scale_fill_manual(values = col_sector) +
-  facet_grid(costred~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  filter(Sector == "Transportation") %>% filter(costred != "20") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
-  facet_grid(costred~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Transportation Electricity Consumption: 40% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  filter(Sector == "Industrial") %>% filter(costred != "20") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
-  facet_grid(costred~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Industrial Electricity Consumption: 40% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  filter(Sector == "Residential") %>% filter(costred != "20") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
-  facet_grid(costred~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Residential Electricity Consumption: 40% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  filter(Sector == "Commercial") %>% filter(costred != "20") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
-  facet_grid(costred~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Commercial Electricity Consumption: 40% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  filter(costred == "40") %>%
-  filter(Sector == "Industrial") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack", fill = "firebrick") +
-  facet_wrap(~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Industrial Electricity Consumption: 40% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
-
-enduse %>%
-  filter(costred == "80") %>%
-  filter(Sector == "Industrial") %>%
-  ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
-  geom_bar(stat = "identity", position = "stack", fill = "firebrick") +
-  facet_wrap(~emred) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Industrial Electricity Consumption: 80% Cost Reduction") +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# enduse %>% filter(costred == "80" & emred == "40") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack") +
+#   scale_fill_manual(values = col_sector) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>% filter(costred == "80" & emred == "40") %>%
+#   ggplot(aes(x = Year, y = Consumption, color = Sector)) +
+#   geom_line(aes(group = Sector)) +
+#   scale_color_manual(values = col_sector) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>% filter(costred == "80" & emred == "40") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack", colour = "black") +
+#   gray_fill +
+#   yt +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Electricity Consumption by Sector:\n40% Emissions Reduction & 80% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   filter(costred == "40") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack") +
+#   scale_fill_manual(values = col_sector) +
+#   facet_wrap(~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack") +
+#   scale_fill_manual(values = col_sector) +
+#   facet_grid(costred~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Electricity Consumption by Sector: 40% Cost Reduction ") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   filter(Sector == "Transportation") %>% filter(costred != "20") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
+#   facet_grid(costred~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Transportation Electricity Consumption: 40% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   filter(Sector == "Industrial") %>% filter(costred != "20") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
+#   facet_grid(costred~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Industrial Electricity Consumption: 40% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   filter(Sector == "Residential") %>% filter(costred != "20") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
+#   facet_grid(costred~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Residential Electricity Consumption: 40% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   filter(Sector == "Commercial") %>% filter(costred != "20") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack", fill = "darkgoldenrod2") +
+#   facet_grid(costred~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Commercial Electricity Consumption: 40% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   filter(costred == "40") %>%
+#   filter(Sector == "Industrial") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack", fill = "firebrick") +
+#   facet_wrap(~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Industrial Electricity Consumption: 40% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
+# 
+# enduse %>%
+#   filter(costred == "80") %>%
+#   filter(Sector == "Industrial") %>%
+#   ggplot(aes(x = Year, y = Consumption, fill = Sector)) +
+#   geom_bar(stat = "identity", position = "stack", fill = "firebrick") +
+#   facet_wrap(~emred) +
+#   labs(x = "Year", y = "Electricity Consumption (PJ)",
+#        title = "Industrial Electricity Consumption: 80% Cost Reduction") +
+#   theme(axis.text.x = element_text(angle = 60, hjust = 1))
 
 ## ~ Heatmaps ----
 
@@ -1375,7 +1375,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
 
 ## Correlations ----
 
-## ~ OSW Only Scenarios (28)
+## ~ OSW Only Scenarios (28) ----
 
 correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswcor$`cap2050`)
 correlations.table <- as.data.frame(correlations)
@@ -1385,37 +1385,46 @@ summary(lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Tota
           data = oswcor))
 
 cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
-cap2050.fit.sum <- summary(cap2050.fit)
+cap2050.sum <- summary(cap2050.fit)
+cap2050.relimp <- calc.relimp(cap2050.fit, type  = "lmg", rela=TRUE)
 
 totalelc.fit <- lm(`Total Elc`~emred+costred+cap2050, data = oswcor)
-totalelc.fit.sum <- summary(totalelc.fit)
+totalelc.sum <- summary(totalelc.fit)
+totalelc.relimp <- calc.relimp(totalelc.fit, type  = "lmg", rela=TRUE)
 
 rps.fit <- lm(`perRenew`~emred+costred, data = oswcor)
-rps.fit.sum <- summary(rps.fit)
+rps.sum <- summary(rps.fit)
+rps.relimp <- calc.relimp(rps.fit, type  = "lmg", rela=TRUE)
 
-co2.fit <- lm(`CO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
-co2.fit.sum <- summary(co2.fit)
+co2.fit <- lm(`CO[2]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+co2.sum <- summary(co2.fit)
+co2.relimp <- calc.relimp(co2.fit, type  = "lmg", rela=TRUE)
 
-so2.fit <- lm(`SO[2]`~emred+cap2050+`Total Elc`, data = oswcor)
-so2.fit.sum <- summary(so2.fit)
+so2.fit <- lm(`SO[2]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+so2.sum <- summary(so2.fit)
+so2.relimp <- calc.relimp(so2.fit, type  = "lmg", rela=TRUE)
 
-nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`, data = oswcor)
-nox.fit.sum <- summary(nox.fit)
+nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+nox.sum <- summary(nox.fit)
+nox.relimp <- calc.relimp(nox.fit, type  = "lmg", rela=TRUE)
 
-pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`, data = oswcor)
-pm2.5.fit.sum <- summary(pm2.5.fit)
+pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+pm2.5.sum <- summary(pm2.5.fit)
+pm2.5.relimp <- calc.relimp(pm2.5.fit, type  = "lmg", rela=TRUE)
 
-ch4.fit <- lm(`CH[4]`~emred+cap2050+`Total Elc`, data = oswcor)
-ch4.fit.sum <- summary(ch4.fit)
+ch4.fit <- lm(`CH[4]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+ch4.sum <- summary(ch4.fit)
+ch4.relimp <- calc.relimp(ch4.fit, type  = "lmg", rela=TRUE)
 
 gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred", "OSW Capacity" = "cap2050")
-gridmodel_names <- c("cap2050.fit" = "OSW Capacity", "totalelc.fit" = "Total Elc")
-emissioncoef_names <- c("CO2 Cap" = "emred", "OSW Capacity" = "cap2050", "Total Elc" = "`Total Elc`")
+gridmodel_names <- c("cap2050.fit" = "OSW Capacity", "totalelc.fit" = "Total Elc", "rps.fit" = "% Renew")
+emissioncoef_names <- c("CO2 Cap" = "emred", "OSW Capacity" = "cap2050", "Total Elc" = "`Total Elc`", 
+                        "% Renew" = "perRenew")
 emissionmodel_names <- c("co2.fit" = expression(CO[2]), "so2.fit" = expression(SO[2]),
                      "nox.fit" = expression(NO[X]), "pm2.5.fit" = expression(PM[2.5]), 
                      "ch4.fit" = expression(CH[4]))
 
-grid.modeltable <- export_summs(cap2050.fit, totalelc.fit,
+grid.modeltable <- export_summs(cap2050.fit, rps.fit, totalelc.fit,
                             scale = TRUE, coefs = gridcoef_names, model.names = gridmodel_names)
 emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit, 
                                     ch4.fit, pm2.5.fit,
@@ -1424,7 +1433,7 @@ emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit,
 ### STILL NEED TO CHECK FOR HETEROSKEDASTICITY
 
 
-## ~ All Scenarios (42)
+## ~ All Scenarios (42) ----
 
 all.correlations <- sapply(allcor, cor.test, method="spearman", exact = F, y = allcor$`cap2050`)
 all.correlations.table <- as.data.frame(all.correlations)
