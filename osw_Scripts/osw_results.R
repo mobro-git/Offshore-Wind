@@ -1373,6 +1373,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
         legend.title = element_text(size = 10),
         legend.text = element_text(size = 9))
 
+
 ## Correlations ----
 
 ## ~ OSW Only Scenarios (28) ----
@@ -1381,40 +1382,59 @@ correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswco
 correlations.table <- as.data.frame(correlations)
 chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
 
+## ~ All Scenarios (42) ----
+
+all.correlations <- sapply(allcor, cor.test, method="spearman", exact = F, y = allcor$`cap2050`)
+all.correlations.table <- as.data.frame(all.correlations)
+chart.Correlation(allcor, histogram = FALSE, method = "spearman")
+
+
+## Regression ---- 
+
+# Regressions only cover OSW scenarios
+
 summary(lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Total Elc`,
           data = oswcor))
 
 cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
 cap2050.sum <- summary(cap2050.fit)
 cap2050.relimp <- calc.relimp(cap2050.fit, type  = "lmg", rela=TRUE)
+cap2050.het <- bptest(cap2050.fit) # pass p > 0.05
 
 totalelc.fit <- lm(`Total Elc`~emred+costred+cap2050, data = oswcor)
 totalelc.sum <- summary(totalelc.fit)
 totalelc.relimp <- calc.relimp(totalelc.fit, type  = "lmg", rela=TRUE)
+totalelc.het <- bptest(totalelc.fit) # pass p > 0.05
 
 rps.fit <- lm(`perRenew`~emred+costred, data = oswcor)
 rps.sum <- summary(rps.fit)
 rps.relimp <- calc.relimp(rps.fit, type  = "lmg", rela=TRUE)
+rps.het <- bptest(rps.fit) # pass p > 0.05
 
 co2.fit <- lm(`CO[2]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 co2.sum <- summary(co2.fit)
 co2.relimp <- calc.relimp(co2.fit, type  = "lmg", rela=TRUE)
+co2.het <- bptest(co2.fit) # pass p > 0.05
 
 so2.fit <- lm(`SO[2]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 so2.sum <- summary(so2.fit)
 so2.relimp <- calc.relimp(so2.fit, type  = "lmg", rela=TRUE)
+so2.het <- bptest(so2.fit) # pass p > 0.05
 
 nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 nox.sum <- summary(nox.fit)
 nox.relimp <- calc.relimp(nox.fit, type  = "lmg", rela=TRUE)
+nox.het <- bptest(nox.fit) # FAIL p < 0.05
 
 pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 pm2.5.sum <- summary(pm2.5.fit)
 pm2.5.relimp <- calc.relimp(pm2.5.fit, type  = "lmg", rela=TRUE)
+pm2.5.het <- bptest(pm2.5.fit) # pass p > 0.05
 
 ch4.fit <- lm(`CH[4]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 ch4.sum <- summary(ch4.fit)
 ch4.relimp <- calc.relimp(ch4.fit, type  = "lmg", rela=TRUE)
+ch4.het <- bptest(ch4.fit) # pass p > 0.05 BUT p = 0.07 so........
 
 gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred", "OSW Capacity" = "cap2050")
 gridmodel_names <- c("cap2050.fit" = "OSW Capacity", "totalelc.fit" = "Total Elc", "rps.fit" = "% Renew")
@@ -1430,14 +1450,10 @@ emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit,
                                     ch4.fit, pm2.5.fit,
                                 scale = TRUE, coefs = emissioncoef_names, model.names = emissionmodel_names)
 
-### STILL NEED TO CHECK FOR HETEROSKEDASTICITY
 
 
-## ~ All Scenarios (42) ----
 
-all.correlations <- sapply(allcor, cor.test, method="spearman", exact = F, y = allcor$`cap2050`)
-all.correlations.table <- as.data.frame(all.correlations)
-chart.Correlation(allcor, histogram = FALSE, method = "spearman")
+
 
 
 
