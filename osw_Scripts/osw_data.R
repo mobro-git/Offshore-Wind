@@ -429,21 +429,6 @@ rps <- elc_long %>%
 # pulls in emissions data for CO2, NOx, SO2, CH4, PM 2.5. both regional and cumulative
 # sets of data produced
 
-testemissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
-  emission() %>%
-  categorize() %>% 
-  gather(`2010`, `2011`, `2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
-                          key = "Year", value = "Emissions") %>%
-  mutate(costred = factor(costred, levels = levels_costred)) %>%
-  mutate(emred = factor(emred, levels = levels_emred)) %>%
-  mutate(Commodity = factor(Commodity, levels = levels_emissions)) %>%
-  group_by(Scenario, emred, costred, Commodity, Year) %>%
-  summarize(Emissions = sum(Emissions)) %>%
-  ungroup() %>%
-  mutate(costred = factor(costred, levels = levels_costred)) %>%
-  mutate(emred = factor(emred, levels = levels_emred)) %>%
-  mutate(Commodity = factor(Commodity, levels = levels_emissions))
-
 emissions <- as.data.frame(data_global$`ELC Emissions Totals`) %>% 
   emission() %>%
   categorize() %>%
@@ -608,7 +593,8 @@ oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
   mutate(`Total Elc` = as.numeric(`Total Elc`)) %>%
   mutate(perRenew = as.numeric(perRenew)) %>%
   mutate_all(~replace(.,is.na(.), 0)) %>% 
-  mutate_if(is.numeric, ~round(.,2))
+  mutate_if(is.numeric, ~round(.,2)) %>%
+  select(`cap2050`, everything())
 
 ## ----~all scenarios (42)----
 

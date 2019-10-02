@@ -3,8 +3,8 @@
 # allows me to quickly run my two previous scripts when I make changes in them or
 # if I'm just going to work with results and need to pull in the data
 
-# source("osw_Scripts/osw_setup.R")
-# source("osw_Scripts/osw_data.R")
+source("osw_Scripts/osw_setup.R")
+source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
@@ -115,7 +115,7 @@ cap_heatmap <- osw_varcap_long %>% filter(Year == "2050") %>%
   
 cap_col_heat <- cap_heatmap + 
   geom_text(aes(label = VAR_Cap), color = "black", size = 5) +
-  col_fill_cont
+  color_fill_cont
 
 cap_bw_heat <- cap_heatmap + 
   geom_text(aes(label = VAR_Cap), color = "white", size = 5) +
@@ -317,7 +317,7 @@ regOSW_map <- ggplot() +
   theme_bw() +
   noaxes
 
-regOSW_map_col <- regOSW_map + col_fill_cont
+regOSW_map_col <- regOSW_map + color_fill_cont
 
 regOSW_map_bw <- regOSW_map + gray_fill_cont
 
@@ -978,7 +978,7 @@ emis_bau_fill_bw <- emis_bau +
 emis_bau_line_bw <- emis_bau +
   geom_line(aes(group = Commodity, linetype = Commodity))
   
-emis_plot <- testemissions %>% filter(!costred %in% c("40", "30", "20")) %>%
+emis_plot <- emissions_long %>% filter(!costred %in% c("40", "30", "20")) %>%
   ggplot(aes(x = Year, y= Emissions)) +
   labs(x = "Year", y = "Emissions (kt)*",
        title = "Electric Sector Emissions Output",
@@ -1002,8 +1002,8 @@ emis_bw <- emis_plot +
 
 emis_perc_plot <- emissions_percent %>% filter(!costred %in% c("40", "30", "20")) %>%
   ggplot(aes(x = Year, y= percent.red)) +
-  labs(x = "Year", y = "Percent Reduction from 2010",
-       title = "Electric Sector Emissions Output",
+  labs(x = "Year", y = "% Reduction from 2010",
+       title = "Electric Sector Emissions Reductions",
        linetype = "Emissions Reduction (%)",
        color = "Cost Reduction (%)") +
   facet_wrap(~Commodity, nrow = 1, labeller = label_parsed) +
@@ -1251,7 +1251,7 @@ elctotal_heat <- ggplot(elcdata, aes(x = costred, y = emred)) +
        title = "Total Electricity Production: 2050",
        fill = "Electricity\nProduced\n(PJ)")
 
-elctotal_heat_col <- elctotal_heat + col_fill_cont
+elctotal_heat_col <- elctotal_heat + color_fill_cont
   
 elctotal_heat_bw <- elctotal_heat + gray_fill_cont
 
@@ -1380,7 +1380,7 @@ enduse %>% filter(Year == "2050") %>% filter(Sector == "Transportation") %>%
 
 correlations <- sapply(oswcor, cor.test, method="spearman", exact = F, y = oswcor$`cap2050`)
 correlations.table <- as.data.frame(correlations)
-chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
+chart.Correlation(oswcor, histogram = TRUE, method = "spearman")
 
 ## ~ All Scenarios (42) ----
 
@@ -1425,8 +1425,10 @@ nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 nox.sum <- summary(nox.fit)
 nox.relimp <- calc.relimp(nox.fit, type  = "lmg", rela=TRUE)
 nox.het <- bptest(nox.fit) # FAIL p < 0.05
-nox.robustSE <- coeftest(nox.fit, vcov = vcovHC(nox.fit, "HC1"))
+nox.robustSE_white <- coeftest(nox.fit, vcov = vcovHC(nox.fit, "HC1"))
 ## NEED TO RESOLVE HETEROSKEDASTICITY
+nox.robust <- lmrob(`NO[X]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+nox.rob.sum <- summary(nox.robust)
 
 pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
 pm2.5.sum <- summary(pm2.5.fit)
@@ -1455,7 +1457,21 @@ emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit,
 
 
 
-
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, color = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, fill = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, fill = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = emred, y = `CO[2]`, group = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = emred, y = `SO[2]`, group = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `SO[2]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CH[4]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = cap2050, y = `CH[4]`, group = cap2050))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CH[4]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = cap2050, group = costred))
+ggplot(oswcor, aes(x = emred, y = cap2050, group = emred)) + 
+  geom_boxplot() +
+  geom_dotplot(binaxis = 'y', stackdir = 'center', dotsize = 1)
 
 
 

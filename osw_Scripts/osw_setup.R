@@ -4,6 +4,7 @@
 # but the list just kept getting longer over time. could clean this up but doesnt seem worth
 # the effort because no harm done
 library(relaimpo)
+library(robustbase)
 library(sandwich)
 library(lmtest)
 library(graphics)
@@ -152,7 +153,7 @@ grid.heatmap.col <- function(data, title) {
        y = "Emissions Reduction (%)",
        title = title,
        fill = "Electricity\nProduced\n(PJ)") +
-  col_fill_cont +
+  color_fill_cont +
   st
 }
 
@@ -253,7 +254,7 @@ em.heatmap.col <- function(data, em, title) {
          y = "Emissions Reduction (%)",
          title = title,
          fill = "Emissions") +
-    col_fill_cont +
+    color_fill_cont +
     st
 }
 
@@ -276,7 +277,7 @@ em.heatmap.per.col <- function(data, em, title) {
          y = "Emissions Reduction (%)",
          title = title,
          fill = "Emissions\nReduction (%)") +
-    col_fill_cont +
+    color_fill_cont +
     st
 }
 
@@ -382,7 +383,7 @@ col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick",
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
 col_cost <- c("20" = "#C2DFF8", "30" = "#98C1E3", "40" = "#6FAADB", "50" = "#4596DA", 
               "60" = "#4579DA", "70" = "#2054B5", "80" = "#032F82")
-col_costosw <- c("50" = "#C2DFF8", "60" = "#6FAADB", "70" = "#4579DA", "80" = "#032F82")
+col_costosw <- c("50" = "#C9D0FF", "60" = "#8F9BEA", "70" = "#364BD8", "80" = "#0017AE")
 col_commodity <-  c("CH[4]" = "deepskyblue4", "PM[2.5]" = "firebrick", "SO[2]" = "darkgoldenrod3", 
                     "NO[X]" = "seashell4", "CO[2]" = "chartreuse4")
 
@@ -392,7 +393,7 @@ osw_fill <- scale_fill_manual(values = col_osw)
 osw_color <- scale_color_manual(values = col_osw)
 gray_fill <- scale_fill_grey(start = 0.9, end = 0)
 gray_color <- scale_color_grey(start = 0.8, end = 0)
-col_fill_cont <- scale_fill_gradient(low = "#d7e8fa", high = "#04488c", na.value = "white")
+color_fill_cont <- scale_fill_gradient(low = "#C9D0FF", high = "#0017AE", na.value = "gray")
 gray_fill_cont <- scale_fill_gradient(low = "#bababa", high = "#08090a", na.value = "white")
 em_color <- scale_color_manual(values = col_em)
 cost_color <- scale_color_manual(values = col_cost)
