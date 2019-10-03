@@ -32,8 +32,8 @@ library(ggstance)
 library(huxtable)
 library(readxl)
 library(knitr)
-library(kableExtra)
 library(tidyverse)
+library(kableExtra)
 
 ## ----Functions-------------------------------------------
 
@@ -168,6 +168,76 @@ grid.heatmap.bw <- function(data, title) {
     st +
     gray_fill_cont
 }
+
+grid.region.col <- function(region) {
+  elc_long_reg %>% 
+    filter(Region == region) %>%
+    filter(!costred %in% c("20", "30", "40")) %>%
+    filter(emred %in% c("BAU", "40", "70")) %>%
+    ggplot() +
+    geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
+    labs(x = "Year", y = "Electricity Production (PJ)",
+         title = "Electricity Production by Process",
+         subtitle = region) +
+    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    yt +
+    x_disc_l +
+    osw_color +
+    theme(legend.title=element_blank())  
+}
+
+grid.region.bw <- function(region) {
+  elc_long_reg %>% 
+    filter(Region == region) %>%
+    filter(!costred %in% c("20", "30", "40")) %>%
+    filter(emred %in% c("BAU", "40", "70")) %>%
+    ggplot() +
+    geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
+    labs(x = "Year", y = "Electricity Production (PJ)",
+         title = "Electricity Production by Process",
+         subtitle = region) +
+    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    yt +
+    x_disc_l +
+    gray_color +
+    theme(legend.title=element_blank())  
+}
+
+grid.region.bar.col <- function(region) {
+  elc_long_reg %>% 
+    filter(Region == region) %>%
+    filter(!costred %in% c("20", "30", "40")) %>%
+    filter(emred %in% c("BAU", "40", "70")) %>%
+    ggplot() +
+    geom_bar(aes(x = Year, y = VAR_FOut, fill = Process), position = "stack", stat = "identity") +
+    labs(x = "Year", y = "Electricity Production (PJ)",
+         title = "Electricity Production by Process",
+         subtitle = region) +
+    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    yt +
+    x_disc_l +
+    osw_fill +
+    theme(legend.title=element_blank())  
+}
+
+grid.region.bar.bw <- function(region) {
+  elc_long_reg %>% 
+    filter(Region == region) %>%
+    filter(!costred %in% c("20", "30", "40")) %>%
+    filter(emred %in% c("BAU", "40", "70")) %>%
+    ggplot() +
+    geom_bar(aes(x = Year, y = VAR_FOut, fill = Process), position = "stack", stat = "identity") +
+    labs(x = "Year", y = "Electricity Production (PJ)",
+         title = "Electricity Production by Process",
+         subtitle = region) +
+    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    yt +
+    x_disc_l +
+    gray_fill +
+    theme(legend.title=element_blank())  
+}
+
+  
 
 # functions to reduce code copying and pasting when duplicating addition/retirement summary graphs
 
@@ -374,8 +444,8 @@ x_cont <- scale_x_continuous(breaks = seq(2020,2050, by = 5), expand = c(0,1))
 x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 5), expand = c(0,.2))
 x_disc_l <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
-col_osw <- c(`Terrestrial Wind` = "lightblue3", `Hydro` = "dodgerblue4", 
-             `Solar` = "darkgoldenrod2", `Offshore Wind` = "deepskyblue4", 
+col_osw <- c(`Terrestrial Wind` = "#92CBF3", `Hydro` = "dodgerblue4", 
+             `Solar` = "darkgoldenrod2", `Offshore Wind` = "#60A080", 
              `Nuclear` = "darkorange3", `Coal` = "gray9", `Natural Gas` = "darkslategray4", 
              `Coal CCS` = "gray")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 

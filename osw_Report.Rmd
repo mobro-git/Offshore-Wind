@@ -32,7 +32,11 @@ knitr::opts_chunk$set(echo = FALSE, include = TRUE, warning = FALSE, message = F
 ```
 ```{r, include = FALSE}
 source("osw_Scripts/osw_setup.R")
+```
+```{r, include = FALSE}
 source("osw_Scripts/osw_data.R")
+```
+```{r, include = FALSE}
 source("osw_Scripts/osw_results.R")
 ```
 ```{r colorcalls}
@@ -206,6 +210,47 @@ Parsed Set
 ```{r}
 if(color > 0) gridmix_col
 if(bw > 0) gridmix_bw
+```
+
+## Regional Mix
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0)gridmix_r1_col
+if(color > 0)gridmix_r1_bar_col
+if(color > 0)gridmix_r2_col
+if(color > 0)gridmix_r2_bar_col
+if(color > 0)gridmix_r3_col
+if(color > 0)gridmix_r3_bar_col
+if(color > 0)gridmix_r4_col
+if(color > 0)gridmix_r4_bar_col
+if(color > 0)gridmix_r5_col 
+if(color > 0)gridmix_r5_bar_col
+if(color > 0)gridmix_r6_col  
+if(color > 0)gridmix_r6_bar_col
+if(color > 0)gridmix_r7_col  
+if(color > 0)gridmix_r7_bar_col
+if(color > 0)gridmix_r8_col  
+if(color > 0)gridmix_r8_bar_col
+if(color > 0)gridmix_r9_col  
+if(color > 0)gridmix_r9_bar_col
+if(bw > 0)gridmix_r1_bw 
+if(bw > 0)gridmix_r1_bar_bw 
+if(bw > 0)gridmix_r2_bw 
+if(bw > 0)gridmix_r2_bar_bw  
+if(bw > 0)gridmix_r3_bw 
+if(bw > 0)gridmix_r3_bar_bw 
+if(bw > 0)gridmix_r4_bw 
+if(bw > 0)gridmix_r4_bar_bw 
+if(bw > 0)gridmix_r5_bw 
+if(bw > 0)gridmix_r5_bar_bw 
+if(bw > 0)gridmix_r6_bw 
+if(bw > 0)gridmix_r6_bar_bw 
+if(bw > 0)gridmix_r7_bw 
+if(bw > 0)gridmix_r7_bar_bw 
+if(bw > 0)gridmix_r8_bw 
+if(bw > 0)gridmix_r8_bar_bw 
+if(bw > 0)gridmix_r9_bw 
+if(bw > 0)gridmix_r9_bar_bw 
 ```
 
 ## Emissions Cap

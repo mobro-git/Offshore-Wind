@@ -3,8 +3,8 @@
 # allows me to quickly run my two previous scripts when I make changes in them or
 # if I'm just going to work with results and need to pull in the data
 
-source("osw_Scripts/osw_setup.R")
-source("osw_Scripts/osw_data.R")
+# source("osw_Scripts/osw_setup.R")
+# source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
@@ -417,6 +417,9 @@ gridmix_col <- gridmix +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
   osw_color
 
+gridmix_bw <- gridmix + 
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process))
+
 gridmix_poster <- elc_long %>% 
   filter(!costred %in% c("20", "30", "40")) %>%
   filter(emred %in% c("BAU", "40", "70")) %>%
@@ -428,11 +431,50 @@ gridmix_poster <- elc_long %>%
   yt +
   x_disc_l +
   osw_color +
-  theme(legend.title=element_blank())
+  theme(legend.title=element_blank())  
 
-gridmix_bw <- gridmix + 
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process))
-  
+## ~ Regions ----
+
+gridmix_r1_col <- grid.region.col("R1")
+gridmix_r2_col <- grid.region.col("R2")
+gridmix_r3_col <- grid.region.col("R3")
+gridmix_r4_col <- grid.region.col("R4")
+gridmix_r5_col <- grid.region.col("R5")
+gridmix_r6_col <- grid.region.col("R6")
+gridmix_r7_col <- grid.region.col("R7")
+gridmix_r8_col <- grid.region.col("R8")
+gridmix_r9_col <- grid.region.col("R9")
+
+gridmix_r1_bw <- grid.region.bw("R1")
+gridmix_r2_bw <- grid.region.bw("R2")
+gridmix_r3_bw <- grid.region.bw("R3")
+gridmix_r4_bw <- grid.region.bw("R4")
+gridmix_r5_bw <- grid.region.bw("R5")
+gridmix_r6_bw <- grid.region.bw("R6")
+gridmix_r7_bw <- grid.region.bw("R7")
+gridmix_r8_bw <- grid.region.bw("R8")
+gridmix_r9_bw <- grid.region.bw("R9")
+
+gridmix_r1_bar_col <- grid.region.bar.col("R1")
+gridmix_r2_bar_col <- grid.region.bar.col("R2")
+gridmix_r3_bar_col <- grid.region.bar.col("R3")
+gridmix_r4_bar_col <- grid.region.bar.col("R4")
+gridmix_r5_bar_col <- grid.region.bar.col("R5")
+gridmix_r6_bar_col <- grid.region.bar.col("R6")
+gridmix_r7_bar_col <- grid.region.bar.col("R7")
+gridmix_r8_bar_col <- grid.region.bar.col("R8")
+gridmix_r9_bar_col <- grid.region.bar.col("R9")
+
+gridmix_r1_bar_bw <- grid.region.bar.bw("R1")
+gridmix_r2_bar_bw <- grid.region.bar.bw("R2")
+gridmix_r3_bar_bw <- grid.region.bar.bw("R3")
+gridmix_r4_bar_bw <- grid.region.bar.bw("R4")
+gridmix_r5_bar_bw <- grid.region.bar.bw("R5")
+gridmix_r6_bar_bw <- grid.region.bar.bw("R6")
+gridmix_r7_bar_bw <- grid.region.bar.bw("R7")
+gridmix_r8_bar_bw <- grid.region.bar.bw("R8")
+gridmix_r9_bar_bw <- grid.region.bar.bw("R9")
+
 
 ## ~ Emissions Reductions ----
 
@@ -1448,8 +1490,7 @@ emissionmodel_names <- c("co2.fit" = expression(CO[2]), "so2.fit" = expression(S
                      "nox.fit" = expression(NO[X]), "pm2.5.fit" = expression(PM[2.5]), 
                      "ch4.fit" = expression(CH[4]))
 
-grid.modeltable <- export_summs(cap2050.fit, rps.fit, totalelc.fit,
-                            scale = TRUE, coefs = gridcoef_names, model.names = gridmodel_names)
+grid.modeltable <- export_summs(cap2050.fit, rps.fit, totalelc.fit)
 emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit, 
                                     ch4.fit, pm2.5.fit,
                                 scale = TRUE, coefs = emissioncoef_names, model.names = emissionmodel_names)
