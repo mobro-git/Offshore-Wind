@@ -1438,12 +1438,13 @@ chart.Correlation(allcor, histogram = FALSE, method = "spearman")
 summary(lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Total Elc`,
           data = oswcor))
 
-cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
+{
+  cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
 cap2050.sum <- summary(cap2050.fit)
 cap2050.relimp <- calc.relimp(cap2050.fit, type  = "lmg", rela=TRUE)
 cap2050.het <- bptest(cap2050.fit) # pass p > 0.05
 
-totalelc.fit <- lm(`Total Elc`~emred+costred+cap2050, data = oswcor)
+totalelc.fit <- lm(`Total Elc`~emred+costred, data = oswcor)
 totalelc.sum <- summary(totalelc.fit)
 totalelc.relimp <- calc.relimp(totalelc.fit, type  = "lmg", rela=TRUE)
 totalelc.het <- bptest(totalelc.fit) # pass p > 0.05
@@ -1453,49 +1454,52 @@ rps.sum <- summary(rps.fit)
 rps.relimp <- calc.relimp(rps.fit, type  = "lmg", rela=TRUE)
 rps.het <- bptest(rps.fit) # pass p > 0.05
 
-co2.fit <- lm(`CO[2]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+co2.fit <- lm(`CO[2]`~emred+cap2050, data = oswcor)
 co2.sum <- summary(co2.fit)
 co2.relimp <- calc.relimp(co2.fit, type  = "lmg", rela=TRUE)
 co2.het <- bptest(co2.fit) # pass p > 0.05
 
-so2.fit <- lm(`SO[2]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+so2.fit <- lm(`SO[2]`~emred+cap2050, data = oswcor)
 so2.sum <- summary(so2.fit)
 so2.relimp <- calc.relimp(so2.fit, type  = "lmg", rela=TRUE)
 so2.het <- bptest(so2.fit) # pass p > 0.05
 
-nox.fit <- lm(`NO[X]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+nox.fit <- lm(`NO[X]`~emred+cap2050, data = oswcor)
 nox.sum <- summary(nox.fit)
 nox.relimp <- calc.relimp(nox.fit, type  = "lmg", rela=TRUE)
 nox.het <- bptest(nox.fit) # FAIL p < 0.05
 nox.robustSE_white <- coeftest(nox.fit, vcov = vcovHC(nox.fit, "HC1"))
 ## NEED TO RESOLVE HETEROSKEDASTICITY
-nox.robust <- lmrob(`NO[X]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+nox.robust <- lmrob(`NO[X]`~emred+cap2050, data = oswcor)
 nox.rob.sum <- summary(nox.robust)
 
-pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050, data = oswcor)
 pm2.5.sum <- summary(pm2.5.fit)
 pm2.5.relimp <- calc.relimp(pm2.5.fit, type  = "lmg", rela=TRUE)
 pm2.5.het <- bptest(pm2.5.fit) # pass p > 0.05
 
-ch4.fit <- lm(`CH[4]`~emred+cap2050+`Total Elc`+perRenew, data = oswcor)
+ch4.fit <- lm(`CH[4]`~emred+cap2050, data = oswcor)
 ch4.sum <- summary(ch4.fit)
 ch4.relimp <- calc.relimp(ch4.fit, type  = "lmg", rela=TRUE)
 ch4.het <- bptest(ch4.fit) # pass p > 0.05 BUT p = 0.07 so........
 
-gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred", "OSW Capacity" = "cap2050")
-gridmodel_names <- c("cap2050.fit" = "OSW Capacity", "totalelc.fit" = "Total Elc", "rps.fit" = "% Renew")
-emissioncoef_names <- c("CO2 Cap" = "emred", "OSW Capacity" = "cap2050", "Total Elc" = "`Total Elc`", 
-                        "% Renew" = "perRenew")
-emissionmodel_names <- c("co2.fit" = expression(CO[2]), "so2.fit" = expression(SO[2]),
-                     "nox.fit" = expression(NO[X]), "pm2.5.fit" = expression(PM[2.5]), 
-                     "ch4.fit" = expression(CH[4]))
 
-grid.modeltable <- export_summs(cap2050.fit, rps.fit, totalelc.fit)
+gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred")
+emissioncoef_names <- c("CO2 Cap" = "emred", "OSW Capacity" = "cap2050")
+emissionmodel_names <- c(expression(CO[2]), expression(SO[2]), expression(NO[X]),
+                         expression(PM[2.5]), expression(CH[4]))
+
+grid.modeltable <- export_summs(cap2050.fit, rps.fit, totalelc.fit,
+                                scale = TRUE,
+                                model.names = c("OSW Capacity", "% Renew", "Total Elc"))
 emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit, 
                                     ch4.fit, pm2.5.fit,
-                                scale = TRUE, coefs = emissioncoef_names, model.names = emissionmodel_names)
+                                scale = TRUE,
+                                model.names = emissionmodel_names)
+}
 
 
+coefs = emissioncoef_names
 
 
 ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred))
