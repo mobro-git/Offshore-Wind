@@ -130,7 +130,7 @@ newcap_plot <- ggplot(osw_varncap_long) +
        title = "Offshore Wind New Capacity",
        color = "Emissions Reduction (%)",
        linetype = "Emissions Reduction (%)") + 
-  facet_grid(costred~., scales = "free_y") +
+  facet_grid(costred~., scales = "free_y", labeller=labeller(costred = costlabels)) +
   yt +
   bottom1 + 
   bottom2 +
@@ -156,7 +156,7 @@ output_plot <- ggplot(osw_varfout_long) +
        title = "Offshore Wind Output",
        color = "Emissions Reduction (%)",
        linetype = "Emissions Reduction (%)") +
-  facet_grid(~costred) +
+  facet_grid(~costred, labeller=labeller(costred = costlabels)) +
   yt +
   bottom1 + bottom2 +
   x_disc
@@ -388,13 +388,14 @@ baseprod_fill_bw <- baseprod +
 
 ## ~ Overall ----
 
-gridmix_all <- elc_long %>%
+gridmix_all <- elc_long %>% filter(costred != "20") %>%
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process") +
-  facet_grid(emred~costred) +
+  facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
-  x_disc_l
+  x_disc_l +
+  bottom1 
   
 gridmix_all_col <- gridmix_all +
   geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process)) +
@@ -409,7 +410,7 @@ gridmix <- elc_long %>%
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process") +
-  facet_grid(emred~costred) +
+  facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
@@ -491,7 +492,7 @@ bau_facetcost <-  embau %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "No Emissions Reductions") +
-  facet_grid(.~costred) +
+  facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
@@ -519,7 +520,7 @@ em30_facetcost <-  em30 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "30% Emissions Reductions") +
-  facet_grid(.~costred) +
+  facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
@@ -547,7 +548,7 @@ em40_facetcost <-  em40 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "40% Emissions Reductions") +
-  facet_grid(.~costred) +
+  facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
@@ -575,7 +576,7 @@ em50_facetcost <-  em50 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "50% Emissions Reductions") +
-  facet_grid(.~costred) +
+  facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
@@ -603,7 +604,7 @@ em60_facetcost <-  em60 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "60% Emissions Reductions") +
-  facet_grid(.~costred) +
+  facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
@@ -631,7 +632,7 @@ em70_facetcost <-  em70 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "70% Emissions Reductions") +
-  facet_grid(.~costred) +
+  facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
@@ -659,7 +660,7 @@ em80_facetcost <-  em80 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "80% Emissions Reductions") +
-  facet_grid(.~costred) +
+  facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
@@ -694,7 +695,7 @@ cost50_facetem <-  cost50 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "50% Cost Reductions") +
-  facet_grid(.~emred) +
+  facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
@@ -722,7 +723,7 @@ cost60_facetem <-  cost60 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "60% Cost Reductions") +
-  facet_grid(.~emred) +
+  facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
@@ -750,7 +751,7 @@ cost70_facetem <-  cost70 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "70% Cost Reductions") +
-  facet_grid(.~emred) +
+  facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
@@ -778,7 +779,7 @@ cost80_facetem <-  cost80 %>%
   labs(x = "Year", y = "Electricity Production (PJ)",
        title = "Electricity Production by Process",
        subtitle = "80% Cost Reductions") +
-  facet_grid(.~emred) +
+  facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
@@ -986,7 +987,7 @@ test <- newcap_total_diff %>% filter(emred == "40")
 
 testplot <- ggplot(data = newcap_total_diff) +
   geom_bar(aes(x = 1, y = diff, fill = Process, group = Scenario), stat = "identity") +
-  facet_grid(costred~emred) +
+  facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   osw_fill +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
@@ -1029,7 +1030,7 @@ emis_plot <- emissions_long %>% filter(!costred %in% c("40", "30", "20")) %>%
        color = "Cost Reduction (%)") +
   facet_wrap(~Commodity, scales = "free_y", nrow = 1, labeller = label_parsed) +
   yt +
-  #x_disc_l +
+  x_disc_l +
   bottom1 + bottom2 +
   theme(legend.box = "vertical") +
   guides(colour = guide_legend(nrow = 1))
@@ -1199,9 +1200,6 @@ ggplot() +
   bottom1 +
   bottom2 +
   commodity_color
-
-
-
 
 
 ggplot() +

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.8)  3 OCT 2019 15:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7050 64-bit) (preloaded format=pdflatex 2019.7.8)  4 OCT 2019 14:43
 entering extended mode
 **./osw_Report.tex
 (osw_Report.tex
@@ -2570,32 +2570,32 @@ Overfull \hbox (48.0pt too wide) in alignment at lines 686--686
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-Overfull \hbox (131.84499pt too wide) in alignment at lines 833--833
+Overfull \hbox (118.26164pt too wide) in alignment at lines 811--811
 [][][][][][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 839.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 817.
 [30 <./osw_Report_files/figure-latex/unnamed-chunk-59-1.pdf> <./osw_Report_file
 s/figure-latex/unnamed-chunk-59-2.pdf> <./osw_Report_files/figure-latex/unnamed
 -chunk-60-1.pdf>] [31]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 839.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 817.
 (osw_Report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 839.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 839.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 817.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 817.
 Package rerunfilecheck Info: File `osw_Report.out' has not changed.
 (rerunfilecheck)             Checksum: 9C5B0CEDB482FB4C799AC1D51DA1A1F4;3339.
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 839.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 817.
  ) 
 Here is how much of TeX's memory you used:
  28427 strings out of 492891
  529855 string characters out of 3122156
- 591248 words of memory out of 3000000
+ 589312 words of memory out of 3000000
  31895 multiletter control sequences out of 15000+200000
  590144 words of font info for 86 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -2613,7 +2613,7 @@ al/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmr7.pfb><C:/Users/mbrownin/AppDat
 a/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmri10.pfb><C:/Users/mbrownin
 /AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmri12.pfb><C:/Users/m
 brownin/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb>
-Output written on osw_Report.pdf (31 pages, 1240477 bytes).
+Output written on osw_Report.pdf (31 pages, 1236030 bytes).
 PDF statistics:
  1076 PDF objects out of 1200 (max. 8388607)
  94 named destinations out of 1000 (max. 500000)

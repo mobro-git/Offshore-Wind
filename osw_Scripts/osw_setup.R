@@ -132,7 +132,7 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
     geom_line(aes_string(group = "Scenario", 
                          linetype = typevar, 
                          color = colvar), size = 1) +
-    facet_grid(facet, scales = scale) +
+    facet_grid(facet, scales = scale, labeller=labeller(costred = costlabels)) +
     yt +
     coltheme +
     labs(x = "Year", y = ylab,
@@ -183,7 +183,8 @@ grid.region.col <- function(region) {
     yt +
     x_disc_l +
     osw_color +
-    theme(legend.title=element_blank())  
+    theme(legend.title=element_blank()) +
+    bottom1
 }
 
 grid.region.bw <- function(region) {
@@ -200,7 +201,8 @@ grid.region.bw <- function(region) {
     yt +
     x_disc_l +
     gray_color +
-    theme(legend.title=element_blank())  
+    theme(legend.title=element_blank()) +
+    bottom1
 }
 
 grid.region.bar.col <- function(region) {
@@ -217,7 +219,8 @@ grid.region.bar.col <- function(region) {
     yt +
     x_disc_l +
     osw_fill +
-    theme(legend.title=element_blank())  
+    theme(legend.title=element_blank()) +
+    bottom1
 }
 
 grid.region.bar.bw <- function(region) {
@@ -234,7 +237,8 @@ grid.region.bar.bw <- function(region) {
     yt +
     x_disc_l +
     gray_fill +
-    theme(legend.title=element_blank())  
+    theme(legend.title=element_blank()) +
+    bottom1
 }
 
   
@@ -250,7 +254,8 @@ prod.dif.col <- function(data, title) {
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt +
-    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
+    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+    bottom1
 }
 
 prod.dif.bw <- function(data, title) {
@@ -262,7 +267,8 @@ prod.dif.bw <- function(data, title) {
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt + 
-    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
+    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+    bottom1
 }
 
 # functions to reduce code copying and pasting when duplicating addition/retirement by emissions scen
@@ -276,7 +282,9 @@ prod.dif.em.col <- function(data, title) {
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt +
-    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab), scales = "free_y")
+    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels), 
+               scales = "free_y") +
+    bottom1
 }
 
 prod.dif.em.bw <- function(data, title) {
@@ -288,7 +296,8 @@ prod.dif.em.bw <- function(data, title) {
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt + 
-    facet_grid(costred~emred, labeller = labeller(emred = elab, costred = clab))
+    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+    bottom1
 }
 
 # functions to reduce code copying and pasting when duplicating addition/retirement by cost scen
@@ -302,7 +311,9 @@ prod.dif.cost.col <- function(data, title) {
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt +
-    facet_grid(emred~costred, labeller = labeller(emred = elab, costred = clab), scales = "free_y")
+    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels), 
+               scales = "free_y") +
+    bottom1
 }
 
 prod.dif.cost.bw <- function(data, title) {
@@ -314,7 +325,9 @@ prod.dif.cost.bw <- function(data, title) {
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt +
-    facet_grid(emred~costred, labeller = labeller(emred = elab, costred = clab), scales = "free_y")
+    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels), 
+               scales = "free_y") +
+    bottom1
 }
 
 em.heatmap.col <- function(data, em, title) {
