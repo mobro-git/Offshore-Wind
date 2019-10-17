@@ -139,8 +139,7 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
          title = title,
          color = "Emissions Reduction (%)",
          linetype = "Emissions Reduction (%)") +
-    bottom1 +
-    bottom2
+    bottom1
 }
 
 # function to reduce code copying and pasting when duplicating heat maps
@@ -148,7 +147,7 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
 grid.heatmap.col <- function(data, title) {
   ggplot(data = data, aes(x = costred, y = emred, fill = VAR_FOut)) +
   geom_tile(colour = "gray", size = 0.25) +
-  facet_grid(Process ~ .) + 
+  facet_grid(Technology ~ .) + 
   labs(x = "Offshore Wind Cost Reductions (%)",
        y = "Emissions Reduction (%)",
        title = title,
@@ -160,7 +159,7 @@ grid.heatmap.col <- function(data, title) {
 grid.heatmap.bw <- function(data, title) {
   ggplot(data = data, aes(x = costred, y = emred, fill = VAR_FOut)) +
     geom_tile(colour = "white", size = 0.25) +
-    facet_grid(Process ~ .) + 
+    facet_grid(Technology ~ .) + 
     labs(x = "Offshore Wind Cost Reductions (%)",
          y = "Emissions Reduction (%)",
          title = title,
@@ -175,11 +174,11 @@ grid.region.col <- function(region) {
     filter(!costred %in% c("20", "30", "40")) %>%
     filter(emred %in% c("BAU", "40", "70")) %>%
     ggplot() +
-    geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
+    geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 1) +
     labs(x = "Year", y = "Electricity Production (PJ)",
-         title = "Electricity Production by Process",
+         title = "Electricity Production by Technology",
          subtitle = region) +
-    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    facet_grid(costred~emred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
     yt +
     x_disc_l +
     osw_color +
@@ -193,11 +192,11 @@ grid.region.bw <- function(region) {
     filter(!costred %in% c("20", "30", "40")) %>%
     filter(emred %in% c("BAU", "40", "70")) %>%
     ggplot() +
-    geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
+    geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 1) +
     labs(x = "Year", y = "Electricity Production (PJ)",
-         title = "Electricity Production by Process",
+         title = "Electricity Production by Technology",
          subtitle = region) +
-    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    facet_grid(costred~emred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
     yt +
     x_disc_l +
     gray_color +
@@ -211,11 +210,12 @@ grid.region.bar.col <- function(region) {
     filter(!costred %in% c("20", "30", "40")) %>%
     filter(emred %in% c("BAU", "40", "70")) %>%
     ggplot() +
-    geom_bar(aes(x = Year, y = VAR_FOut, fill = Process), position = "stack", stat = "identity") +
+    geom_bar(aes(x = Year, y = VAR_FOut, fill = Technology), position = "stack", stat = "identity",
+             color = "black") +
     labs(x = "Year", y = "Electricity Production (PJ)",
-         title = "Electricity Production by Process",
+         title = "Electricity Production by Technology",
          subtitle = region) +
-    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    facet_grid(costred~emred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
     yt +
     x_disc_l +
     osw_fill +
@@ -229,11 +229,12 @@ grid.region.bar.bw <- function(region) {
     filter(!costred %in% c("20", "30", "40")) %>%
     filter(emred %in% c("BAU", "40", "70")) %>%
     ggplot() +
-    geom_bar(aes(x = Year, y = VAR_FOut, fill = Process), position = "stack", stat = "identity") +
+    geom_bar(aes(x = Year, y = VAR_FOut, fill = Technology), position = "stack", stat = "identity",
+             color = "black") +
     labs(x = "Year", y = "Electricity Production (PJ)",
-         title = "Electricity Production by Process",
+         title = "Electricity Production by Technology",
          subtitle = region) +
-    facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
+    facet_grid(costred~emred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
     yt +
     x_disc_l +
     gray_fill +
@@ -245,37 +246,42 @@ grid.region.bar.bw <- function(region) {
 
 # functions to reduce code copying and pasting when duplicating addition/retirement summary graphs
 
-prod.dif.col <- function(data, title) {
-  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
-    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+prod.dif.col <- function(data, title, subtitle = NULL) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Technology)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9, color = "black") +
     osw_fill +
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
-         title = title) +
+         title = title,
+         subtitle = subtitle) +
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt +
-    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+    x_disc_l +
+    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels),
+               scales = "free_y") +
     bottom1
 }
 
-prod.dif.bw <- function(data, title) {
-  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
-    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+prod.dif.bw <- function(data, title, subtitle = NULL) {
+  ggplot(data = data, aes(x = Year, y = diff, fill = Technology)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9, color = "black") +
     gray_fill +
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
-         title = title) +
+         title = title,
+         subtitle = subtitle) +
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt + 
-    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+    x_disc_l +
+    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
     bottom1
 }
 
 # functions to reduce code copying and pasting when duplicating addition/retirement by emissions scen
 
 prod.dif.em.col <- function(data, title) {
-  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
-    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+  ggplot(data = data, aes(x = Year, y = diff, fill = Technology)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9, color = "black") +
     osw_fill +
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
          title = title) +
@@ -288,8 +294,8 @@ prod.dif.em.col <- function(data, title) {
 }
 
 prod.dif.em.bw <- function(data, title) {
-  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
-    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+  ggplot(data = data, aes(x = Year, y = diff, fill = Technology)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9, color = "black") +
     gray_fill +
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
          title = title) +
@@ -303,29 +309,29 @@ prod.dif.em.bw <- function(data, title) {
 # functions to reduce code copying and pasting when duplicating addition/retirement by cost scen
 
 prod.dif.cost.col <- function(data, title) {
-  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
-    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+  ggplot(data = data, aes(x = Year, y = diff, fill = Technology)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9, color = "black") +
     osw_fill +
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
          title = title) +
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt +
-    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels), 
+    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels), 
                scales = "free_y") +
     bottom1
 }
 
 prod.dif.cost.bw <- function(data, title) {
-  ggplot(data = data, aes(x = Year, y = diff, fill = Process)) +
-    geom_bar(stat = "identity", position = "stack", width = 0.9) +
+  ggplot(data = data, aes(x = Year, y = diff, fill = Technology)) +
+    geom_bar(stat = "identity", position = "stack", width = 0.9, color = "black") +
     gray_fill +
     labs(x = "Year", y = "Change in Electricity Production (PJ)",
          title = title) +
     theme(axis.text.x = element_text(angle = 60, hjust = 1)) +
     zero +
     yt +
-    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels), 
+    facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels), 
                scales = "free_y") +
     bottom1
 }
@@ -458,7 +464,7 @@ x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 5), expand = c(0,.2))
 x_disc_l <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
 col_osw <- c(`Terrestrial Wind` = "#92CBF3", `Hydro` = "dodgerblue4", 
-             `Solar` = "darkgoldenrod2", `Offshore Wind` = "#60A080", 
+             `Solar` = "darkgoldenrod2", `Offshore Wind` = "#6BA85A", 
              `Nuclear` = "darkorange3", `Coal` = "gray9", `Natural Gas` = "darkslategray4", 
              `Coal CCS` = "gray")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 

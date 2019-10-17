@@ -3,8 +3,8 @@
 # allows me to quickly run my two previous scripts when I make changes in them or
 # if I'm just going to work with results and need to pull in the data
 
-# source("osw_Scripts/osw_setup.R")
-# source("osw_Scripts/osw_data.R")
+source("osw_Scripts/osw_setup.R")
+source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
@@ -86,8 +86,7 @@ cap_plot <- ggplot(osw_varcap_long) +
        linetype = "Emissions Reduction (%)") + 
   facet_grid(~costred, labeller=labeller(costred = costlabels)) +
   yt +
-  bottom1 + 
-  bottom2 +
+  bottom1 +
   x_disc
   
 cap_col_side <- cap_plot + 
@@ -110,8 +109,7 @@ cap_heatmap <- osw_varcap_long %>% filter(Year == "2050") %>%
        title = "2050 Offshore Wind Capacity",
        fill = "Capacity (GW)") +
   st +
-  bottom1 +
-  bottom2
+  bottom1
   
 cap_col_heat <- cap_heatmap + 
   geom_text(aes(label = VAR_Cap), color = "black", size = 5) +
@@ -132,8 +130,7 @@ newcap_plot <- ggplot(osw_varncap_long) +
        linetype = "Emissions Reduction (%)") + 
   facet_grid(costred~., scales = "free_y", labeller=labeller(costred = costlabels)) +
   yt +
-  bottom1 + 
-  bottom2 +
+  bottom1 +
   x_disc
 
 newcap_col_top <- newcap_plot +
@@ -158,7 +155,7 @@ output_plot <- ggplot(osw_varfout_long) +
        linetype = "Emissions Reduction (%)") +
   facet_grid(~costred, labeller=labeller(costred = costlabels)) +
   yt +
-  bottom1 + bottom2 +
+  bottom1 +
   x_disc
 
 output_col_side <- output_plot+
@@ -357,77 +354,125 @@ output_2050_table <- osw_varfout_2050total %>%
 baseprod <- elc_long %>% filter(emred == "BAU" & costred == "20") %>%
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process:\nBAU & 20% Cost Reduction") +
+       title = "Electricity Production by Technology:\nBAU & 20% Cost Reduction") +
   yt +
   x_disc
 
 baseprod_line_col <- baseprod + 
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = .75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = .75) +
   geom_label(data = . %>% filter(Year == last(Year)),
-             aes(label = Process, x = Year, y = VAR_FOut, color = Process), 
+             aes(label = Technology, x = Year, y = VAR_FOut, color = Technology), 
              size = 3, alpha = .3, vjust = 0.1, hjust = 1) +
   osw_color +
   nolegend
 
 baseprod_line_bw <-baseprod + 
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = .75) +
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = .75) +
   geom_label(data = . %>% filter(Year == last(Year)),
-             aes(label = Process, x = Year, y = VAR_FOut), 
+             aes(label = Technology, x = Year, y = VAR_FOut), 
              size = 3, alpha = .3, vjust = 0.1, hjust = 1) +
   nolegend
 
 baseprod_fill_col <- baseprod +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process)) +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology)) +
   osw_fill +
-  bottom1 + bottom2
+  bottom1
 
 baseprod_fill_bw <- baseprod +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1
+
+baseprod_reg <- elc_long_reg %>% filter(emred == "BAU" & costred == "20") %>%
+  ggplot() +
+  labs(x = "Year", y = "Electricity Production (PJ)",
+       title = "Electricity Production by Technology: Baseline") +
+  yt +
+  x_disc_l
+
+baseprod_reg_line_col <- baseprod_reg + 
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = .75) +
+  facet_grid(.~Region) +
+  osw_color +
+  bottom1
+
+baseprod_reg_line_bw <-baseprod_reg + 
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = .75) +
+  geom_label(data = . %>% filter(Year == last(Year)),
+             aes(label = Technology, x = Year, y = VAR_FOut), 
+             size = 3, alpha = .3, vjust = 0.1, hjust = 1) +
+  facet_grid(.~Region) +
+  bottom1
+
+baseprod_reg_fill_col <- baseprod_reg +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology)) +
+  facet_grid(.~Region) +
+  osw_fill +
+  bottom1 
+
+baseprod_reg_fill_bw <- baseprod_reg +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
+  facet_grid(.~Region) +
+  gray_fill +
+  bottom1
+
+baseprod_renew_reg <- elc_long_reg %>% filter(emred == "BAU" & costred == "20") %>%
+  filter(Technology %in% c("Hydro", "Solar", "Terrestrial Wind", "Offshore Wind")) %>%
+  ggplot() +
+  labs(x = "Year", y = "Electricity Production (PJ)",
+       title = "Electricity Production by Technology: Baseline") +
+  yt +
+  x_disc_l
+
+baseprod_reg_renew_line_col <- baseprod_renew_reg + 
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = .75) +
+  facet_grid(.~Region) +
+  osw_color +
+  bottom1
 
 ## ~ Overall ----
 
 gridmix_all <- elc_long %>% filter(costred != "20") %>%
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process") +
+       title = "Electricity Production by Technology") +
   facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l +
   bottom1 
   
 gridmix_all_col <- gridmix_all +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process)) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology)) +
   osw_color
   
 gridmix_all_bw <- gridmix_all +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process))
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology))
 
 gridmix <- elc_long %>% 
   filter(!costred %in% c("20", "30", "80")) %>%
   filter(emred %in% c("BAU", "40", "60")) %>%
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process") +
+       title = "Electricity Production by Technology") +
   facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
-  x_disc_l
+  x_disc_l +
+  bottom1
 
 gridmix_col <- gridmix +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 1) +
   osw_color
 
 gridmix_bw <- gridmix + 
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process))
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology))
 
 gridmix_poster <- elc_long %>% 
   filter(!costred %in% c("20", "30", "40")) %>%
   filter(emred %in% c("BAU", "40", "70")) %>%
   ggplot() +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 1) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 1) +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process") +
+       title = "Electricity Production by Technology") +
   facet_grid(emred~costred, labeller=labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l +
@@ -490,198 +535,198 @@ em80 <- elc_long %>% filter(emred == "80" & !costred %in% c("20", "80"))
 bau_facetcost <-  embau %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "No Emissions Reductions") +
   facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
 bau_facetcost_line_col <- bau_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 bau_facetcost_line_bw <- bau_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 bau_facetcost_fill_col <- bau_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill + 
-  bottom1 + bottom2
+  bottom1  
 
 bau_facetcost_fill_bw <- bau_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em30_facetcost <-  em30 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "30% Emissions Reductions") +
   facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
 em30_facetcost_line_col <- em30_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 em30_facetcost_line_bw <- em30_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 em30_facetcost_fill_col <- em30_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em30_facetcost_fill_bw <- em30_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em40_facetcost <-  em40 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "40% Emissions Reductions") +
   facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
 em40_facetcost_line_col <- em40_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 em40_facetcost_line_bw <- em40_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 em40_facetcost_fill_col <- em40_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em40_facetcost_fill_bw <- em40_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em50_facetcost <-  em50 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "50% Emissions Reductions") +
   facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
 em50_facetcost_line_col <- em50_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 em50_facetcost_line_bw <- em50_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 em50_facetcost_fill_col <- em50_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em50_facetcost_fill_bw <- em50_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em60_facetcost <-  em60 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "60% Emissions Reductions") +
   facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
 em60_facetcost_line_col <- em60_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 em60_facetcost_line_bw <- em60_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 em60_facetcost_fill_col <- em60_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em60_facetcost_fill_bw <- em60_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em70_facetcost <-  em70 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "70% Emissions Reductions") +
   facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
 em70_facetcost_line_col <- em70_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 em70_facetcost_line_bw <- em70_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 em70_facetcost_fill_col <- em70_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em70_facetcost_fill_bw <- em70_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em80_facetcost <-  em80 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "80% Emissions Reductions") +
   facet_grid(.~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc
 
 em80_facetcost_line_col <- em80_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 em80_facetcost_line_bw <- em80_facetcost +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 em80_facetcost_fill_col <- em80_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 em80_facetcost_fill_bw <- em80_facetcost +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 ## ~ Cost Reductions ----
 
@@ -693,114 +738,114 @@ cost80 <- elc_long %>% filter(costred == "80" & !emred %in% c("30", "80"))
 cost50_facetem <-  cost50 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "50% Cost Reductions") +
   facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
 cost50_facetem_line_col <- cost50_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 cost50_facetem_line_bw <- cost50_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 cost50_facetem_fill_col <- cost50_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 cost50_facetem_fill_bw <- cost50_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 cost60_facetem <-  cost60 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "60% Cost Reductions") +
   facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
 cost60_facetem_line_col <- cost60_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 cost60_facetem_line_bw <- cost60_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 cost60_facetem_fill_col <- cost60_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 cost60_facetem_fill_bw <- cost60_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 cost70_facetem <-  cost70 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "70% Cost Reductions") +
   facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
 cost70_facetem_line_col <- cost70_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 cost70_facetem_line_bw <- cost70_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 cost70_facetem_fill_col <- cost70_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 cost70_facetem_fill_bw <- cost70_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 cost80_facetem <-  cost80 %>% 
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Process",
+       title = "Electricity Production by Technology",
        subtitle = "80% Cost Reductions") +
   facet_grid(.~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   yt +
   x_disc_l
 
 cost80_facetem_line_col <- cost80_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, color = Process, group = Process), size = 0.75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1 + bottom2
+  bottom1  
 
 cost80_facetem_line_bw <- cost80_facetem +
-  geom_line(aes(x = Year, y = VAR_FOut, linetype = Process, group = Process), size = 0.75) +
-  bottom1 + bottom2
+  geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
+  bottom1  
 
 cost80_facetem_fill_col <- cost80_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   osw_fill +
-  bottom1 + bottom2
+  bottom1  
 
 cost80_facetem_fill_bw <- cost80_facetem +
-  geom_area(aes(x = Year, y = VAR_FOut, fill = Process, group = Process), color = "black") +
+  geom_area(aes(x = Year, y = VAR_FOut, fill = Technology, group = Technology), color = "black") +
   gray_fill +
-  bottom1 + bottom2
+  bottom1  
 
 ## ~ Heat Maps ----
 
@@ -808,14 +853,14 @@ elc_long_heatmaps <- elc_long %>%
   filter(Year == "2050") %>%
   filter(costred != "20" & costred != "40")
 
-osw <- elc_long_heatmaps %>% filter(Process == "Offshore Wind")
-wnd <- elc_long_heatmaps %>% filter(Process == "Terrestrial Wind")
-sol <- elc_long_heatmaps %>% filter(Year == "2050" & Process == "Solar" & costred != "20")
-coal <- elc_long_heatmaps %>% filter(Process == "Coal")
-nga <- elc_long_heatmaps %>% filter(Process == "Natural Gas")
-nuk <- elc_long_heatmaps %>% filter(Process == "Nuclear")
-hyd <- elc_long_heatmaps %>% filter(Process == "Hydro")
-ccs <- elc_long_heatmaps %>% filter(Process == "Coal CCS") %>%
+osw <- elc_long_heatmaps %>% filter(Technology == "Offshore Wind")
+wnd <- elc_long_heatmaps %>% filter(Technology == "Terrestrial Wind")
+sol <- elc_long_heatmaps %>% filter(Year == "2050" & Technology == "Solar" & costred != "20")
+coal <- elc_long_heatmaps %>% filter(Technology == "Coal")
+nga <- elc_long_heatmaps %>% filter(Technology == "Natural Gas")
+nuk <- elc_long_heatmaps %>% filter(Technology == "Nuclear")
+hyd <- elc_long_heatmaps %>% filter(Technology == "Hydro")
+ccs <- elc_long_heatmaps %>% filter(Technology == "Coal CCS") %>%
   replace_with_na(replace = list(VAR_FOut = 0))
 
 osw_grid_heatmap_col <- grid.heatmap.col(osw, "Offshore Wind Electricity Output: 2050")
@@ -836,8 +881,43 @@ nuk_grid_heatmap_bw <- grid.heatmap.bw(nuk, "Nuclear Electricity Output: 2050")
 hyd_grid_heatmap_bw <- grid.heatmap.bw(hyd, "Hydropower Electricity Output: 2050")
 ccs_grid_heatmap_bw <- grid.heatmap.bw(ccs, "Coal with CCS Retrofits Electricity Output: 2050")
 
-heatmap_col <- grid.heatmap.col(elc_long, "Grid Mix Production by Process")
-heatmap_bw <- grid.heatmap.bw(elc_long, "Grid Mix Production by Process")
+heatmap_col <- grid.heatmap.col(elc_long, "Grid Mix Production by Technology")
+heatmap_bw <- grid.heatmap.bw(elc_long, "Grid Mix Production by Technology")
+
+
+## ~ RPS ---------------------
+
+rps_graph <- rps %>% filter(costred != "40" & costred != "20") %>%
+  ggplot() +
+  geom_line(aes(x = Year, y = perRenew, color = costred, group = Scenario)) +
+  labs(x = "Year", y = "% Renewables",
+       title = "Renewable Technology Contribution to Electricity Production", 
+       color = "Cost Reduction %") +
+  facet_grid(.~emred, labeller = labeller(emred = elab)) +
+  yt +
+  x_disc_l +
+  bottom1 +
+  bottom2
+
+rps_col <- rps_graph + cost_color
+
+rps_bw <- rps_graph + gray_color
+
+
+## ~ Market Share -----------------
+
+marketShare <- oswmarket %>% split(.$Technology) %>% map(summary)
+
+marketShareTable <- oswmarket_table %>%
+  kable(longtable = T, booktabs = T, caption = "2050 Percent Market Share by Technology",
+        digits = 1, linesep = "") %>%
+  kable_styling(latex_options = c("striped", "hold_position")) %>% 
+  column_spec(1, width = "2 cm") %>%
+  add_header_above(c(" " = 2, "Cost Reduction (%)" = 6)) %>%
+  collapse_rows(columns = 1, latex_hline = "major")
+
+marketShareTable_small <- 
+
 
 ## ~ Retirements and Additions----
 
@@ -845,20 +925,20 @@ heatmap_bw <- grid.heatmap.bw(elc_long, "Grid Mix Production by Process")
 
 base_retire <- retire_long %>%
   filter(emred == "BAU" & costred == "20") %>%
-  filter(Process != "Other") %>%
+  filter(Technology != "Other") %>%
   ggplot() +
   labs(x = "Year", y = "Change (PJ)",
        title = "BAU Electricity Production Yearly Changes") +
   yt
 
 base_retire_fill_col <- base_retire + 
-  geom_bar(aes(x = Year, y = retire, fill = Process), 
-           stat = "identity", position = "stack", width = 0.9) +
+  geom_bar(aes(x = Year, y = retire, fill = Technology), 
+           stat = "identity", position = "stack", width = 0.9, color = "black") +
   osw_fill +
   zero
 
 base_retire_fill_bw <- base_retire + 
-  geom_bar(aes(x = Year, y = retire, fill = Process), 
+  geom_bar(aes(x = Year, y = retire, fill = Technology), 
            stat = "identity", position = "stack", width = 0.9, colour = "black") +
   gray_fill +
   zero
@@ -871,8 +951,8 @@ prod_dif_all_bw <- prod.dif.bw(prod_dif,"Changes in Grid Mix over Baseline")
 
 prod_dif_col <- prod.dif.col(
   (prod_dif %>% 
-     filter(costred %in% c("40", "50", "70")) %>% 
-     filter(emred %in% c("BAU", "40", "70"))),
+     filter(costred %in% c("40", "50", "60", "70")) %>% 
+     filter(emred %in% c("BAU", "40", "60"))),
   "Changes in Grid Mix over Baseline")
 
 prod_dif_bw <- prod.dif.bw(
@@ -880,6 +960,66 @@ prod_dif_bw <- prod.dif.bw(
      filter(costred %in% c("40", "50", "70")) %>% 
      filter(emred %in% c("BAU", "40", "70"))),
   "Changes in Grid Mix over Baseline") 
+
+# regional diff summary
+
+prod_dif_min <- prod_dif_reg %>% 
+  filter(costred %in% c("40", "50", "70")) %>% 
+  filter(emred %in% c("BAU", "40", "70"))
+
+prod_dif_r1_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R1")), "Changes in Grid Mix over Baseline", "R1")
+
+prod_dif_r1_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R1")), "Changes in Grid Mix over Baseline", "R1")
+
+prod_dif_r2_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R2")), "Changes in Grid Mix over Baseline", "R2")
+
+prod_dif_r2_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R2")), "Changes in Grid Mix over Baseline", "R2")
+
+prod_dif_r3_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R3")), "Changes in Grid Mix over Baseline", "R3")
+
+prod_dif_r3_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R3")), "Changes in Grid Mix over Baseline", "R3")
+
+prod_dif_r4_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R4")), "Changes in Grid Mix over Baseline", "R4")
+
+prod_dif_r4_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R4")), "Changes in Grid Mix over Baseline", "R4")
+
+prod_dif_r5_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R5")), "Changes in Grid Mix over Baseline", "R5")
+
+prod_dif_r5_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R5")), "Changes in Grid Mix over Baseline", "R5")
+
+prod_dif_r6_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R6")), "Changes in Grid Mix over Baseline", "R6")
+
+prod_dif_r6_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R6")), "Changes in Grid Mix over Baseline", "R6")
+
+prod_dif_r7_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R7")), "Changes in Grid Mix over Baseline", "R7")
+
+prod_dif_r7_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R7")), "Changes in Grid Mix over Baseline", "R7")
+
+prod_dif_r8_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R8")), "Changes in Grid Mix over Baseline", "R8")
+
+prod_dif_r8_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R8")), "Changes in Grid Mix over Baseline", "R8")
+
+prod_dif_r9_col <- prod.dif.col(
+  (prod_dif_min %>% filter(Region == "R9")), "Changes in Grid Mix over Baseline", "R9")
+
+prod_dif_r9_bw <- prod.dif.bw(
+  (prod_dif_min %>% filter(Region == "R9")), "Changes in Grid Mix over Baseline", "R9")
 
 # diff by emissions
 
@@ -981,12 +1121,13 @@ prod_dif_c80_bw <- prod.dif.cost.bw(
   (prod_dif %>% filter(costred == "80")),
   "Changes in Grid Mix over Baseline: C80")
 
-## ~ New Capacity by Process Set----
+## ~ New Capacity by Technology Set----
 
-test <- newcap_total_diff %>% filter(emred == "40")
+test <- newcap_total_diff %>% filter(emred == "BAU" & costred == "40")
 
-testplot <- ggplot(data = newcap_total_diff) +
-  geom_bar(aes(x = 1, y = diff, fill = Process, group = Scenario), stat = "identity") +
+testplot <- ggplot(data = test) +
+  geom_bar(aes(x = 1, y = diff, fill = Technology, group = Scenario), 
+           stat = "identity", color = "black") +
   facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   osw_fill +
   theme(axis.title.x=element_blank(),
@@ -1004,10 +1145,10 @@ emis_bau <- ggplot(data = emissions_bau, aes(x = Year, y = Emissions, fill = Com
        title = "Baseline Electric Sector Emissions",
        caption = "*Units are Mt for CO2 and kt for all other emissions") +
   yt +
-  bottom1 + bottom2
+  bottom1
 
 emis_bau_fill_col <- emis_bau +
-  geom_bar(stat = "identity", position = "stack", aes(fill = Commodity)) +
+  geom_bar(stat = "identity", position = "stack", aes(fill = Commodity), color = "black") +
   commodity_fill
 
 emis_bau_line_col <- emis_bau +
@@ -1031,7 +1172,7 @@ emis_plot <- emissions_long %>% filter(!costred %in% c("40", "30", "20")) %>%
   facet_wrap(~Commodity, scales = "free_y", nrow = 1, labeller = label_parsed) +
   yt +
   x_disc_l +
-  bottom1 + bottom2 +
+  bottom1 +
   theme(legend.box = "vertical") +
   guides(colour = guide_legend(nrow = 1))
 
@@ -1052,7 +1193,7 @@ emis_perc_plot <- emissions_percent %>% filter(!costred %in% c("40", "30", "20")
   facet_wrap(~Commodity, nrow = 1, labeller = label_parsed) +
   yt +
   x_disc_l +
-  bottom1 + bottom2 +
+  bottom1 + 
   theme(legend.box = "vertical") +
   guides(colour = guide_legend(nrow = 1))
 
@@ -1159,7 +1300,7 @@ ggplot() +
               filter(!costred %in% c("20","30","40")),
             aes(x = Year, y = Emissions, group = Scenario), color = "black") +
   geom_bar(data = osw_varcap_long1, stat = "identity",
-            aes(x = Year, y = VAR_Cap*3), alpha = 0.5) +
+            aes(x = Year, y = VAR_Cap*3), alpha = 0.5, color = "black") +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
   facet_grid(emred~costred, 
              labeller = labeller(emred = label_wrap_gen(width = 10),
@@ -1172,7 +1313,7 @@ ggplot() +
               filter(Commodity != "PM[2.5]" & Commodity != "CH[4]") %>%
               filter(!costred %in% c("20","30","40")),
             aes(x = Year, y = Emissions, group = Commodity, color = Commodity)) +
-  geom_bar(data = osw_varcap_long1, stat = "identity",
+  geom_bar(data = osw_varcap_long1, stat = "identity", color = "black", 
            aes(x = Year, y = VAR_Cap*3), alpha = 0.5) +
   scale_y_continuous(sec.axis = sec_axis(~./3, name = "Offshore Wind Capacity (GW)")) +
   facet_grid(emred~costred, 
@@ -1181,7 +1322,6 @@ ggplot() +
   yt +
   x_disc_l +
   bottom1 +
-  bottom2 +
   commodity_color
 
 ggplot() +
@@ -1190,7 +1330,7 @@ ggplot() +
               filter(!costred %in% c("20","30","40")),
             aes(x = Year, y = Emissions, group = Commodity, color = Commodity)) +
   geom_bar(data = osw_varcap_long1, stat = "identity",
-           aes(x = Year, y = VAR_Cap*.25), alpha = 0.5) +
+           aes(x = Year, y = VAR_Cap*.25), alpha = 0.5, color = "black") +
   scale_y_continuous(sec.axis = sec_axis(~./.25, name = "Offshore Wind Capacity (GW)")) +
   facet_grid(emred~costred, scales = "free_y",
              labeller = labeller(emred = label_wrap_gen(width = 10),
@@ -1198,7 +1338,6 @@ ggplot() +
   yt +
   x_disc_l +
   bottom1 +
-  bottom2 +
   commodity_color
 
 
@@ -1275,8 +1414,7 @@ elctotal_line <- ggplot(elcdata) +
        color = "Emissions Reduction (%)",
        linetype = "Emissions Reduction (%)") +
   yt +
-  bottom1 + bottom2
-
+  bottom1 
 elctotal_line_col <- elctotal_line +
   geom_line(aes(x = Year, y = VAR_FOut, color = emred, group = Scenario)) +
   em_color
@@ -1455,7 +1593,7 @@ rps.het <- bptest(rps.fit) # pass p > 0.05
 co2.fit <- lm(`CO[2]`~emred+cap2050, data = oswcor)
 co2.sum <- summary(co2.fit)
 co2.relimp <- calc.relimp(co2.fit, type  = "lmg", rela=TRUE)
-co2.het <- bptest(co2.fit) # pass p > 0.05
+co2.het <- bptest(co2.fit) # pass p > 0.05, BUT BARELY 0.068
 
 so2.fit <- lm(`SO[2]`~emred+cap2050, data = oswcor)
 so2.sum <- summary(so2.fit)
@@ -1465,9 +1603,9 @@ so2.het <- bptest(so2.fit) # pass p > 0.05
 nox.fit <- lm(`NO[X]`~emred+cap2050, data = oswcor)
 nox.sum <- summary(nox.fit)
 nox.relimp <- calc.relimp(nox.fit, type  = "lmg", rela=TRUE)
-nox.het <- bptest(nox.fit) # FAIL p < 0.05
+nox.het <- bptest(nox.fit) # pass p > 0.05
+## If trying to reduce/remove heteroskedasticity
 nox.robustSE_white <- coeftest(nox.fit, vcov = vcovHC(nox.fit, "HC1"))
-## NEED TO RESOLVE HETEROSKEDASTICITY
 nox.robust <- lmrob(`NO[X]`~emred+cap2050, data = oswcor)
 nox.rob.sum <- summary(nox.robust)
 
@@ -1479,7 +1617,7 @@ pm2.5.het <- bptest(pm2.5.fit) # pass p > 0.05
 ch4.fit <- lm(`CH[4]`~emred+cap2050, data = oswcor)
 ch4.sum <- summary(ch4.fit)
 ch4.relimp <- calc.relimp(ch4.fit, type  = "lmg", rela=TRUE)
-ch4.het <- bptest(ch4.fit) # pass p > 0.05 BUT p = 0.07 so........
+ch4.het <- bptest(ch4.fit) # FAIL p < 0.05 BUT p = 0.04857 so........
 
 
 gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred")
@@ -1489,15 +1627,19 @@ emissionmodel_names <- c(expression(CO[2]), expression(SO[2]), expression(NO[X])
 
 grid.modeltable <- export_summs(cap2050.fit, rps.fit, totalelc.fit,
                                 scale = TRUE,
-                                model.names = c("OSW Capacity", "% Renew", "Total Elc"))
+                                model.names = c("OSW Capacity", "% Renewables", "Total Elc"),
+                                coefs = gridcoef_names)
 emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit, 
                                     ch4.fit, pm2.5.fit,
                                 scale = TRUE,
-                                model.names = emissionmodel_names)
+                                model.names = emissionmodel_names,
+                                coefs = emissioncoef_names)
 }
 
 
-coefs = emissioncoef_names
+
+
+plot_summs(co2.fit,so2.fit,nox.fit,pm2.5.fit,ch4.fit, scale = FALSE, model.names = emissionmodel_names)
 
 
 ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred))

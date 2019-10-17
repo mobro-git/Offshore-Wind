@@ -10,6 +10,8 @@ output:
     number_sections: yes
     toc: yes
     keep_md: TRUE
+editor_options: 
+  chunk_output_type: console
 ---
 
 ***
@@ -194,6 +196,17 @@ if(color > 0) baseprod_fill_col
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
 if(bw > 0) baseprod_line_bw
 if(bw > 0) baseprod_fill_bw
+```
+
+Regional baseline production
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) baseprod_reg_line_col
+if(color > 0) baseprod_reg_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) baseprod_reg_line_bw
+if(bw > 0) baseprod_reg_fill_bw
 ```
 
 ## All Scenarios
@@ -405,6 +418,20 @@ if(bw > 0) hyd_grid_heatmap_bw
 if(bw > 0) ccs_grid_heatmap_bw
 ```
 
+## Market Share
+
+```{r}
+oswmarket %>% split(.$Technology) %>% map(summary)
+marketShareTable
+```
+
+## Renewable Contributions
+
+```{r}
+if(color > 0) rps_col
+if(bw > 0) rps_bw
+```
+
 ## Retirements and Additions
 
 Basecase year-on-year changes in the grid mix. Shows the modeled fluctuations in generation. All following quantifications of grid mix changes are as compared to these changes in the basecase.
@@ -425,6 +452,29 @@ if(bw > 0) prod_dif_all_bw
 ```{r}
 if (color > 0) prod_dif_col
 if(bw > 0) prod_dif_bw
+```
+
+Regional Summary Graphs
+
+```{r}
+if(color > 0) prod_dif_r1_col
+if(color > 0) prod_dif_r2_col
+if(color > 0) prod_dif_r3_col
+if(color > 0) prod_dif_r4_col
+if(color > 0) prod_dif_r5_col
+if(color > 0) prod_dif_r6_col
+if(color > 0) prod_dif_r7_col
+if(color > 0) prod_dif_r8_col
+if(color > 0) prod_dif_r9_col
+if(bw > 0) prod_dif_r1_bw
+if(bw > 0) prod_dif_r2_bw
+if(bw > 0) prod_dif_r3_bw
+if(bw > 0) prod_dif_r4_bw
+if(bw > 0) prod_dif_r5_bw
+if(bw > 0) prod_dif_r6_bw
+if(bw > 0) prod_dif_r7_bw
+if(bw > 0) prod_dif_r8_bw
+if(bw > 0) prod_dif_r9_bw
 ```
 
 By Emissions Reduction %
@@ -532,11 +582,14 @@ if(bw > 0) elctotal_heat_bw
 ```
 
 
-# Correlation
+# Correlations
 
 ```{r}
 chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
 ```
+
+# Regressions
+
 ```{r, results = 'asis'}
 grid.modeltable
 emission.modeltable

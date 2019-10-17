@@ -192,7 +192,8 @@ osw_varfout_regiontotals <- osw %>%
 elc <- as.data.frame(data_global$`ELC Produced by Process Set`) %>% 
   select(-`2011`, -`2010`, -Commodity, -Attribute) %>%
   process() %>%
-  categorize()
+  categorize() %>%
+  rename("Technology" = "Process")
 
 ## ----~ccs--------------------------------------------------
 
@@ -230,7 +231,7 @@ ccs_percent <- left_join(ccs_retro, ccs_base,
   select(Scenario, Region, Year, CCSpercent, emred, costred)
 
 coal_calculations <- elc %>%
-  filter(Process == "Coal") %>%
+  filter(Technology == "Coal") %>%
   gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "VAR_FOut") %>%
   left_join(., ccs_percent, by = c("Scenario", "Region", "Year", "emred", "costred")) %>%
@@ -238,15 +239,15 @@ coal_calculations <- elc %>%
   mutate(`Coal CCS` = VAR_FOut * CCSpercent) %>%
   mutate(`Coal` = VAR_FOut - `Coal CCS`) %>%
   select(Scenario, Region, Year, `Coal CCS`, Coal, emred, costred) %>%
-  gather(`Coal CCS`, Coal, key = "Process", value = "VAR_FOut") %>%
+  gather(`Coal CCS`, Coal, key = "Technology", value = "VAR_FOut") %>%
   spread(key = Year, value = VAR_FOut) %>%
-  select(Scenario, Process, Region, 
+  select(Scenario, Technology, Region, 
          `2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`,
          costred, emred)
 
 # add coal CCS rows to the elc data frame 
 
-elc <- elc %>% filter(Process != "Coal") %>%
+elc <- elc %>% filter(Technology != "Coal") %>%
   bind_rows(., coal_calculations)
 
 # duplicate the current elc dataframe to calculate retirements - pull now before 
@@ -264,23 +265,23 @@ retirements <- elc
 elc_long_reg <- elc %>% 
   gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "VAR_FOut") %>%
-  select(Process, Scenario, emred, costred, everything())
+  select(Technology, Scenario, emred, costred, everything())
 
 elc_levels <- elc_long_reg %>%
-  group_by(Process) %>%
+  group_by(Technology) %>%
   summarize(elcproduction = sum(VAR_FOut)) %>%
   arrange(elcproduction) %>%
-  pull(Process)
+  pull(Technology)
 
 elc_long_reg <- elc_long_reg %>%
-  mutate(Process = factor(Process, levels = elc_levels)) %>%
-  filter(Process != "Other") %>%
+  mutate(Technology = factor(Technology, levels = elc_levels)) %>%
+  filter(Technology != "Other") %>%
   ungroup()
 elc_long_reg$emred <- factor(elc_long_reg$emred, levels = levels_emred)
 elc_long_reg$costred <- factor(elc_long_reg$costred, levels = levels_costred)
 
 elc_long <- elc_long_reg %>%
-  group_by(Scenario, emred, costred, Process, Year) %>%
+  group_by(Scenario, emred, costred, Technology, Year) %>%
   summarize(VAR_FOut = sum(VAR_FOut)) %>%
   ungroup()
 
@@ -300,41 +301,41 @@ retirements <- retirements %>%
   mutate("2045r" = `2045`-`2040`) %>%
   mutate("2050r" = `2050`-`2045`) %>%
   select(-`2015`, -`2020`, -`2025`, -`2030`, -`2035`, -`2040`, -`2045`, -`2050`) %>%
-  arrange(Process)
+  arrange(Technology)
 colnames(retirements)[6:12] <- c(seq(2020, 2050, by = 5))
 
 retire_long_reg <- retirements %>%
   gather(`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "retire") %>% 
-  select(Process, Scenario, emred, costred, everything())
+  select(Technology, Scenario, emred, costred, everything())
 
 retire_long_reg <- retire_long_reg %>%
-  mutate(Process = factor(Process, levels = elc_levels)) %>%
+  mutate(Technology = factor(Technology, levels = elc_levels)) %>%
   mutate(emred = factor(emred, levels = levels_emred)) %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   ungroup()
 
 retire_long <- retire_long_reg %>%
-  group_by(Scenario, emred, costred, Process, Year) %>%
+  group_by(Scenario, emred, costred, Technology, Year) %>%
   summarize(retire = sum(retire)) %>%
   ungroup()
 
 basecase_production_reg <- elc_long_reg %>%
   filter(emred == "BAU" & costred == "20") %>%
-  select("Process", "Region", "Year", "VAR_FOut")
+  select("Technology", "Region", "Year", "VAR_FOut")
 colnames(basecase_production_reg)[4] <- c("baseprod")
 
 prod_dif_reg <- left_join(elc_long_reg, basecase_production_reg, 
-                          by = c("Process", "Year", "Region")) 
+                          by = c("Technology", "Year", "Region")) 
 prod_dif_reg[is.na(prod_dif_reg)] <- 0  
 prod_dif_reg <- prod_dif_reg %>% mutate(diff = VAR_FOut - baseprod)
 
 basecase_production <- elc_long %>%
   filter(emred == "BAU" & costred == "20") %>%
-  select("Process", "Year", "VAR_FOut")
+  select("Technology", "Year", "VAR_FOut")
 colnames(basecase_production)[3] <- c("baseprod")
 
-prod_dif <- left_join(elc_long, basecase_production, by = c("Process", "Year")) 
+prod_dif <- left_join(elc_long, basecase_production, by = c("Technology", "Year")) 
 prod_dif[is.na(prod_dif)] <- 0  
 prod_dif <- prod_dif %>% mutate(diff = VAR_FOut - baseprod)
 
@@ -348,47 +349,48 @@ prod_dif <- prod_dif %>% mutate(diff = VAR_FOut - baseprod)
 
 newcap <- as.data.frame(data_global$`New Capacity by Process Set`) %>%
   categorize() %>%
-  process()
+  process() %>%
+  rename("Technology" = "Process")
 
 newcap_long_reg <- newcap %>%
   gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "Ncap") %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred)) %>%
-  mutate(Process = factor(Process, levels = elc_levels)) %>%
+  mutate(Technology = factor(Technology, levels = elc_levels)) %>%
   ungroup
 
 newcap_total_reg <- newcap_long_reg %>%
-  group_by(Scenario, Process, Region, costred, emred) %>%
+  group_by(Scenario, Technology, Region, costred, emred) %>%
   summarize(Ncap = sum(Ncap))
 
 newcap_total_reg_bau <- newcap_total_reg %>% 
   filter(emred == "BAU" & costred == "20") %>%
   ungroup() %>%
-  select(Process, Region, Ncap)
+  select(Technology, Region, Ncap)
 colnames(newcap_total_reg_bau)[3] <- c("BAUncap")
 
-newcap_total_reg_diff <- left_join(newcap_total_reg, newcap_total_reg_bau, by = c("Process", "Region"))
+newcap_total_reg_diff <- left_join(newcap_total_reg, newcap_total_reg_bau, by = c("Technology", "Region"))
 newcap_total_reg_diff[is.na(newcap_total_reg_diff)] <- 0
 newcap_total_reg_diff <- newcap_total_reg_diff %>% mutate(diff = Ncap - BAUncap)
 newcap_total_reg_diff$diff <- round(newcap_total_reg_diff$diff,2)
 
 newcap_long <- newcap_long_reg %>%
-  group_by(Scenario, Process, Year, emred, costred, Attribute) %>%
+  group_by(Scenario, Technology, Year, emred, costred, Attribute) %>%
   summarize(Ncap = sum(Ncap)) %>%
-  select(Scenario, Process, Year, Ncap, emred, costred, Attribute)
+  select(Scenario, Technology, Year, Ncap, emred, costred, Attribute)
 
 newcap_total <- newcap_total_reg %>%
-  group_by(Scenario, Process, costred, emred) %>%
+  group_by(Scenario, Technology, costred, emred) %>%
   summarize(Ncap = sum(Ncap)) 
 
 newcap_total_bau <- newcap_total %>% 
   filter(emred == "BAU" & costred == "20") %>%
   ungroup() %>%
-  select(Process, Ncap)
+  select(Technology, Ncap)
 colnames(newcap_total_bau)[2] <- c("BAUncap")
   
-newcap_total_diff <- left_join(newcap_total, newcap_total_bau, by = "Process")
+newcap_total_diff <- left_join(newcap_total, newcap_total_bau, by = "Technology")
 newcap_total_diff[is.na(newcap_total_diff)] <- 0
 newcap_total_diff <- newcap_total_diff %>% mutate(diff = Ncap - BAUncap)
 newcap_total_diff$diff <- round(newcap_total_diff$diff,2)
@@ -402,27 +404,55 @@ renewables <- c("Solar", "Terrestrial Wind", "Offshore Wind")
 
 rps_reg <- elc_long_reg %>%
   mutate(RPS = case_when(
-    Process %in% renewables ~ "Renewable",
+    Technology %in% renewables ~ "Renewable",
     TRUE ~ "Other")) %>%
   group_by(Scenario, Region, Year, RPS, costred, emred) %>%
   summarise(Output = sum(VAR_FOut)) %>%
   spread(key = RPS, value = Output) %>%
   mutate(Total = sum(Other, Renewable)) %>%
-  mutate(perRenew = round(Renewable/Total, 2)) %>% 
-  mutate(perOther = round(Other/Total, 2)) %>%
+  mutate(perRenew = round(Renewable/Total*100, 2)) %>% 
+  mutate(perOther = round(Other/Total*100, 2)) %>%
   ungroup()
 
 rps <- elc_long %>% 
   mutate(RPS = case_when(
-    Process %in% renewables ~ "Renewable",
+    Technology %in% renewables ~ "Renewable",
     TRUE ~ "Other")) %>%
   group_by(Scenario, Year, RPS, costred, emred) %>%
   summarise(Output = sum(VAR_FOut)) %>%
   spread(key = RPS, value = Output) %>%
   mutate(Total = sum(Other, Renewable)) %>%
-  mutate(perRenew = Renewable/Total) %>% 
-  mutate(perOther = Other/Total) %>%
+  mutate(perRenew = Renewable/Total*100) %>% 
+  mutate(perOther = Other/Total*100) %>%
   ungroup()
+
+# ----~market share------------------------------
+
+# calculating the % of total generation coming from OSW
+
+oswmarket <- elc_long %>%
+  group_by(Technology, Scenario, emred, costred, Year) %>%
+  summarise(Output = sum(VAR_FOut)) %>%
+  spread(key = Technology, value = Output) %>%
+  mutate_all(~replace(.,is.na(.), 0)) %>% 
+  ungroup() %>%
+  mutate(Total = 
+           `Coal CCS`+`Offshore Wind`+Hydro+`Terrestrial Wind`+Solar+Nuclear+Coal+`Natural Gas`) %>%
+  gather(`Coal CCS`, `Offshore Wind`, Hydro, `Terrestrial Wind`, 
+          Solar, Nuclear, Coal, `Natural Gas`, key = "Technology", value = "Output") %>%
+  select(Scenario, emred, costred, Technology, Year, Output, Total) %>%
+  mutate(MarketShare = round(Output/Total*100, 2))
+
+oswmarket_table <- oswmarket %>%
+  filter(Year == "2050") %>%
+  select(Technology, emred, costred, MarketShare) %>%
+  spread(key = costred, value = MarketShare) %>%
+  rename("CO2 Cap"="emred")
+
+oswmarket_small <- oswmarket %>% 
+  filter(!costred %in% c("20", "30", "80")) %>%
+  filter(emred %in% c("BAU", "40", "60"))
+  
 
 ## ----emissions----------------------------------------------------
 
