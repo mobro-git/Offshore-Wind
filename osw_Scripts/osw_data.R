@@ -4,7 +4,7 @@
 # and plugs the spreadsheet into the function I created to turn all sheets into
 # separate dataframes in the current environment
 
-results <- c("osw_data/OffshoreWind_Resultsdata_09242019.xlsx")
+results <- c("osw_data/OffshoreWind_Resultsdata_11062019.xlsx")
 sheets <- readxl::excel_sheets(results)
 data_global <- ReadAllSheets(results)
 
@@ -508,7 +508,7 @@ emissions2050 <- emissions2050_reg %>%
 
 ## ----~% emissions reduction----------------------------------------
 
-# calculates % reduction from baseline for each emission
+# calculates % and value reduction from baseline for each emission
 
 emissions_percent_reg <- emissions2010_long_reg %>% select(Commodity, Region, Emissions2010) %>%
   left_join(emissions_long_reg, emissions_percent_reg, by = c("Commodity", "Region")) %>%
@@ -518,7 +518,8 @@ emissions_percent_reg <- emissions2010_long_reg %>% select(Commodity, Region, Em
 emissions_percent <- emissions2010_long %>% ungroup() %>% select(Commodity, Emissions2010) %>%
   left_join(emissions_long, emissions_percent, by = "Commodity") %>%
   select(Scenario, emred, costred, Commodity, Year, Emissions2010, Emissions) %>%
-  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010), 2))
+  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010), 2)) %>%
+  mutate(value.red = Emissions2010 - Emissions)
 
 ## ----~2050 % emissions reductions----------------------------------------
 
@@ -527,6 +528,73 @@ emissions_percent <- emissions2010_long %>% ungroup() %>% select(Commodity, Emis
 
 emissions2050_percent_reg <- emissions_percent_reg %>% filter(Year == "2050") 
 emissions2050_percent <- emissions_percent %>% filter(Year == "2050")
+
+## ----~industrial emissions----------------------------------------
+
+# all five emissions from the industrial sector, not regional - includes CHP and
+# all other emissions sources for industrial sector
+
+indemissions <- as.data.frame(data_global$`IND Emissions`) %>% 
+  select(-Attribute) %>%
+  gather(`2010`, `2011`, `2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`,
+         key = "Year", value = "Emissions") %>%
+  categorize() %>%
+  mutate(Commodity = case_when(
+    str_detect(Commodity, "CO2") ~ "CO[2]",
+    str_detect(Commodity, "SO2") ~ "SO[2]",
+    str_detect(Commodity, "NOX") ~ "NO[X]",
+    str_detect(Commodity, "CH4") ~ "CH[4]",
+    TRUE ~ "PM[2.5]")) %>%
+  mutate(costred = factor(costred, levels = levels_costred)) %>%
+  mutate(emred = factor(emred, levels = levels_emred))
+
+# baseline industrial emissions to calculate changes over time and scenarios
+
+ind2010 <- indemissions %>% filter(Year == "2010")
+
+# remove 2010 and 2011 from dataset for better graphing
+
+indemissions <- indemissions %>% filter(Year != "2010" & Year != "2011")
+
+## ----~tradeoff IND and grid emissions----
+
+# calculates % and value reduction from baseline for each emission
+
+indreductions <- left_join(indemissions, ind2010, 
+                         by = c("Scenario", "Commodity", "costred", "emred")) %>%
+  rename("Year" = "Year.x") %>%
+  rename("IndEmissions" = "Emissions.x") %>%
+  rename("IndEmissions2010" = "Emissions.y") %>%
+  select(-Year.y) %>%
+  mutate(indred = IndEmissions2010 - IndEmissions) %>%
+  mutate(indredperc = indred/IndEmissions2010)
+
+## ----~industrial vs electric sector
+
+# compares emissions changes from grid with emissions changes from industrial 
+# to calculate net change in emissions with tradeoff/switching between grid elc
+# and industrial CHP in the tighter CO2 scenarios
+
+indtradeoff <- left_join(emissions_percent, indreductions, 
+                         by = c('Scenario', 'Commodity', 'Year', 'costred', 'emred')) %>%
+  filter(costred != "40") %>%
+  mutate(netdecrease = value.red + indred) %>%
+  mutate(tradeoff = indred / value.red * 100)
+
+co2tradeoff <- indtradeoff %>% filter(Commodity == "CO[2]" & Year == "2050") %>%
+  select(Scenario, emred, costred, value.red, indred, netdecrease, tradeoff)
+
+so2tradeoff <- indtradeoff %>% filter(Commodity == "SO[2]" & Year == "2050") %>%
+  select(Scenario, emred, costred, value.red, indred, netdecrease, tradeoff)
+
+ch4tradeoff <- indtradeoff %>% filter(Commodity == "CH[4]" & Year == "2050") %>%
+  select(Scenario, emred, costred, value.red, indred, netdecrease, tradeoff)
+
+noxtradeoff <- indtradeoff %>% filter(Commodity == "NO[X]" & Year == "2050") %>%
+  select(Scenario, emred, costred, value.red, indred, netdecrease, tradeoff)
+
+pm2.5tradeoff <- indtradeoff %>% filter(Commodity == "PM[2.5]" & Year == "2050") %>%
+  select(Scenario, emred, costred, value.red, indred, netdecrease, tradeoff)
 
 ## ----elc total----------------------------------------------------
 
@@ -570,27 +638,47 @@ elctotal2050 <- elctotal2050_reg %>%
 # separate dataframes made for regional and cumulative
 
 com <- as.data.frame(data_global$`Electricity to Commercial`) %>%  
-  mutate(Sector = "Commercial")
-ind <- as.data.frame(data_global$`Electricity to Industrial`) %>% 
-  mutate(Sector = "Industrial")
+  mutate(Sector = "Commercial") %>%
+  select(-`2010`, -`2011`, -Commodity, -Attribute, -Process)
 res <- as.data.frame(data_global$`Electricity to Residential`) %>% 
-  mutate(Sector = "Residential")
+  mutate(Sector = "Residential") %>%
+  select(-`2010`, -`2011`, -Commodity, -Attribute, -Process)
 tran <- as.data.frame(data_global$`Electricity to Transportation`) %>% 
-  mutate(Sector = "Transportation")
+  mutate(Sector = "Transportation") %>%
+  select(-`2010`, -`2011`, -Commodity, -Attribute, -Process)
 
-enduse_reg <- bind_rows(com, ind, res, tran) %>% 
+ind_all <- as.data.frame(data_global$`Electricity to Industrial`) %>%
+  mutate_all(~replace(.,is.na(.), 0)) %>%
+  mutate_if(is.numeric, ~round(.,2)) %>%
+  select(-`2010`, -`2011`, -Commodity, -Attribute) %>%
+  gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
+         key = "Year", value = "Consumption") %>%
+  group_by(Scenario, Region, Year) %>%
+  summarize(Consumption = sum(Consumption)) %>%
+  spread(key = Year, value = Consumption) %>% 
+  mutate(Sector = "All Industrial")
+
+ind_sep <- as.data.frame(data_global$`Electricity to Industrial`) %>%
+  select(-`2010`, -`2011`, -Attribute) %>%
+  rename("Sector" = "Commodity") %>%
+  mutate(Sector = case_when(
+    str_detect(Sector, "CHP") ~ "CHP Industrial",
+    TRUE ~ "Grid Industrial")) %>%
+  select(-Sector, everything())
+
+enduse_reg <- bind_rows(com, res, tran, ind_all, ind_sep) %>% 
   categorize() %>% 
-  select(-`2010`, -`2011`, -Commodity, -Attribute, -Process) %>%
   gather(`2015`,`2020`,`2025`, `2030`, `2035`, `2040`, `2045`, `2050`, 
          key = "Year", value = "Consumption") %>%
   mutate(Sector = factor(Sector, levels = levels_sector)) %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
-  mutate(emred = factor(emred, levels = levels_emred))
+  mutate(emred = factor(emred, levels = levels_emred)) %>%
+  filter(costred != 40)
 
 enduse <- enduse_reg %>%
   group_by(Scenario,emred,costred,Year,Sector) %>%
   summarize(Consumption = sum(Consumption)) %>%
-  ungroup
+  ungroup() 
 
 
 ## ----correlation------------------------------------------------------

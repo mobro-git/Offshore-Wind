@@ -571,7 +571,6 @@ if(bw > 0) ch4_hm_per_bw
 if(bw > 0) pm2.5_hm_per_bw
 ```
 
-
 # Total Electricity Production
 
 ```{r, out.width=c('50%', '50%'), fig.show='hold'}
@@ -581,6 +580,19 @@ if(bw > 0) elctotal_line_bw
 if(bw > 0) elctotal_heat_bw
 ```
 
+# End Use ELC
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+enduse_line
+enduse_nochp_line
+sector_line
+sector_split_ind
+trn_line
+res_line
+com_line
+ind_line
+ind_split_line
+```
 
 # Correlations
 

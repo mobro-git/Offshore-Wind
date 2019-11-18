@@ -390,7 +390,8 @@ em.heatmap.per.bw <- function(data, em, title) {
 levels_costred <- c("20", "30", "40", "50", "60", "70", "80")
 levels_emred <- c("BAU", "30", "40", "50", "60", "70", "80")
 levels_emissions <- c("CH[4]", "PM[2.5]", "SO[2]", "NO[X]", "CO[2]")
-levels_sector <- c("Transportation", "Industrial", "Commercial", "Residential")
+levels_sector <- c("Transportation", "All Industrial", "CHP Industrial", 
+                   "Grid Industrial", "Commercial", "Residential")
 
 ## ----Labels-----------------------
 
