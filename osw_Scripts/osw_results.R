@@ -1172,7 +1172,7 @@ emis_plot <- emissions_long %>% filter(!costred %in% c("40", "30", "20")) %>%
   facet_wrap(~Commodity, scales = "free_y", nrow = 1, labeller = label_parsed) +
   yt +
   x_disc_l +
-  bottom1 +
+  bottom1 + bottom2 +
   theme(legend.box = "vertical") +
   guides(colour = guide_legend(nrow = 1))
 

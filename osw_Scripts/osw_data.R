@@ -603,7 +603,8 @@ pm2.5tradeoff <- indtradeoff %>% filter(Commodity == "PM[2.5]" & Year == "2050")
 
 elctotal <- as.data.frame(data_global$`ELC All Production`) %>%
   select(-Commodity, -Attribute, -`2010`, -`2011`) %>%
-  categorize()
+  categorize() %>%
+  filter(!str_detect(Process, "Trd"))
 elctotal[is.na(elctotal)] <- 0
 
 elctotal_long_reg <- elctotal %>%
