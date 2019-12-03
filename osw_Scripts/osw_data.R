@@ -4,7 +4,7 @@
 # and plugs the spreadsheet into the function I created to turn all sheets into
 # separate dataframes in the current environment
 
-results <- c("osw_data/OffshoreWind_Resultsdata_11062019.xlsx")
+results <- c("osw_data/OffshoreWind_Resultsdata_12032019.xlsx")
 sheets <- readxl::excel_sheets(results)
 data_global <- ReadAllSheets(results)
 
@@ -452,6 +452,12 @@ oswmarket_table <- oswmarket %>%
 oswmarket_small <- oswmarket %>% 
   filter(!costred %in% c("20", "30", "80")) %>%
   filter(emred %in% c("BAU", "40", "60"))
+
+totaloutput <- oswmarket %>%
+  filter(Year == "2050") %>%
+  select(Technology, emred, costred, Output) %>%
+  spread(key = costred, value = Output) %>%
+  rename("CO2 Cap"="emred") 
   
 
 ## ----emissions----------------------------------------------------
@@ -599,7 +605,8 @@ pm2.5tradeoff <- indtradeoff %>% filter(Commodity == "PM[2.5]" & Year == "2050")
 ## ----elc total----------------------------------------------------
 
 # total electricity produced in each scenario, agnostic of process. both regional
-# and cumulative data sets produced
+# and cumulative data sets produced. Need to remove "trade" processes to 
+# prevent overcounting
 
 elctotal <- as.data.frame(data_global$`ELC All Production`) %>%
   select(-Commodity, -Attribute, -`2010`, -`2011`) %>%
@@ -744,23 +751,5 @@ allcor <- allcor %>% ungroup() %>% mutate(emred = replace(emred, emred == "BAU",
   mutate(perRenew = as.numeric(perRenew)) %>%
   mutate_all(~replace(.,is.na(.), 0)) %>%
   mutate_if(is.numeric, ~round(.,2))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

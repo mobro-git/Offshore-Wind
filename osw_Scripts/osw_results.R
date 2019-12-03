@@ -3,8 +3,8 @@
 # allows me to quickly run my two previous scripts when I make changes in them or
 # if I'm just going to work with results and need to pull in the data
 
-source("osw_Scripts/osw_setup.R")
-source("osw_Scripts/osw_data.R")
+# source("osw_Scripts/osw_setup.R")
+# source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
@@ -339,13 +339,13 @@ cap_2050_table <- osw_varcap_2050total %>%
   kable(booktabs = T, caption = "Offshore Wind Total Installed Capacity (GW): 2050", 
         digits = 1, linesep = "") %>% 
   kable_styling(latex_options = c("striped", "hold_position")) %>% 
-  add_header_above(c("CO2 Emissions\nReduction (%)", "Cost Reduction (%)" = 4)) 
+  add_header_above(c("CO2 Emissions\nReduction (%)", "Cost Reduction (%)" = 5)) 
 
 output_2050_table <- osw_varfout_2050total %>% 
   kable(booktabs = T, caption = "Offshore Wind Total Output (PJ): 2050", 
         digits = 1, linesep = "") %>%
   kable_styling(latex_options = c("striped", "hold_position")) %>% 
-  add_header_above(c("CO2 Emissions\nReduction (%)", "Cost Reduction (%)" = 4)) 
+  add_header_above(c("CO2 Emissions\nReduction (%)", "Cost Reduction (%)" = 5)) 
 
 ## Grid Mix ----
 
@@ -917,6 +917,14 @@ marketShareTable <- oswmarket_table %>%
   collapse_rows(columns = 1, latex_hline = "major")
 
 marketShareTable_small <- 
+  
+totaloutput_table <- totaloutput %>%
+  kable(longtable = T, booktabs = T, caption = "2050 Elc Production by Technology (PJ)",
+        digits = 1, linesep = "") %>%
+  kable_styling(latex_options = c("striped", "hold_position")) %>% 
+  column_spec(1, width = "2 cm") %>%
+  add_header_above(c(" " = 2, "Cost Reduction (%)" = 6)) %>%
+  collapse_rows(columns = 1, latex_hline = "major")
 
 
 ## ~ Retirements and Additions----
@@ -1374,7 +1382,7 @@ ggplot() +
 
 indemissions %>% filter(Commodity == "INDCO2") %>% ggplot(aes(x = Year, y = Emissions)) +
   geom_line(aes(group = Scenario, color = emred)) +
-  facet_grid(costred~.)
+  facet_grid(~emred)
   
 
 ## ~ Heatmaps ----
@@ -1541,7 +1549,9 @@ ind_line <- enduse %>% filter(Sector == "All Industrial" & costred != 40) %>%
   geom_line(aes(x = Year, y = Consumption, color = emred, group = Scenario)) +
   em_color
   
-ind_split_line <- ind_chp %>% filter(!costred %in% c("30", "40")) %>%
+ind_split_line <- enduse %>% 
+  filter(Sector == "CHP Industrial" | Sector == "Grid Industrial") %>%
+  filter(!costred %in% c("30", "40")) %>%
   ggplot() +
   facet_grid(emred~costred, labeller = labeller(costred = costlabels, emred = emissionlabels)) +
   yt + x_disc_l +

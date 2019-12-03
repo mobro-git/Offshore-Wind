@@ -57,27 +57,25 @@ ReadAllSheets <- function(filename, tibble = FALSE) {
 categorize <- function(table) {
   x <- table %>%
     mutate(costred = case_when(
-      str_detect(Scenario, "CostRed40") ~ "40",
-      str_detect(Scenario, "CostRed50") ~ "50",
-      str_detect(Scenario, "CostRed60") ~ "60",
-      str_detect(Scenario, "CostRed70") ~ "70",
-      str_detect(Scenario, "CostRed80") ~ "80",
-      str_detect(Scenario, "CostRed45") ~ "45",
-      str_detect(Scenario, "CostRed55") ~ "55",
+      str_detect(Scenario, "C40") ~ "40",
+      str_detect(Scenario, "C50") ~ "50",
+      str_detect(Scenario, "C60") ~ "60",
+      str_detect(Scenario, "C70") ~ "70",
+      str_detect(Scenario, "C80") ~ "80",
       TRUE ~ "20"
     )) %>%
     mutate(emred = case_when(
-      str_detect(Scenario, "EmRedG30") ~ "30",
-      str_detect(Scenario, "EmRedG40") ~ "40",
-      str_detect(Scenario, "EmRedG50") ~ "50",
-      str_detect(Scenario, "EmRedG60") ~ "60",
-      str_detect(Scenario, "EmRedG70") ~ "70",
-      str_detect(Scenario, "EmRedG80") ~ "80",
+      str_detect(Scenario, "E30") ~ "30",
+      str_detect(Scenario, "E40") ~ "40",
+      str_detect(Scenario, "E50") ~ "50",
+      str_detect(Scenario, "E60") ~ "60",
+      str_detect(Scenario, "E70") ~ "70",
+      str_detect(Scenario, "E80") ~ "80",
       TRUE ~ "BAU"
     )) %>% 
     mutate_if(is.numeric, ~round(.,2)) %>%
     mutate_all(~replace(.,is.na(.),0)) %>%
-    mutate(Scenario = paste("E", emred, "C", costred, sep = ''))
+    mutate(Scenario = paste("C", costred, "E", emred, sep = ''))
 }
 
 # function to reformat names of processes to more intelligable names and consolidate
