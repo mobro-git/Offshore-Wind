@@ -45,6 +45,7 @@ osw <- as.data.frame(data_global$`Offshore Wind`) %>%
   mutate(costred = factor(costred, levels = levels_costred)) %>%
   mutate(emred = factor(emred, levels = levels_emred))
 
+
 # sets map information for the regional map with avg OSW buildout
 
 reg.names <- structure(list(lat = c(447343.4,27443.77,-300000,-87448.23,-904151.5,-1060878,
@@ -151,7 +152,8 @@ osw_varcap_2050total <- osw %>%
   ungroup() %>%
   select(emred, costred, `2050 Total`) %>% 
   distinct() %>%
-  spread(key = costred, value = `2050 Total`)
+  spread(key = costred, value = `2050 Total`) %>%
+  mutate_if(is.numeric, ~round(.,0))
 names(osw_varcap_2050total)[1] <- c("")
 
 osw_varfout_2050total <- osw %>% 
@@ -161,7 +163,8 @@ osw_varfout_2050total <- osw %>%
   ungroup() %>%
   select(emred, costred, `2050 Total`) %>% 
   distinct() %>%
-  spread(key = costred, value = `2050 Total`)
+  spread(key = costred, value = `2050 Total`) %>%
+  mutate_if(is.numeric, ~round(.,0))
 names(osw_varfout_2050total)[1] <- c("")
 
 
@@ -175,14 +178,16 @@ osw_varcap_regiontotals <- osw %>%
   group_by(Region) %>%
   summarize(`2050 Total` = mean(`2050`)) %>%
   select(Region, `2050 Total`) %>%
-  arrange(`2050 Total`)
+  arrange(`2050 Total`) %>%
+  mutate_if(is.numeric, ~round(.,1))
 
 osw_varfout_regiontotals <- osw %>% 
   filter(Attribute == "VAR_FOut") %>%
   group_by(Region) %>%
   summarize(`2050 Total` = mean(`2050`)) %>%
   select(Region, `2050 Total`) %>%
-  arrange(`2050 Total`)
+  arrange(`2050 Total`) %>% 
+  mutate_if(is.numeric, ~round(.,1))
 
 
 ## ----grid mix--------------------------------------------------

@@ -469,9 +469,10 @@ col_osw <- c(`Terrestrial Wind` = "#92CBF3", `Hydro` = "dodgerblue4",
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
-col_cost <- c("20" = "#C2DFF8", "30" = "#98C1E3", "40" = "#6FAADB", "50" = "#4596DA", 
-              "60" = "#4579DA", "70" = "#2054B5", "80" = "#032F82")
-col_costosw <- c("50" = "#C9D0FF", "60" = "#8F9BEA", "70" = "#364BD8", "80" = "#0017AE")
+col_cost <- c("20" = "#f7d859", "30" = "#d1d752", "40" = "#a9d64b", "50" = "#80d543", 
+              "60" = "#55a12d", "70" = "#276a15", "80" = "#013c01")
+col_costosw <- c("40" = "#f7d859", "50" = "#bcd74e", "60" = "#80d543", 
+                 "70" = "#3e8521", "80" = "#013c01")
 col_commodity <-  c("CH[4]" = "deepskyblue4", "PM[2.5]" = "firebrick", "SO[2]" = "darkgoldenrod3", 
                     "NO[X]" = "seashell4", "CO[2]" = "chartreuse4")
 

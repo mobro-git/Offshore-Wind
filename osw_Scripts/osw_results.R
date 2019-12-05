@@ -16,7 +16,7 @@ costscen_plot <- ggplot(scenario_cost) +
   geom_label(data = . %>% filter(Year == last(Year)),
              aes(label = paste(CostCurve,"%"), x = Year, y = Costs), 
              size = 3, alpha = 0.5, nudge_y = 4) +
-  scale_y_continuous(limits = c(0, 100), expand = c(.01, 0)) +
+  #scale_y_continuous(limits = c(0, 100), expand = c(.01, 0)) +
   labs(x = "Year", y = "Cost Reduction", 
        title = "OSW Cost Curves", 
        subtitle = "Percentage decrease from 2018 offshore wind CAPEX costs") +
@@ -112,11 +112,11 @@ cap_heatmap <- osw_varcap_long %>% filter(Year == "2050") %>%
   bottom1
   
 cap_col_heat <- cap_heatmap + 
-  geom_text(aes(label = VAR_Cap), color = "black", size = 5) +
+  geom_text(aes(label = round(VAR_Cap, 0)), color = "black", size = 5) +
   color_fill_cont
 
 cap_bw_heat <- cap_heatmap + 
-  geom_text(aes(label = VAR_Cap), color = "white", size = 5) +
+  geom_text(aes(label = round(VAR_Cap, 0)), color = "white", size = 5) +
   gray_fill_cont 
 
 ## ~ New Capacity ----
@@ -283,21 +283,18 @@ state_map <- us_map(regions = "states") %>%
     abbr %in% r9 ~ "R9"
   )) %>%
   mutate(avgOSW = case_when(
-    abbr %in% r1 ~ 21.5,
-    abbr %in% r2 ~ 31.0,
-    abbr %in% r3 ~ 44.1,
-    abbr %in% r4 ~ 0.0,
-    abbr %in% r5 ~ 50.5,
-    abbr %in% r6 ~ 0.0,
-    abbr %in% r7 ~ 20.7,
-    abbr %in% r8 ~ 0.0,
-    abbr %in% r9 ~ 45.0
+    abbr %in% r1 ~ 20.6,
+    abbr %in% r2 ~ 26.2,
+    abbr %in% r3 ~ 39.1,
+    abbr %in% r5 ~ 51.8,
+    abbr %in% r7 ~ 21.7,
+    abbr %in% r9 ~ 46.1
   ))
 
 # singles out region 8 because no offshore wind is available in 8 - dont want it to
 # skew the heatmap 
 
-r8map <- subset(state_map, abbr %in% r8)
+r8map <- subset(state_map, abbr %in% c(r8, r4, r6))
 
 # map showing average osw capacity over all scenarios - for comparison between regions
 # total osw capacity
@@ -309,8 +306,9 @@ regOSW_map <- ggplot() +
                color = "gray", fill = "white") +
   geom_label(data = reg.names, aes(x = long, y = lat, label = region), size = 4) +
   coord_fixed(1.2) +
-  labs(title = "Average Offshore Wind Capacity",
-       fill = "GW") +
+  labs(title = "Distribution of Offshore Wind Capacity",
+       fill = "GW",
+       subtitle = "Average cumulative capacity across all scenarios") +
   theme_bw() +
   noaxes
 
@@ -321,14 +319,18 @@ regOSW_map_bw <- regOSW_map + gray_fill_cont
 
 ## ~ Tables ----
 
+# set kable options
+
+options(knitr.kable.NA = '-')
+
 # kable tables for osw capacity and elc generation by region
 
-cap_region_table <- osw_varcap_regiontotals %>% 
+cap_region_table <- osw_varcap_regiontotals %>%
   kable(booktabs = T, caption = "Average Installed Capacity (GW)", linesep = "") %>% 
   kable_styling(latex_options = c("striped", "hold_position"))%>%
   footnote(general = "Average is across all scenarios")
 
-output_region_table <- osw_varfout_regiontotals %>% 
+output_region_table <- osw_varfout_regiontotals %>% mutate_if(is.numeric, ~round(.,1)) %>% 
   kable(booktabs = T, caption = "Average Electricity Output (PJ)", linesep = "") %>% 
   kable_styling(latex_options = c("striped", "hold_position"))%>%
   footnote(general = "Average is across all scenarios")
@@ -851,7 +853,7 @@ cost80_facetem_fill_bw <- cost80_facetem +
 
 elc_long_heatmaps <- elc_long %>% 
   filter(Year == "2050") %>%
-  filter(costred != "20" & costred != "40")
+  filter(costred != "20")
 
 osw <- elc_long_heatmaps %>% filter(Technology == "Offshore Wind")
 wnd <- elc_long_heatmaps %>% filter(Technology == "Terrestrial Wind")
@@ -899,7 +901,7 @@ rps_graph <- rps %>% filter(costred != "40" & costred != "20") %>%
   bottom1 +
   bottom2
 
-rps_col <- rps_graph + cost_color
+rps_col <- rps_graph + costosw_color
 
 rps_bw <- rps_graph + gray_color
 
@@ -907,6 +909,17 @@ rps_bw <- rps_graph + gray_color
 ## ~ Market Share -----------------
 
 marketShare <- oswmarket %>% split(.$Technology) %>% map(summary)
+
+marketshare_heatmap <- oswmarket %>%
+  ggplot(aes(x = costred, y = emred, fill = MarketShare)) +
+  geom_tile(colour = "gray", size = 0.25) +
+  facet_wrap(~Technology) +
+  labs(x = "Offshore Wind Cost Reductions (%)",
+       y = "Emissions Reduction (%)",
+       title = "Technology Market Share: 2050",
+       fill = "% Market Share") +
+  color_fill_cont +
+  st
 
 marketShareTable <- oswmarket_table %>%
   kable(longtable = T, booktabs = T, caption = "2050 Percent Market Share by Technology",
@@ -916,7 +929,6 @@ marketShareTable <- oswmarket_table %>%
   add_header_above(c(" " = 2, "Cost Reduction (%)" = 6)) %>%
   collapse_rows(columns = 1, latex_hline = "major")
 
-marketShareTable_small <- 
   
 totaloutput_table <- totaloutput %>%
   kable(longtable = T, booktabs = T, caption = "2050 Elc Production by Technology (PJ)",
@@ -935,8 +947,8 @@ base_retire <- retire_long %>%
   filter(emred == "BAU" & costred == "20") %>%
   filter(Technology != "Other") %>%
   ggplot() +
-  labs(x = "Year", y = "Change (PJ)",
-       title = "BAU Electricity Production Yearly Changes") +
+  labs(x = "Year", y = "Change in Production (PJ)",
+       title = "BAU Retirements and Additions") +
   yt
 
 base_retire_fill_col <- base_retire + 
@@ -1131,12 +1143,22 @@ prod_dif_c80_bw <- prod.dif.cost.bw(
 
 ## ~ New Capacity by Technology Set----
 
-test <- newcap_total_diff %>% filter(emred == "BAU" & costred == "40")
+test <- newcap_total_diff %>% filter(emred == "80" & costred == "80")
 
 testplot <- ggplot(data = test) +
   geom_bar(aes(x = 1, y = diff, fill = Technology, group = Scenario), 
            stat = "identity", color = "black") +
   facet_grid(costred~emred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
+  osw_fill +
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()) +
+  zero
+
+newcap_diff_bar <- ggplot(data = newcap_total_diff) +
+  geom_bar(aes(x = 1, y = diff, fill = Technology, group = Scenario), 
+           stat = "identity", color = "black") +
+  facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
   osw_fill +
   theme(axis.title.x=element_blank(),
         axis.text.x=element_blank(),
@@ -1380,10 +1402,9 @@ ggplot() +
 
 ## ~ Industrial Emissions ----
 
-indemissions %>% filter(Commodity == "INDCO2") %>% ggplot(aes(x = Year, y = Emissions)) +
-  geom_line(aes(group = Scenario, color = emred)) +
-  facet_grid(~emred)
-  
+indemissions %>% filter(Commodity == "CO[2]") %>% ggplot(aes(x = Year, y = Emissions)) +
+  geom_line(aes(group = Scenario)) +
+  facet_grid(costred~emred)
 
 ## ~ Heatmaps ----
 
@@ -1418,7 +1439,8 @@ pm2.5_hm_per_bw <- em.heatmap.per.bw(emissions2050_percent, "PM[2.5]", "Electric
 
 ## Total Electricity Production ----
 
-elcdata <- elctotal_long %>% filter(!costred %in% c("20", "30", "40"))
+elcdata <- elctotal_long %>% filter(!costred %in% c("20", "30")) 
+elc2050 <- elcdata %>% filter(Year == "2050")
 
 elctotal_line <- ggplot(elcdata) +
   facet_grid(~costred, labeller = labeller(costred = costlabels)) +
@@ -1436,16 +1458,29 @@ elctotal_line_col <- elctotal_line +
 elctotal_line_bw <- elctotal_line +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = emred, group = Scenario))
 
-elctotal_heat <- ggplot(elcdata, aes(x = costred, y = emred)) +
+elctotal_byem <- ggplot(elcdata) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = costred, group = Scenario), size = 0.75) +
+  facet_grid(~emred, labeller = labeller(emred = emissionlabels)) +
+  labs(x = "Year", y = "Electricity Production (PJ)",
+       title = "Total Electricity Production by Scenario",
+       color = "Cost Reduction (%)",
+       linetype = "Cost Reduction (%)") +
+  yt +
+  bottom1 +
+  costosw_color
+
+elctotal_heat <- ggplot(elc2050, aes(x = costred, y = emred)) +
   geom_tile(aes(fill = VAR_FOut), colour = "gray", size = 0.25) +
   labs(x = "Offshore Wind Cost Reductions (%)",
        y = "Emissions Reduction (%)",
        title = "Total Electricity Production: 2050",
        fill = "Electricity\nProduced\n(PJ)")
 
-elctotal_heat_col <- elctotal_heat + color_fill_cont
+elctotal_heat_col <- elctotal_heat + color_fill_cont + 
+  geom_text(aes(label = round(VAR_FOut, 0)), color = "black", size = 5)
   
-elctotal_heat_bw <- elctotal_heat + gray_fill_cont
+elctotal_heat_bw <- elctotal_heat + gray_fill_cont +
+  geom_text(aes(label = round(VAR_FOut, 0)), color = "white", size = 5)
 
 ## End Uses ----
 
@@ -1557,7 +1592,7 @@ ind_split_line <- enduse %>%
   yt + x_disc_l +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Industrial Electricity Consumption by Scenario") +
-  geom_line(aes(x = Year, y = Consumption, color = Commodity, group = Commodity)) +
+  geom_line(aes(x = Year, y = Consumption, color = Sector, group = Sector)) +
   scale_color_manual(name = "Electricity Source", labels = c("Industrial CHP", "Grid ELC"), 
                      values = c("#B45F04", "#0B3861")) +
   bottom1
@@ -1652,7 +1687,7 @@ summary(lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Tota
           data = oswcor))
 
 {
-  cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
+cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
 cap2050.sum <- summary(cap2050.fit)
 cap2050.relimp <- calc.relimp(cap2050.fit, type  = "lmg", rela=TRUE)
 cap2050.het <- bptest(cap2050.fit) # pass p > 0.05
@@ -1712,8 +1747,6 @@ emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit,
                                 model.names = emissionmodel_names,
                                 coefs = emissioncoef_names)
 }
-
-
 
 
 plot_summs(co2.fit,so2.fit,nox.fit,pm2.5.fit,ch4.fit, scale = FALSE, model.names = emissionmodel_names)

@@ -423,6 +423,7 @@ if(bw > 0) ccs_grid_heatmap_bw
 ```{r}
 oswmarket %>% split(.$Technology) %>% map(summary)
 marketShareTable
+marketshare_heatmap
 ```
 
 ## Renewable Contributions
