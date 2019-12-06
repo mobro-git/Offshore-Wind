@@ -463,7 +463,7 @@ x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 5), expand = c(0,.2))
 x_disc_l <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
 col_osw <- c(`Terrestrial Wind` = "#92CBF3", `Hydro` = "dodgerblue4", 
-             `Solar` = "darkgoldenrod2", `Offshore Wind` = "#6BA85A", 
+             `Solar` = "darkgoldenrod2", `Offshore Wind` = "#398440", 
              `Nuclear` = "darkorange3", `Coal` = "gray9", `Natural Gas` = "darkslategray4", 
              `Coal CCS` = "gray")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 

@@ -1681,10 +1681,26 @@ chart.Correlation(allcor, histogram = FALSE, method = "spearman")
 
 ## Regression ---- 
 
-# Regressions only cover OSW scenarios
+# box plots 
 
-summary(lm(cap2050~emred+costred+`CO[2]`+`SO[2]`+`CH[4]`+`PM[2.5]`+`NO[X]`+`Total Elc`,
-          data = oswcor))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, color = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, fill = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, fill = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = emred, y = `CO[2]`, group = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = emred, y = `SO[2]`, group = emred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `SO[2]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CH[4]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CH[4]`, group = costred))
+ggplot(oswcor) + geom_boxplot(aes(x = costred, y = cap2050, group = costred))
+ggplot(oswcor, aes(x = emred, y = cap2050, group = emred)) + 
+  geom_boxplot() +
+  geom_dotplot(binaxis = 'y', stackdir = 'center', dotsize = 1)
+
+## ~ Regressions for all data ----
+
+# Regressions are for all cases WITH OSW 
 
 {
 cap2050.fit <- lm(`cap2050`~emred+costred, data = oswcor)
@@ -1702,10 +1718,19 @@ rps.sum <- summary(rps.fit)
 rps.relimp <- calc.relimp(rps.fit, type  = "lmg", rela=TRUE)
 rps.het <- bptest(rps.fit) # pass p > 0.05
 
+renew.fit <- lm(Renewable~emred+costred, data = oswcor)
+renew.sum <- summary(renew.fit)
+renew.relimp <- calc.relimp(renew.fit, type  = "lmg", rela=TRUE)
+renew.het <- bptest(renew.fit) # pass p > 0.05
+
 co2.fit <- lm(`CO[2]`~emred+cap2050, data = oswcor)
 co2.sum <- summary(co2.fit)
 co2.relimp <- calc.relimp(co2.fit, type  = "lmg", rela=TRUE)
-co2.het <- bptest(co2.fit) # pass p > 0.05, BUT BARELY 0.068
+co2.het <- bptest(co2.fit) # DOESNT PASS, 0.046
+## If trying to reduce/remove heteroskedasticity
+co2.robustSE_white <- coeftest(co2.fit, vcov = vcovHC(co2.fit, "HC1"))
+co2.robust <- lmrob(`CO[2]`~emred+cap2050, data = oswcor)
+co2.rob.sum <- summary(co2.robust)
 
 so2.fit <- lm(`SO[2]`~emred+cap2050, data = oswcor)
 so2.sum <- summary(so2.fit)
@@ -1716,10 +1741,6 @@ nox.fit <- lm(`NO[X]`~emred+cap2050, data = oswcor)
 nox.sum <- summary(nox.fit)
 nox.relimp <- calc.relimp(nox.fit, type  = "lmg", rela=TRUE)
 nox.het <- bptest(nox.fit) # pass p > 0.05
-## If trying to reduce/remove heteroskedasticity
-nox.robustSE_white <- coeftest(nox.fit, vcov = vcovHC(nox.fit, "HC1"))
-nox.robust <- lmrob(`NO[X]`~emred+cap2050, data = oswcor)
-nox.rob.sum <- summary(nox.robust)
 
 pm2.5.fit <- lm(`PM[2.5]`~emred+cap2050, data = oswcor)
 pm2.5.sum <- summary(pm2.5.fit)
@@ -1729,48 +1750,228 @@ pm2.5.het <- bptest(pm2.5.fit) # pass p > 0.05
 ch4.fit <- lm(`CH[4]`~emred+cap2050, data = oswcor)
 ch4.sum <- summary(ch4.fit)
 ch4.relimp <- calc.relimp(ch4.fit, type  = "lmg", rela=TRUE)
-ch4.het <- bptest(ch4.fit) # FAIL p < 0.05 BUT p = 0.04857 so........
-
+ch4.het <- bptest(ch4.fit) # DOESNT PASS, 0.023
+## If trying to reduce/remove heteroskedasticity
+ch4.robustSE_white <- coeftest(ch4.fit, vcov = vcovHC(ch4.fit, "HC1"))
+ch4.robust <- lmrob(`CH[4]`~emred+cap2050, data = oswcor)
+ch4.rob.sum <- summary(ch4.robust)
 
 gridcoef_names <- c("CO2 Cap" = "emred", "Cost Reduction" = "costred")
 emissioncoef_names <- c("CO2 Cap" = "emred", "OSW Capacity" = "cap2050")
-emissionmodel_names <- c(expression(CO[2]), expression(SO[2]), expression(NO[X]),
-                         expression(PM[2.5]), expression(CH[4]))
 
 grid.modeltable <- export_summs(cap2050.fit, rps.fit, totalelc.fit,
-                                scale = TRUE,
-                                model.names = c("OSW Capacity", "% Renewables", "Total Elc"),
+                                scale = FALSE,
+                                model.names = c("OSW Capacity","% Renewables","Total Elc"),
                                 coefs = gridcoef_names)
-emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit, 
-                                    ch4.fit, pm2.5.fit,
-                                scale = TRUE,
-                                model.names = emissionmodel_names,
-                                coefs = emissioncoef_names)
+
+grid_graph <- plot_summs(cap2050.fit, rps.fit, totalelc.fit, 
+                         scale = FALSE, 
+                         model.names = c("OSW Capacity", "% Renewables","Total Elc"),
+                         coefs = gridcoef_names)
+
+emission.modeltable <- export_summs(co2.fit, so2.fit, nox.fit, ch4.fit, pm2.5.fit,
+                                    scale = FALSE,
+                                    model.names = c(expression(CO[2]), expression(SO[2]), 
+                                                    expression(NO[X]),expression(PM[2.5]), 
+                                                    expression(CH[4])),
+                                    coefs = emissioncoef_names)
+
+emission_graph <- plot_summs(co2.fit,so2.fit,nox.fit,pm2.5.fit,ch4.fit,
+                             scale = FALSE,
+                             model.names = emissionmodel_names,
+                             coefs = emissioncoef_names, 
+                             colors = col_commodity) 
 }
 
+## ~ Regressions by emissions scenarios ----
 
-plot_summs(co2.fit,so2.fit,nox.fit,pm2.5.fit,ch4.fit, scale = FALSE, model.names = emissionmodel_names)
+# Regressions just for emissions dependent variables. OSW capacity is the only coefficient,
+# and there are 7 regressions for each emission (1 for each co2 cap scenario). This is meant
+# to assess in which cases cost has the biggest influence.
+
+{
+oswcor.bau <- oswcor %>% filter(emred == "20")
+oswcor.30 <- oswcor %>% filter(emred == "30")
+oswcor.40 <- oswcor %>% filter(emred == "40")
+oswcor.50 <- oswcor %>% filter(emred == "50")
+oswcor.60 <- oswcor %>% filter(emred == "60")
+oswcor.70 <- oswcor %>% filter(emred == "70")
+oswcor.80 <- oswcor %>% filter(emred == "80")
+  
+co2.bau <- lm(`CO[2]`~cap2050, data = oswcor.bau)
+co2.30 <- lm(`CO[2]`~cap2050, data = oswcor.30)
+co2.40 <- lm(`CO[2]`~cap2050, data = oswcor.40)
+co2.50 <- lm(`CO[2]`~cap2050, data = oswcor.50)
+co2.60 <- lm(`CO[2]`~cap2050, data = oswcor.60)
+co2.70 <- lm(`CO[2]`~cap2050, data = oswcor.70)
+co2.80 <- lm(`CO[2]`~cap2050, data = oswcor.80)
+
+nox.bau <- lm(`NO[X]`~cap2050, data = oswcor.bau)
+nox.30 <- lm(`NO[X]`~cap2050, data = oswcor.30)
+nox.40 <- lm(`NO[X]`~cap2050, data = oswcor.40)
+nox.50 <- lm(`NO[X]`~cap2050, data = oswcor.50)
+nox.60 <- lm(`NO[X]`~cap2050, data = oswcor.60)
+nox.70 <- lm(`NO[X]`~cap2050, data = oswcor.70)
+nox.80 <- lm(`NO[X]`~cap2050, data = oswcor.80)
+
+so2.bau <- lm(`SO[2]`~cap2050, data = oswcor.bau)
+so2.30 <- lm(`SO[2]`~cap2050, data = oswcor.30)
+so2.40 <- lm(`SO[2]`~cap2050, data = oswcor.40)
+so2.50 <- lm(`SO[2]`~cap2050, data = oswcor.50)
+so2.60 <- lm(`SO[2]`~cap2050, data = oswcor.60)
+so2.70 <- lm(`SO[2]`~cap2050, data = oswcor.70)
+so2.80 <- lm(`SO[2]`~cap2050, data = oswcor.80)
+
+pm2.5.bau <- lm(`PM[2.5]`~cap2050, data = oswcor.bau)
+pm2.5.30 <- lm(`PM[2.5]`~cap2050, data = oswcor.30)
+pm2.5.40 <- lm(`PM[2.5]`~cap2050, data = oswcor.40)
+pm2.5.50 <- lm(`PM[2.5]`~cap2050, data = oswcor.50)
+pm2.5.60 <- lm(`PM[2.5]`~cap2050, data = oswcor.60)
+pm2.5.70 <- lm(`PM[2.5]`~cap2050, data = oswcor.70)
+pm2.5.80 <- lm(`PM[2.5]`~cap2050, data = oswcor.80)
+
+ch4.bau <- lm(`CH[4]`~cap2050, data = oswcor.bau)
+ch4.30 <- lm(`CH[4]`~cap2050, data = oswcor.30)
+ch4.40 <- lm(`CH[4]`~cap2050, data = oswcor.40)
+ch4.50 <- lm(`CH[4]`~cap2050, data = oswcor.50)
+ch4.60 <- lm(`CH[4]`~cap2050, data = oswcor.60)
+ch4.70 <- lm(`CH[4]`~cap2050, data = oswcor.70)
+ch4.80 <- lm(`CH[4]`~cap2050, data = oswcor.80)
 
 
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, color = emred))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, fill = emred))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = emred, fill = costred))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CO[2]`, group = costred))
-ggplot(oswcor) + geom_boxplot(aes(x = emred, y = `CO[2]`, group = emred))
-ggplot(oswcor) + geom_boxplot(aes(x = emred, y = `SO[2]`, group = emred))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `SO[2]`, group = costred))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CH[4]`, group = costred))
-ggplot(oswcor) + geom_boxplot(aes(x = cap2050, y = `CH[4]`, group = cap2050))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = `CH[4]`, group = costred))
-ggplot(oswcor) + geom_boxplot(aes(x = costred, y = cap2050, group = costred))
-ggplot(oswcor, aes(x = emred, y = cap2050, group = emred)) + 
-  geom_boxplot() +
-  geom_dotplot(binaxis = 'y', stackdir = 'center', dotsize = 1)
+modelnames_emred <- c("BAU", "30% CO2 Red", "40% CO2 Red", "50% CO2 Red",
+                    "60% CO2 Red", "70% CO2 Red", "80% CO2 Red")
 
+co2.modeltable <- export_summs(co2.bau, co2.30, co2.40, co2.50, co2.60, 
+                               co2.70, co2.80,
+                               scale = FALSE,
+                               model.names = modelnames_emred,
+                               coefs = c("OSW Capacity" = "cap2050"))
 
+co2_graph <- plot_summs(co2.bau, co2.30, co2.40, co2.50, co2.60, 
+                        co2.70, co2.80,
+                        scale = FALSE,
+                        model.names = modelnames_emred,
+                        coefs = c("OSW Capacity" = "cap2050"))
 
+so2.modeltable <- export_summs(so2.bau, so2.30, so2.40, so2.50, so2.60, 
+                               so2.70, so2.80,
+                               scale = FALSE,
+                               model.names = modelnames_emred,
+                               coefs = c("OSW Capacity" = "cap2050"))
 
+so2_graph <- plot_summs(so2.bau, so2.30, so2.40, so2.50, so2.60, 
+                        so2.70, so2.80,
+                        scale = FALSE,
+                        model.names = modelnames_emred,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+nox.modeltable <- export_summs(nox.bau, nox.30, nox.40, nox.50, nox.60, 
+                               nox.70, nox.80,
+                               scale = FALSE,
+                               model.names = modelnames_emred,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+nox_graph <- plot_summs(nox.bau, nox.30, nox.40, nox.50, nox.60, 
+                        nox.70, nox.80,
+                        scale = FALSE,
+                        model.names = modelnames_emred,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+pm2.5.modeltable <- export_summs(pm2.5.bau, pm2.5.30, pm2.5.40, pm2.5.50, pm2.5.60, 
+                               pm2.5.70, pm2.5.80,
+                               scale = FALSE,
+                               model.names = modelnames_emred,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+pm2.5_graph <- plot_summs(pm2.5.bau, pm2.5.30, pm2.5.40, pm2.5.50, pm2.5.60, 
+                        pm2.5.70, pm2.5.80,
+                        scale = FALSE,
+                        model.names = modelnames_emred,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+ch4.modeltable <- export_summs(ch4.bau, ch4.30, ch4.40, ch4.50, ch4.60, 
+                               ch4.70, ch4.80,
+                               scale = FALSE,
+                               model.names = modelnames_emred,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+ch4_graph <- plot_summs(ch4.bau, ch4.30, ch4.40, ch4.50, ch4.60, 
+                        ch4.70, ch4.80,
+                        scale = FALSE,
+                        model.names = modelnames_emred,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+bau.modeltable <- export_summs(co2.bau, so2.bau, nox.bau, pm2.5.bau, ch4.bau,
+                               scale = FALSE,
+                               model.names = emissionmodel_names,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+bau_graph <- plot_summs(co2.bau, so2.bau, nox.bau, pm2.5.bau, ch4.bau,
+                          scale = FALSE,
+                          model.names = emissionmodel_names,
+                          coefs = c("OSW Capacity" = "cap2050"))
+
+e30.modeltable <- export_summs(co2.30, so2.30, nox.30, pm2.5.30, ch4.30,
+                               scale = FALSE,
+                               model.names = emissionmodel_names,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+e30_graph <- plot_summs(co2.30, so2.30, nox.30, pm2.5.30, ch4.30,
+                        scale = FALSE,
+                        model.names = emissionmodel_names,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+e40.modeltable <- export_summs(co2.40, so2.40, nox.40, pm2.5.40, ch4.40,
+                               scale = FALSE,
+                               model.names = emissionmodel_names,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+e40_graph <- plot_summs(co2.40, so2.40, nox.40, pm2.5.40, ch4.40,
+                        scale = FALSE,
+                        model.names = emissionmodel_names,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+e50.modeltable <- export_summs(co2.50, so2.50, nox.50, pm2.5.50, ch4.50,
+                               scale = FALSE,
+                               model.names = emissionmodel_names,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+e50_graph <- plot_summs(co2.50, so2.50, nox.50, pm2.5.50, ch4.50,
+                        scale = FALSE,
+                        model.names = emissionmodel_names,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+e60.modeltable <- export_summs(co2.60, so2.60, nox.60, pm2.5.60, ch4.60,
+                               scale = FALSE,
+                               model.names = emissionmodel_names,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+e60_graph <- plot_summs(co2.60, so2.60, nox.60, pm2.5.60, ch4.60,
+                        scale = FALSE,
+                        model.names = emissionmodel_names,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+e70.modeltable <- export_summs(co2.70, so2.70, nox.70, pm2.5.70, ch4.70,
+                               scale = FALSE,
+                               model.names = emissionmodel_names,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+e70_graph <- plot_summs(co2.70, so2.70, nox.70, pm2.5.70, ch4.70,
+                        scale = FALSE,
+                        model.names = emissionmodel_names,
+                        coefs = c("OSW Capacity" = "cap2050"))
+
+e80.modeltable <- export_summs(co2.80, so2.80, nox.80, pm2.5.80, ch4.80,
+                               scale = FALSE,
+                               model.names = emissionmodel_names,
+                               coefs = c("OSW Capacity" = "cap2050"))
+
+e80_graph <- plot_summs(co2.80, so2.80, nox.80, pm2.5.80, ch4.80,
+                        scale = FALSE,
+                        model.names = emissionmodel_names,
+                        coefs = c("OSW Capacity" = "cap2050"))
+}
 
 
 ## Save Plots ----

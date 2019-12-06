@@ -598,14 +598,16 @@ ind_split_line
 # Correlations
 
 ```{r}
-chart.Correlation(oswcor, histogram = FALSE, method = "spearman")
+chart.Correlation(oswcor, histogram = TRUE, method = "spearman")
 ```
 
 # Regressions
 
 ```{r, results = 'asis'}
 grid.modeltable
+grid_graph
 emission.modeltable
+emission_graph
 ```
 
 

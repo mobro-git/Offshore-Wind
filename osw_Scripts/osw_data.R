@@ -710,7 +710,8 @@ oswcor <- osw_varcap_2050total %>%
   left_join(., elctotal2050, by = c("emred", "costred", "Scenario", "Year")) %>%
   rename("Total Elc" = "VAR_FOut") %>%
   left_join(., rps, by = c("Scenario", "emred", "costred", "Year")) %>%
-  select(emred, costred, `cap2050`, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`, `Total Elc`, perRenew)
+  select(emred, costred, `cap2050`, `CO[2]`, `SO[2]`, `CH[4]`, `PM[2.5]`, `NO[X]`,
+         `Total Elc`, perRenew, Renewable)
 oswcor[] <- lapply(oswcor, as.character)
 oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
   mutate(emred = as.numeric(emred)) %>%
@@ -723,6 +724,7 @@ oswcor <- oswcor %>% mutate(emred = replace(emred, emred == "BAU", 20)) %>%
   mutate(`cap2050` = as.numeric(`cap2050`)) %>%
   mutate(`Total Elc` = as.numeric(`Total Elc`)) %>%
   mutate(perRenew = as.numeric(perRenew)) %>%
+  mutate(Renewable = as.numeric(Renewable)) %>%
   mutate_all(~replace(.,is.na(.), 0)) %>% 
   mutate_if(is.numeric, ~round(.,2)) %>%
   select(`cap2050`, everything())
