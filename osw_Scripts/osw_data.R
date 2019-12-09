@@ -181,7 +181,7 @@ osw_varcap_regiontotals <- osw %>%
   arrange(`2050 Total`) %>%
   mutate_if(is.numeric, ~round(.,1))
 
-osw_varfout_regiontotals <- osw %>% os
+osw_varfout_regiontotals <- osw %>% 
   filter(Attribute == "VAR_FOut") %>%
   group_by(Region) %>%
   summarize(`2050 Total` = mean(`2050`)) %>%
