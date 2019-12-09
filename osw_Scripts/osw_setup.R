@@ -135,8 +135,8 @@ lineplot.region <- function(data, region=NULL, yvar, facet="Region~costred",
     coltheme +
     labs(x = "Year", y = ylab,
          title = title,
-         color = "Emissions Reduction (%)",
-         linetype = "Emissions Reduction (%)") +
+         color = "CO2 Cap (%)",
+         linetype = "CO2 Cap (%)") +
     bottom1
 }
 
@@ -147,10 +147,10 @@ grid.heatmap.col <- function(data, title) {
   geom_tile(colour = "gray", size = 0.25) +
   facet_grid(Technology ~ .) + 
   labs(x = "Offshore Wind Cost Reductions (%)",
-       y = "Emissions Reduction (%)",
+       y = "CO2 Cap (%)",
        title = title,
        fill = "Electricity\nProduced\n(PJ)") +
-  color_fill_cont +
+  fill_cont +
   st
 }
 
@@ -159,7 +159,7 @@ grid.heatmap.bw <- function(data, title) {
     geom_tile(colour = "white", size = 0.25) +
     facet_grid(Technology ~ .) + 
     labs(x = "Offshore Wind Cost Reductions (%)",
-         y = "Emissions Reduction (%)",
+         y = "CO2 Cap (%)",
          title = title,
          fill = "Electricity\nProduced\n(PJ)") +
     st +
@@ -255,8 +255,7 @@ prod.dif.col <- function(data, title, subtitle = NULL) {
     zero +
     yt +
     x_disc_l +
-    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels),
-               scales = "free_y") +
+    facet_grid(emred~costred, labeller = labeller(emred = emissionlabels, costred = costlabels)) +
     bottom1
 }
 
@@ -338,10 +337,10 @@ em.heatmap.col <- function(data, em, title) {
   ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = Emissions)) +
     geom_tile(colour = "gray", size = 0.25) +
     labs(x = "Offshore Wind Cost Reductions (%)",
-         y = "Emissions Reduction (%)",
+         y = "CO2 Cap (%)",
          title = title,
          fill = "Emissions") +
-    color_fill_cont +
+    fill_cont +
     st
 }
 
@@ -349,7 +348,7 @@ em.heatmap.bw <- function(data, em, title) {
   ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = Emissions)) +
     geom_tile(colour = "white", size = 0.25) +
     labs(x = "Offshore Wind Cost Reductions (%)",
-         y = "Emissions Reduction (%)",
+         y = "CO2 Cap (%)",
          title = title,
          fill = "Emissions") +
     gray_fill_cont +
@@ -359,23 +358,23 @@ em.heatmap.bw <- function(data, em, title) {
 em.heatmap.per.col <- function(data, em, title) {
   ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = percent.red)) +
     geom_tile(colour = "gray", size = 0.25) +
-    geom_text(aes(label = paste(percent.red*100, "%")), color = "black", size = 5) +
+    geom_text(aes(label = paste(percent.red, "%")), color = "black", size = 3) +
     labs(x = "Offshore Wind Cost Reductions (%)",
-         y = "Emissions Reduction (%)",
+         y = "CO2 Cap (%)",
          title = title,
-         fill = "Emissions\nReduction (%)") +
-    color_fill_cont +
+         fill = "Reduction\n(%)") +
+    fill_cont +
     st
 }
 
 em.heatmap.per.bw <- function(data, em, title) {
   ggplot(data = data %>% filter(Commodity == em), aes(x = costred, y = emred, fill = percent.red)) +
     geom_tile(colour = "white", size = 0.25) +
-    geom_text(aes(label = paste(percent.red*100, "%")), color = "white", size = 5) +
+    geom_text(aes(label = paste(percent.red, "%")), color = "white", size = 3) +
     labs(x = "Offshore Wind Cost Reductions (%)",
-         y = "Emissions Reduction (%)",
+         y = "CO2 Cap (%)",
          title = title,
-         fill = "Emissions\nReduction (%)") +
+         fill = "Reduction\n(%)") +
     gray_fill_cont +
     st
 }
@@ -412,13 +411,13 @@ costlabels <- c(
   "80" = "80% Cost Red.")
 
 emissionlabels <- c(
-  "BAU" = "Business as usual", 
-  "30" = "30% CO2 Red.", 
-  "40" = "40% CO2 Red.",  
-  "50" = "50% CO2 Red.", 
-  "60" = "60% CO2 Red.", 
-  "70" = "70% CO2 Red.", 
-  "80" = "80% CO2 Red.")
+  "BAU" = "BAU", 
+  "30" = "30% Cap", 
+  "40" = "40% Cap",  
+  "50" = "50% Cap", 
+  "60" = "60% Cap", 
+  "70" = "70% Cap", 
+  "80" = "80% Cap")
 
 airlabels <- c(
   "CO[2]" = expression(CO[2]),
@@ -465,7 +464,7 @@ x_disc_l <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 col_osw <- c(`Terrestrial Wind` = "#92CBF3", `Hydro` = "dodgerblue4", 
              `Solar` = "darkgoldenrod2", `Offshore Wind` = "#398440", 
              `Nuclear` = "darkorange3", `Coal` = "gray9", `Natural Gas` = "darkslategray4", 
-             `Coal CCS` = "gray")
+             `Coal CCS` = "gray", `Other` = "#F3C0D4")
 col_sector <- c(`Commercial` = "chartreuse4", `Industrial` = "firebrick", 
                 `Residential` = "cadetblue3", `Transportation` = "darkgoldenrod2")
 col_em <- c("#462300","#80470E","#B27941","#EEB67F","#7FBDEE","#367FB7","#034679")
@@ -484,12 +483,15 @@ gray_fill <- scale_fill_grey(start = 0.9, end = 0)
 gray_color <- scale_color_grey(start = 0.8, end = 0)
 color_fill_cont <- scale_fill_gradient(low = "#C9D0FF", high = "#0017AE", na.value = "gray")
 gray_fill_cont <- scale_fill_gradient(low = "#bababa", high = "#08090a", na.value = "white")
+fill_cont <- scale_fill_distiller(palette = "Spectral")
 em_color <- scale_color_manual(values = col_em)
 cost_color <- scale_color_manual(values = col_cost)
 costosw_color <- scale_color_manual(values = col_costosw)
+costosw_fill <- scale_fill_manual(values = col_costosw)
 sec_fill <- scale_fill_manual(values = col_sector)
 sec_color <- scale_color_manual(values = col_sector)
 commodity_fill <- scale_fill_manual(values = col_commodity, labels = airlabels)
-commodity_color <- scale_color_manual(values = col_commodity, labels = airlabels)
+commodity_color <- scale_color_manual(values = col_commodity, labels = airlabels) 
+linetype <- scale_linetype_manual(values = c("solid", "twodash", "dashed", "dotted"))
 
 

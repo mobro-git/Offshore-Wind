@@ -181,7 +181,7 @@ osw_varcap_regiontotals <- osw %>%
   arrange(`2050 Total`) %>%
   mutate_if(is.numeric, ~round(.,1))
 
-osw_varfout_regiontotals <- osw %>% 
+osw_varfout_regiontotals <- osw %>% os
   filter(Attribute == "VAR_FOut") %>%
   group_by(Region) %>%
   summarize(`2050 Total` = mean(`2050`)) %>%
@@ -280,7 +280,6 @@ elc_levels <- elc_long_reg %>%
 
 elc_long_reg <- elc_long_reg %>%
   mutate(Technology = factor(Technology, levels = elc_levels)) %>%
-  filter(Technology != "Other") %>%
   ungroup()
 elc_long_reg$emred <- factor(elc_long_reg$emred, levels = levels_emred)
 elc_long_reg$costred <- factor(elc_long_reg$costred, levels = levels_costred)
@@ -442,9 +441,9 @@ oswmarket <- elc_long %>%
   mutate_all(~replace(.,is.na(.), 0)) %>% 
   ungroup() %>%
   mutate(Total = 
-           `Coal CCS`+`Offshore Wind`+Hydro+`Terrestrial Wind`+Solar+Nuclear+Coal+`Natural Gas`) %>%
+           `Coal CCS`+`Offshore Wind`+Hydro+`Terrestrial Wind`+Solar+Nuclear+Coal+`Natural Gas`+Other) %>%
   gather(`Coal CCS`, `Offshore Wind`, Hydro, `Terrestrial Wind`, 
-          Solar, Nuclear, Coal, `Natural Gas`, key = "Technology", value = "Output") %>%
+          Solar, Nuclear, Coal, `Natural Gas`,Other, key = "Technology", value = "Output") %>%
   select(Scenario, emred, costred, Technology, Year, Output, Total) %>%
   mutate(MarketShare = round(Output/Total*100, 2))
 
@@ -452,7 +451,7 @@ oswmarket_table <- oswmarket %>%
   filter(Year == "2050") %>%
   select(Technology, emred, costred, MarketShare) %>%
   spread(key = costred, value = MarketShare) %>%
-  rename("CO2 Cap"="emred")
+  rename("CO2 Cap\n(%)"="emred")
 
 oswmarket_small <- oswmarket %>% 
   filter(!costred %in% c("20", "30", "80")) %>%
@@ -462,7 +461,7 @@ totaloutput <- oswmarket %>%
   filter(Year == "2050") %>%
   select(Technology, emred, costred, Output) %>%
   spread(key = costred, value = Output) %>%
-  rename("CO2 Cap"="emred") 
+  rename("CO2 Cap\n(%)"="emred") 
   
 
 ## ----emissions----------------------------------------------------
@@ -512,10 +511,17 @@ emissions2010_long <- emissions2010_long_reg %>%
 # pulls just the 2050 totals for each emission, both regional and cumulative
 # data sets produced
 
-emissions2050_reg <- emissions_long_reg %>% filter(Year == "2050") 
+emissions2050_reg <- emissions_long_reg %>% filter(Year == "2050") %>%
+  mutate(costred = factor(costred, levels = levels_costred)) %>%
+  mutate(emred = factor(emred, levels = levels_emred)) %>%
+  mutate(Commodity = factor(Commodity, levels = levels_emissions))
 emissions2050 <- emissions2050_reg %>%
   group_by(Scenario,emred,costred,Year,Commodity) %>%
-  summarize(Emissions = sum(Emissions))
+  summarize(Emissions = sum(Emissions)) %>%
+  ungroup() %>%
+  mutate(costred = factor(costred, levels = levels_costred)) %>%
+  mutate(emred = factor(emred, levels = levels_emred)) %>%
+  mutate(Commodity = factor(Commodity, levels = levels_emissions))
 
 ## ----~% emissions reduction----------------------------------------
 
@@ -524,12 +530,12 @@ emissions2050 <- emissions2050_reg %>%
 emissions_percent_reg <- emissions2010_long_reg %>% select(Commodity, Region, Emissions2010) %>%
   left_join(emissions_long_reg, emissions_percent_reg, by = c("Commodity", "Region")) %>%
   select(Scenario, emred, costred, Commodity, Region, Year, Emissions2010, Emissions) %>%
-  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010), 2))
+  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010 * 100), 0))
 
 emissions_percent <- emissions2010_long %>% ungroup() %>% select(Commodity, Emissions2010) %>%
   left_join(emissions_long, emissions_percent, by = "Commodity") %>%
   select(Scenario, emred, costred, Commodity, Year, Emissions2010, Emissions) %>%
-  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010), 2)) %>%
+  mutate(percent.red = round(((Emissions2010 - Emissions) / Emissions2010 * 100), 0)) %>%
   mutate(value.red = Emissions2010 - Emissions)
 
 ## ----~2050 % emissions reductions----------------------------------------

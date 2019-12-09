@@ -1,0 +1,731 @@
+---
+title: "Modeling the Contribution of Offshore Wind to the Grid Mix and Air Quality Implications:\nNational Approach Results and Analysis"
+author: "Morgan Browning"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+  html_document:
+    number_sections: yes
+    toc: yes
+    keep_md: TRUE
+editor_options: 
+  chunk_output_type: console
+---
+
+***
+
+# Disclosure
+
+This document functions as an all-inclusive working directory for synthesis and graphical analysis of the results from the offshore wind research of Morgan Browning, an ORISE Fellow at the U.S. Environmental Protection Agency's Office of Research and Development. This document and its contents are not finalized nor are intended for publication. 
+
+It is annotated primarily for ease of reproducability and a general understanding of the results. 
+
+# Setup
+
+Three scripts are loaded into this markdown document to allow for analysis of the data. The setup script loads the library, creates generalized functions, and creates global variables for color scales and factors. The data script loads an excel spreadsheet with all of the results data and performs the majority of data munging. The results script creates charts, graphs, and tables. This report functions as the annotated synthesis of the data and results.
+
+Graphs are provided with many variations to meet criteria of different publication and presentation platforms. Formats may be chosen using the `colorcalls` toggles
+
+```{r setup, include = FALSE}
+# Sets global knit options and loads the setup and data import scripts for the project. Code is hidden for ease of reading. Was running into issues when cacheing results, so have set cache to false. Time to knit <5 minutes, so it does not cause much of an issue. Will consider cacheing in the future if the issue is resolved.
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, warning = FALSE, message = FALSE, tidy = TRUE, cache = FALSE)
+```
+```{r, include = FALSE}
+source("osw_Scripts/osw_setup.R")
+```
+```{r, include = FALSE}
+source("osw_Scripts/osw_data.R")
+```
+```{r, include = FALSE}
+source("osw_Scripts/osw_results.R")
+```
+```{r colorcalls}
+# Creates toggles for selecting the color scale of graphics to be printed [color, black & white, gray]. More than one may be selected.
+color <- 1
+bw <- 0
+gray <- 0
+```
+
+# Scenarios
+
+The nested parametric sensitivity analysis was built on combinations of two sets of scenarios:
+
+1. Electric sector CO~2~ emissions caps, as a linear decrease to a given % decrease from 2010 emissions by 2050  
+  + Business and usual emissions represent approximately a 20% reduction in CO~2~ emissions
+
+2. Cost reductions of offshore wind, as a linear decrease to a given % decrease from 2010 costs by 2035, then level costs to 2050  
+  + A 20% cost reduction is used as the base case, assuming very conservative technological advancement and little benefit of economies of scale
+  + Cost curves are set to resolve by 2035 as estimated based on NREL LCOE cost projections for offshore wind
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) emissionsscen_col
+if(color > 0) costscen_col
+```
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) emissionsscen_bw
+if(bw > 0) costscen_bw
+```
+
+# LCOE
+
+EIA's AEO 2019 provides the following values for the estimated levelized cost of electricity (capacity-weighted average) for new generation resources entering service in 2023 (2018 $/MWh). Offshore wind has the highest total LCOE by a large margin. The second most expensive technology is biomass. The AEO LCOE was used in the calculation of offshore wind costs for the above cost curves, but LCOE is not directly used in the model.
+
+```{r}
+lcoe_table
+```
+
+# Offshore Wind
+
+As offshore wind is the primary technology being assessed in this research, we have explored many facets of offshore wind buildout. These facets are explored below, both at a regional and national cumulative level.
+
+## Capacity Buildout
+
+Cumulative and new addition offshore wind capacity across all nine census regions, by cost and emissions reduction scenario.
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cap_col_side
+if(color > 0) newcap_col_top
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cap_bw_side
+if(bw > 0) newcap_bw_top
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(gray > 0) cap_gray_side
+if(gray > 0) newcap_gray_top
+```
+
+## Total Capacity
+
+Total offshore wind capacity across all nine census regions in 2050, by cost and emissions reduction scenario.
+
+```{r}
+if(color > 0) cap_col_heat 
+if(bw > 0) cap_bw_heat
+```
+```{r}
+cap_2050_table
+```
+
+## Output
+
+Total offshore wind electricity output across all nine census regions, by cost and emissions reduction scenario. Results show almost identical trajectories for total capacity and output due to the non-dispatchable quality of offshore wind. All generated electricity is utilized in the modeled scenarios.
+
+```{r}
+if(color > 0) output_col_side
+if(bw > 0) output_bw_side
+if(gray > 0) output_gray_side
+```
+```{r}
+output_2050_table 
+```
+
+## Regions
+
+Cumulative and new addition offshore wind capacity by region. Regions are listed from least to highest electricity output.
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cap_reg7_col
+if(color > 0) newcap_reg7_col
+if(color > 0) cap_reg1_col
+if(color > 0) newcap_reg1_col
+if(color > 0) cap_reg2_col
+if(color > 0) newcap_reg2_col
+if(color > 0) cap_reg3_col
+if(color > 0) newcap_reg3_col
+if(color > 0) cap_reg9_col
+if(color > 0) newcap_reg9_col
+if(color > 0) cap_reg5_col
+if(color > 0) newcap_reg5_col
+```
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cap_reg7_bw
+if(bw > 0) newcap_reg7_bw
+if(bw > 0) cap_reg1_bw
+if(bw > 0) newcap_reg1_bw
+if(bw > 0) cap_reg2_bw
+if(bw > 0) newcap_reg2_bw
+if(bw > 0) cap_reg3_bw
+if(bw > 0) newcap_reg3_bw
+if(bw > 0) cap_reg9_bw
+if(bw > 0) newcap_reg9_bw
+if(bw > 0) cap_reg5_bw
+if(bw > 0) newcap_reg5_bw
+```
+
+Cumulative and new addition offshore wind capacity by region, emissions reduction, and cost reduction.
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cap_allreg_col
+if(color > 0) newcap_allreg_col
+if(color > 0) cap_allreg_col_free
+if(color > 0) newcap_allreg_col_free
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cap_allreg_bw
+if(bw > 0) newcap_allreg_bw
+if(bw > 0) cap_allreg_bw_free
+if(bw > 0) newcap_allreg_bw_free
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+cap_region_table
+output_region_table
+```
+
+Map of average total capacity 
+
+```{r}
+if(color > 0) regOSW_map_col
+if(bw > 0) regOSW_map_bw
+```
+
+# Grid Mix
+
+## Baseline Production
+
+Grid mix without any offshore wind cost reduction or emissions cap.
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) baseprod_line_col
+if(color > 0) baseprod_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) baseprod_line_bw
+if(bw > 0) baseprod_fill_bw
+```
+
+Regional baseline production
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) baseprod_reg_line_col
+if(color > 0) baseprod_reg_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) baseprod_reg_line_bw
+if(bw > 0) baseprod_reg_fill_bw
+```
+
+## All Scenarios
+
+Complete Set
+
+```{r}
+if(color > 0) gridmix_all_col
+if(bw > 0) gridmix_all_bw
+```
+
+Parsed Set
+
+```{r}
+if(color > 0) gridmix_col
+if(bw > 0) gridmix_bw
+```
+
+## Regional Mix
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0)gridmix_r1_col
+if(color > 0)gridmix_r1_bar_col
+if(color > 0)gridmix_r2_col
+if(color > 0)gridmix_r2_bar_col
+if(color > 0)gridmix_r3_col
+if(color > 0)gridmix_r3_bar_col
+if(color > 0)gridmix_r4_col
+if(color > 0)gridmix_r4_bar_col
+if(color > 0)gridmix_r5_col 
+if(color > 0)gridmix_r5_bar_col
+if(color > 0)gridmix_r6_col  
+if(color > 0)gridmix_r6_bar_col
+if(color > 0)gridmix_r7_col  
+if(color > 0)gridmix_r7_bar_col
+if(color > 0)gridmix_r8_col  
+if(color > 0)gridmix_r8_bar_col
+if(color > 0)gridmix_r9_col  
+if(color > 0)gridmix_r9_bar_col
+if(bw > 0)gridmix_r1_bw 
+if(bw > 0)gridmix_r1_bar_bw 
+if(bw > 0)gridmix_r2_bw 
+if(bw > 0)gridmix_r2_bar_bw  
+if(bw > 0)gridmix_r3_bw 
+if(bw > 0)gridmix_r3_bar_bw 
+if(bw > 0)gridmix_r4_bw 
+if(bw > 0)gridmix_r4_bar_bw 
+if(bw > 0)gridmix_r5_bw 
+if(bw > 0)gridmix_r5_bar_bw 
+if(bw > 0)gridmix_r6_bw 
+if(bw > 0)gridmix_r6_bar_bw 
+if(bw > 0)gridmix_r7_bw 
+if(bw > 0)gridmix_r7_bar_bw 
+if(bw > 0)gridmix_r8_bw 
+if(bw > 0)gridmix_r8_bar_bw 
+if(bw > 0)gridmix_r9_bw 
+if(bw > 0)gridmix_r9_bar_bw 
+```
+
+## Emissions Cap
+
+BAU emissions
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) bau_facetcost_line_col
+if(color > 0) bau_facetcost_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) bau_facetcost_line_bw
+if(bw > 0) bau_facetcost_fill_bw
+```
+
+30% emissions reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) em30_facetcost_line_col
+if(color > 0) em30_facetcost_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) em30_facetcost_line_bw
+if(bw > 0) em30_facetcost_fill_bw
+```
+
+40% emissions reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) em40_facetcost_line_col
+if(color > 0) em40_facetcost_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) em40_facetcost_line_bw
+if(bw > 0) em40_facetcost_fill_bw
+```
+
+50% emissions reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) em50_facetcost_line_col
+if(color > 0) em50_facetcost_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) em50_facetcost_line_bw
+if(bw > 0) em50_facetcost_fill_bw
+```
+
+60% emissions reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) em60_facetcost_line_col
+if(color > 0) em60_facetcost_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) em60_facetcost_line_bw
+if(bw > 0) em60_facetcost_fill_bw
+```
+
+70% emissions reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) em70_facetcost_line_col
+if(color > 0) em70_facetcost_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) em70_facetcost_line_bw
+if(bw > 0) em70_facetcost_fill_bw
+```
+
+80% emissions reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) em80_facetcost_line_col
+if(color > 0) em80_facetcost_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) em80_facetcost_line_bw
+if(bw > 0) em80_facetcost_fill_bw
+```
+
+## Cost Reductions
+
+50% cost reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cost50_facetem_line_col
+if(color > 0) cost50_facetem_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cost50_facetem_line_bw
+if(bw > 0) cost50_facetem_fill_bw
+```
+
+60% cost reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cost60_facetem_line_col
+if(color > 0) cost60_facetem_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cost60_facetem_line_bw
+if(bw > 0) cost60_facetem_fill_bw
+```
+
+70% cost reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cost70_facetem_line_col
+if(color > 0) cost70_facetem_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cost70_facetem_line_bw
+if(bw > 0) cost70_facetem_fill_bw
+```
+
+80% cost reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) cost80_facetem_line_col
+if(color > 0) cost80_facetem_fill_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) cost80_facetem_line_bw
+if(bw > 0) cost80_facetem_fill_bw
+```
+
+## Heatmaps
+
+```{r}
+if(color > 0) heatmap_col
+if(bw > 0) heatmap_bw
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) osw_grid_heatmap_col
+if(color > 0) wnd_grid_heatmap_col
+if(color > 0) sol_grid_heatmap_col
+if(color > 0) coal_grid_heatmap_col
+if(color > 0) nga_grid_heatmap_col
+if(color > 0) nuk_grid_heatmap_col
+if(color > 0) hyd_grid_heatmap_col
+if(color > 0) ccs_grid_heatmap_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(bw > 0) osw_grid_heatmap_bw 
+if(bw > 0) wnd_grid_heatmap_bw 
+if(bw > 0) sol_grid_heatmap_bw 
+if(bw > 0) coal_grid_heatmap_bw
+if(bw > 0) nga_grid_heatmap_bw 
+if(bw > 0) nuk_grid_heatmap_bw 
+if(bw > 0) hyd_grid_heatmap_bw 
+if(bw > 0) ccs_grid_heatmap_bw
+```
+
+## Market Share
+
+```{r}
+oswmarket %>% split(.$Technology) %>% map(summary)
+marketShareTable
+marketshare_heatmap
+```
+
+## Renewable Contributions
+
+```{r}
+if(color > 0) rps_col
+if(bw > 0) rps_bw
+```
+
+## Retirements and Additions
+
+Basecase year-on-year changes in the grid mix. Shows the modeled fluctuations in generation. All following quantifications of grid mix changes are as compared to these changes in the basecase.
+
+```{r}
+if(color > 0) base_retire_fill_col
+if(bw > 0) base_retire_fill_bw
+```
+
+## Changes Over Baseline
+
+Summary Graph 
+
+```{r}
+if (color > 0) prod_dif_all_col
+if(bw > 0) prod_dif_all_bw
+```
+```{r}
+if (color > 0) prod_dif_col
+if(bw > 0) prod_dif_bw
+```
+
+Regional Summary Graphs
+
+```{r}
+if(color > 0) prod_dif_r1_col
+if(color > 0) prod_dif_r2_col
+if(color > 0) prod_dif_r3_col
+if(color > 0) prod_dif_r4_col
+if(color > 0) prod_dif_r5_col
+if(color > 0) prod_dif_r6_col
+if(color > 0) prod_dif_r7_col
+if(color > 0) prod_dif_r8_col
+if(color > 0) prod_dif_r9_col
+if(bw > 0) prod_dif_r1_bw
+if(bw > 0) prod_dif_r2_bw
+if(bw > 0) prod_dif_r3_bw
+if(bw > 0) prod_dif_r4_bw
+if(bw > 0) prod_dif_r5_bw
+if(bw > 0) prod_dif_r6_bw
+if(bw > 0) prod_dif_r7_bw
+if(bw > 0) prod_dif_r8_bw
+if(bw > 0) prod_dif_r9_bw
+```
+
+By Emissions Reduction %
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) prod_dif_bau_col
+if(color > 0) prod_dif_e30_col
+if(color > 0) prod_dif_e40_col
+if(color > 0) prod_dif_e50_col
+if(color > 0) prod_dif_e60_col
+if(color > 0) prod_dif_e70_col
+if(color > 0) prod_dif_e80_col
+if(bw > 0) prod_dif_bau_bw
+if(bw > 0) prod_dif_e30_bw
+if(bw > 0) prod_dif_e40_bw
+if(bw > 0) prod_dif_e50_bw
+if(bw > 0) prod_dif_e60_bw
+if(bw > 0) prod_dif_e70_bw
+if(bw > 0) prod_dif_e80_bw
+```
+
+By Cost Reduction %
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) prod_dif_c40_col
+if(color > 0) prod_dif_c50_col
+if(color > 0) prod_dif_c60_col
+if(color > 0) prod_dif_c70_col
+if(color > 0) prod_dif_c80_col
+if(bw > 0) prod_dif_c40_bw
+if(bw > 0) prod_dif_c50_bw
+if(bw > 0) prod_dif_c60_bw
+if(bw > 0) prod_dif_c70_bw
+if(bw > 0) prod_dif_c80_bw
+```
+
+# Emissions
+
+## Baseline
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) emis_bau_line_col
+if(color > 0) emis_bau_fill_col
+if(bw > 0) emis_bau_line_bw
+if(bw > 0) emis_bau_fill_bw
+```
+
+## Emissions by Scenario and Commodity
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) emis_col
+if(color > 0) emis_perc_col
+if(bw > 0) emis_bw
+if(bw > 0) emis_perc_bw
+```
+
+## Emissions by Commodity - Values
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) co2_col
+if(color > 0) co2_hm_col
+if(color > 0) so2_col
+if(color > 0) so2_hm_col
+if(color > 0) nox_col
+if(color > 0) nox_hm_col
+if(color > 0) ch4_col
+if(color > 0) ch4_hm_col
+if(color > 0) pm2.5_col
+if(color > 0) pm2.5_hm_col
+if(bw > 0) co2_bw
+if(bw > 0) co2_hm_bw
+if(bw > 0) so2_bw
+if(bw > 0) so2_hm_bw
+if(bw > 0) nox_bw
+if(bw > 0) nox_hm_bw
+if(bw > 0) ch4_bw
+if(bw > 0) ch4_hm_bw
+if(bw > 0) pm2.5_bw
+if(bw > 0) pm2.5_hm_bw
+```
+
+## Emissions by Commodity - Percent Reduction
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) co2_hm_per_col
+if(color > 0) so2_hm_per_col
+if(color > 0) nox_hm_per_col
+if(color > 0) ch4_hm_per_col
+if(color > 0) pm2.5_hm_per_col
+if(bw > 0) co2_hm_per_bw
+if(bw > 0) so2_hm_per_bw
+if(bw > 0) nox_hm_per_bw
+if(bw > 0) ch4_hm_per_bw
+if(bw > 0) pm2.5_hm_per_bw
+```
+
+# Total Electricity Production
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+if(color > 0) elctotal_line_col
+if(color > 0) elctotal_heat_col
+if(bw > 0) elctotal_line_bw
+if(bw > 0) elctotal_heat_bw
+```
+
+# End Use ELC
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+enduse_line
+enduse_nochp_line
+sector_line
+sector_split_ind
+trn_line
+res_line
+com_line
+ind_line
+ind_split_line
+```
+
+# Correlations
+
+```{r}
+chart.Correlation(oswcor, histogram = TRUE, method = "spearman")
+```
+
+# Regressions
+
+## Full set of models
+
+OSW Capacity, % Renewables, and Total Elc Production Regressions
+
+```{r, results = 'asis'}
+grid_modeltable
+grid_graph
+```
+
+Emissions Regressions
+
+```{r, results = 'asis'}
+emission_modeltable
+emission_graph
+```
+
+## Emission-specific regressions by CO2 cap scenario
+
+CO2
+
+```{r, results = 'asis'}
+co2_modeltable
+co2_graph
+```
+
+SO2
+
+```{r, results = 'asis'}
+so2_modeltable
+so2_graph
+```
+
+NOx
+
+```{r, results = 'asis'}
+nox_modeltable
+nox_graph
+```
+
+PM 2.5
+
+```{r, results = 'asis'}
+pm2.5_modeltable
+pm2.5_graph
+```
+
+CH4
+
+```{r, results = 'asis'}
+ch4_modeltable
+ch4_graph
+```
+
+## CO2 cap regressions by emissions type
+
+BAU
+
+```{r, results = 'asis'}
+bau_modeltable
+bau_graph
+```
+
+30% CO2 Cap
+
+```{r, results = 'asis'}
+e30_modeltable
+e30_graph
+```
+
+40% CO2 Cap
+
+```{r, results = 'asis'}
+e40_modeltable
+e40_graph
+```
+
+50% CO2 Cap
+
+```{r, results = 'asis'}
+e50_modeltable
+e50_graph
+```
+
+60% CO2 Cap
+
+```{r, results = 'asis'}
+e60_modeltable
+e60_graph
+```
+
+70% CO2 Cap
+
+```{r, results = 'asis'}
+e70_modeltable
+e70_graph
+```
+
+80% CO2 Cap
+
+```{r, results = 'asis'}
+e80_modeltable
+e80_graph
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

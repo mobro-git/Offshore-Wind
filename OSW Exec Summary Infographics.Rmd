@@ -43,13 +43,13 @@ source("osw_Scripts/osw_results.R")
 ### Costs
 
 ```{r}
-ggplotly(cost_col)
+ggplotly(costscen_col)
 ```
 
 ### CO2 Emissions
 
 ```{r}
-ggplotly(emissions_col)
+ggplotly(emissionsscen_col)
 ```
  
 ## Data {.tabset}
