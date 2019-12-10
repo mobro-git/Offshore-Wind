@@ -91,6 +91,7 @@ cap_plot <- ggplot(osw_varcap_long) +
   facet_grid(~costred, labeller=labeller(costred = costlabels)) +
   yt +
   bottom1 + 
+  bottom2 +
   x_disc
   
 cap_col_side <- cap_plot + 
@@ -112,15 +113,14 @@ cap_heatmap <- osw_varcap_long %>% filter(Year == "2050") %>%
   labs(x = "Cost Reduction (%)", y = "CO2 Cap (%)",
        title = "2050 Offshore Wind Capacity",
        fill = "Capacity (GW)") +
-  st +
-  bottom1
+  st 
   
 cap_col_heat <- cap_heatmap + 
-  geom_text(aes(label = round(VAR_Cap, 0)), color = "black", size = 5) +
+  geom_text(aes(label = round(VAR_Cap, 0)), color = "black", size = 3) +
   fill_cont
 
 cap_bw_heat <- cap_heatmap + 
-  geom_text(aes(label = round(VAR_Cap, 0)), color = "white", size = 5) +
+  geom_text(aes(label = round(VAR_Cap, 0)), color = "white", size = 3) +
   gray_fill_cont 
 
 ## ~ New Capacity ----
@@ -135,6 +135,7 @@ newcap_plot <- ggplot(osw_varncap_long) +
   facet_grid(costred~., scales = "free_y", labeller=labeller(costred = costlabels)) +
   yt +
   bottom1 +
+  bottom2 +
   x_disc
 
 newcap_col_top <- newcap_plot +
@@ -900,10 +901,11 @@ heatmap_bw <- grid.heatmap.bw(elc_long, "Grid Mix Production by Technology")
 rps_graph <- rps %>% filter(costred != "40" & costred != "20") %>%
   filter(emred %in% c("BAU", "40", "60", "80")) %>%
   ggplot() +
-  geom_line(aes(x = Year, y = perRenew, color = costred, group = Scenario)) +
+  geom_line(aes(x = Year, y = perRenew, color = costred, group = Scenario),
+            size = 0.75) +
   labs(x = "Year", y = "Renewables (%)",
        title = "Renewable Technology Contribution to Electricity Production", 
-       color = "Cost Reduction\n(%)") +
+       color = "Cost Reduction (%)") +
   facet_grid(.~emred, labeller = labeller(emred = emissionlabels)) +
   yt +
   x_disc_l +
@@ -982,7 +984,7 @@ prod_dif_col <- prod.dif.col(
   (prod_dif %>% 
      filter(costred %in% c("50", "60", "70", "80")) %>% 
      filter(emred %in% c("BAU", "40", "60", "80"))),
-  "Changes in Grid Mix over Baseline")
+  "Changes in Grid Mix over Reference Case")
 
 prod_dif_bw <- prod.dif.bw(
   (prod_dif %>% 
@@ -1243,7 +1245,8 @@ emis_perc_plot <- emissions_percent %>% filter(!costred %in% c("40", "30", "20")
   linetype
 
 emis_perc_col <- emis_perc_plot +
-  geom_line(aes(x=Year, y=percent.red, color = costred, group = Scenario, linetype = emred), size = 1) +
+  geom_line(aes(x=Year, y=percent.red, color = costred, group = Scenario, linetype = emred), 
+            size = 1) +
   costosw_color
 
 emis_perc_bw <- emis_perc_plot +
@@ -1439,9 +1442,9 @@ osw_varcap_long1$emred <- emissionlabels[idx_osw]
 
 ## ~ Industrial Emissions ----
 
-indemissions %>% filter(Commodity == "CO[2]") %>% ggplot(aes(x = Year, y = Emissions)) +
-  geom_line(aes(group = Scenario)) +
-  facet_grid(costred~emred)
+# indemissions %>% filter(Commodity == "CO[2]") %>% ggplot(aes(x = Year, y = Emissions)) +
+#   geom_line(aes(group = Scenario)) +
+#   facet_grid(costred~emred)
 
 ## ~ Heatmaps ----
 
@@ -1580,17 +1583,34 @@ sector_line <- ggplot(enduse %>%
   x_disc_l
 
 sector_split_ind <- ggplot(enduse %>% 
-                             filter(costred != 40) %>% 
+                             filter(!costred %in% c("20", "40")) %>% 
                              filter(Sector %in% c("CHP Industrial", "Grid Industrial"))) +
   facet_grid(Sector~costred, scales = "free_y", labeller = labeller(costred = costlabels)) +
-  labs(x = "Year", y = "Electricity Consumption (PJ)",
-       title = "Sector Electricity Consumption by Scenario",
+  labs(x = "Year", y = "Electricity Consumption/Production (PJ)",
+       title = "Sector Electricity Consumption/Production by Scenario",
        color = "CO2 Cap (%)") +
   yt +
   bottom1 +
   bottom2 +
-  geom_line(aes(x = Year, y = Consumption, color = emred, group = Scenario)) +
+  geom_line(aes(x = Year, y = Consumption, color = emred, group = Scenario),
+            size = 0.75) +
   em_color +
+  x_disc_l
+
+sector_bar_ind <- ggplot(enduse %>%
+                           filter(!costred %in% c("20", "40")) %>% 
+                           filter(Sector %in% c("CHP Industrial", "Grid Industrial")) %>%
+                           filter(Year == "2050")) +
+  facet_grid(Sector~costred, scales = "free_y", labeller = labeller(costred = costlabels)) +
+  labs(y = "Electricity Consumption (PJ)", x = "CO2 Reduction (%)",
+       title = "Sector Electricity Consumption by Scenario",
+       fill = "CO2 Cap (%)") +
+  yt +
+  bottom1 +
+  bottom2 +
+  geom_bar(aes(x = emred, y = Consumption, fill = emred), 
+           stat = "identity", position = "dodge") +
+  em_fill +
   x_disc_l
 
 trn_line <- enduse %>% filter(Sector == "Transportation" & costred != 40) %>%
@@ -1648,6 +1668,23 @@ ind_split_line <- enduse %>%
        title = "Industrial Electricity Consumption by Scenario") +
   geom_line(aes(x = Year, y = Consumption, color = Sector, group = Sector)) +
   scale_color_manual(name = "Electricity Source", labels = c("Industrial CHP", "Grid ELC"), 
+                     values = c("#B45F04", "#0B3861")) +
+  bottom1
+
+ind_split_bar <- enduse %>% 
+  filter(Sector == "CHP Industrial" | Sector == "Grid Industrial") %>%
+  filter(Year == "2050") %>%
+  filter(!costred %in% c("20", "30", "40")) %>%
+  filter(emred %in% c("BAU", "40", "60", "80")) %>%
+  ggplot() +
+  geom_bar(aes(x = " ", y = Consumption, fill = Sector), 
+           stat = "identity", position = "dodge") +
+  facet_grid(emred~costred, labeller = labeller(costred = costlabels, emred = emissionlabels)) +
+  yt + x_disc_l +
+  labs(x = " ", y = "Electricity Consumption (PJ)",
+       title = "Industrial Electricity Consumption by Scenario") +
+  
+  scale_fill_manual(name = "Electricity Source", labels = c("Industrial CHP", "Grid ELC"), 
                      values = c("#B45F04", "#0B3861")) +
   bottom1
 
@@ -2024,7 +2061,21 @@ e80_graph <- plot_summs(co2.80, so2.80, nox.80, pm2.5.80, ch4.80,
                         scale = FALSE,
                         model.names = emissionmodel_names,
                         coefs = c("OSW Capacity" = "cap2050"))
+
+emission_fullmodeltable <- rbind(
+  co2_modeltable %>% mutate(Emission = "CO2"),
+  so2_modeltable %>% mutate(Emission = "SO2"),
+  nox_modeltable %>% mutate(Emission = "NOx"),
+  pm2.5_modeltable %>% mutate(Emission = "PM 2.5"),
+  ch4_modeltable %>% mutate(Emission = "CH4"))
+emission_fullmodeltable <- emission_fullmodeltable[
+  -c(4,6,7,10,12,13,16,18,19,22,24,25,28)] %>%
+  select(Emission, everything()) %>%
+  rename("Coefficient" = "names")
+emission_fullmodeltable$Emission[17] <- c(" ")
+
 }
+
 
 
 ## Save Plots ----

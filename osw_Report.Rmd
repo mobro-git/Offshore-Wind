@@ -6,12 +6,8 @@ output:
   pdf_document:
     number_sections: yes
     toc: yes
-    fig_width: 5
-    fig_height: 5
-  html_document:
-    number_sections: yes
-    toc: yes
-    keep_md: TRUE
+header-includes:
+  - \usepackage[labelformat=empty]{caption}
 editor_options: 
   chunk_output_type: console
 ---
@@ -250,6 +246,10 @@ ch4_graph
 ```
 
 ## CO2 cap regressions by emissions type
+
+```{r,results = 'asis'}
+emission_fullmodeltable
+```
 
 BAU
 

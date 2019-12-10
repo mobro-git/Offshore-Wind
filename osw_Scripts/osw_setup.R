@@ -485,6 +485,7 @@ color_fill_cont <- scale_fill_gradient(low = "#C9D0FF", high = "#0017AE", na.val
 gray_fill_cont <- scale_fill_gradient(low = "#bababa", high = "#08090a", na.value = "white")
 fill_cont <- scale_fill_distiller(palette = "Spectral")
 em_color <- scale_color_manual(values = col_em)
+em_fill <- scale_fill_manual(values = col_em)
 cost_color <- scale_color_manual(values = col_cost)
 costosw_color <- scale_color_manual(values = col_costosw)
 costosw_fill <- scale_fill_manual(values = col_costosw)
