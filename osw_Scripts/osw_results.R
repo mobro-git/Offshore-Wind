@@ -3,8 +3,8 @@
 # allows me to quickly run my two previous scripts when I make changes in them or
 # if I'm just going to work with results and need to pull in the data
 
-# source("osw_Scripts/osw_setup.R")
-# source("osw_Scripts/osw_data.R")
+source("osw_Scripts/osw_setup.R")
+source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
