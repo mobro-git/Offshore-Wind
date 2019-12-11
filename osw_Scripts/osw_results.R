@@ -361,12 +361,12 @@ output_2050_table <- osw_varfout_2050total %>%
 baseprod <- elc_long %>% filter(emred == "BAU" & costred == "20") %>%
   ggplot() +
   labs(x = "Year", y = "Electricity Production (PJ)",
-       title = "Electricity Production by Technology:\nBAU & 20% Cost Reduction") +
+       title = "Electricity Production by Technology: Reference Case") +
   yt +
   x_disc
 
 baseprod_line_col <- baseprod + 
-  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = .75) +
+  geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = .85) +
   geom_text_repel(data = . %>% filter(Year == last(Year)),
              aes(label = Technology, x = Year, y = VAR_FOut, color = Technology),
              size = 5, vjust = -2) +
@@ -1249,9 +1249,25 @@ emis_perc_col <- emis_perc_plot +
             size = 1) +
   costosw_color
 
-emis_perc_bw <- emis_perc_plot +
+emis_perc_pm2.5 <- emissions_percent %>% filter(!costred %in% c("40", "30", "20")) %>%
+  filter(emred %in% c("BAU", "40", "60", "80")) %>%
+  filter(Commodity == "PM[2.5]") %>%
+  ggplot(aes(x = Year, y= percent.red)) +
+  labs(x = "Year", y = "% Reduction from 2010",
+       title = "Electric Sector Emissions Reductions",
+       linetype = "CO2 Cap (%)",
+       color = "Cost Reduction (%)") +
+  facet_wrap(~Commodity, nrow = 1, labeller = label_parsed) +
+  yt +
+  x_disc_l +
+  bottom1 + 
+  bottom2 +
+  theme(legend.box = "vertical") +
+  guides(colour = guide_legend(nrow = 1)) +
+  scale_y_reverse() +
+  linetype +
   geom_line(aes(x=Year, y=percent.red, color = costred, group = Scenario, linetype = emred)) +
-  gray_color
+  costosw_color
 
 emis_perc_bar <- emissions_percent %>% 
   filter(!costred %in% c("40", "30", "20")) %>%
@@ -1587,7 +1603,7 @@ sector_split_ind <- ggplot(enduse %>%
                              filter(Sector %in% c("CHP Industrial", "Grid Industrial"))) +
   facet_grid(Sector~costred, scales = "free_y", labeller = labeller(costred = costlabels)) +
   labs(x = "Year", y = "Electricity Consumption/Production (PJ)",
-       title = "Sector Electricity Consumption/Production by Scenario",
+       title = "Industrial Electricity Consumption &Production",
        color = "CO2 Cap (%)") +
   yt +
   bottom1 +

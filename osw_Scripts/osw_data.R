@@ -345,6 +345,11 @@ prod_dif <- prod_dif %>% mutate(diff = VAR_FOut - baseprod)
 
 # ----~new capacity------------------------------
 
+# PULLED WRONG STAT - NEED VAR_NCAP INSTEAD OF CAP_NEW
+# ALSO NEED TO TAKE OUT THE LIFETIME EXTENSIONS
+# TABLE UPDATED IN BACKEND BUT CODE HAS NOT BEEN CHANGED TO REFLECT
+# NEW TABLE NOR HAS THE TABLE BEEN PULLED INTO THE RESULTS SPREADSHEET
+
 # pulls in the new capacity by process set from the excel workbook. this represents actual
 # new capacity added, not changes in production, which is what is reflected in "retirements"
 # separate dataframe for the base case and all other scenarios
