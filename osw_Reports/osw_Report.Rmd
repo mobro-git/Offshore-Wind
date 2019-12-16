@@ -1,0 +1,303 @@
+---
+title: "Modeling the Contribution of Offshore Wind to the Grid Mix and Air Quality Implications:\nNational Approach Results and Analysis"
+author: "Morgan Browning"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    number_sections: yes
+    toc: yes
+header-includes:
+  - \usepackage[labelformat=empty]{caption}
+editor_options: 
+  chunk_output_type: console
+---
+
+***
+
+```{r setup, include = FALSE}
+# Sets global knit options and loads the setup and data import scripts for the project. Code is hidden for ease of reading. Was running into issues when cacheing results, so have set cache to false. Time to knit <5 minutes, so it does not cause much of an issue. Will consider cacheing in the future if the issue is resolved.
+knitr::opts_chunk$set(echo = FALSE, include = TRUE, warning = FALSE, message = FALSE, tidy = TRUE, cache = FALSE)
+library(here)
+```
+```{r, include = FALSE}
+source(here("osw_Scripts/osw_setup.R"))
+```
+```{r, include = FALSE}
+source(here("osw_Scripts/osw_data.R"))
+```
+```{r, include = FALSE}
+source(here("osw_Scripts/osw_results.R"))
+```
+
+
+# Scenarios
+
+The nested parametric sensitivity analysis was built on combinations of two sets of scenarios:
+
+1. Electric sector CO~2~ emissions caps, as a linear decrease to a given % decrease from 2010 emissions by 2050  
+  + Business and usual emissions represent approximately a 20% reduction in CO~2~ emissions
+
+2. Cost reductions of offshore wind, as a linear decrease to a given % decrease from 2010 costs by 2035, then level costs to 2050  
+  + A 20% cost reduction is used as the base case, assuming very conservative technological advancement and little benefit of economies of scale
+  + Cost curves are set to resolve by 2035 as estimated based on NREL LCOE cost projections for offshore wind
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+emissionsscen_col
+costscen_col
+```
+
+# LCOE
+
+EIA's AEO 2019 provides the following values for the estimated levelized cost of electricity (capacity-weighted average) for new generation resources entering service in 2023 (2018 $/MWh). Offshore wind has the highest total LCOE by a large margin. The second most expensive technology is biomass. The AEO LCOE was used in the calculation of offshore wind costs for the above cost curves, but LCOE is not directly used in the model.
+
+```{r}
+lcoe_table
+```
+
+# Offshore Wind
+
+As offshore wind is the primary technology being assessed in this research, we have explored many facets of offshore wind buildout. These facets are explored below, both at a regional and national cumulative level.
+
+## Capacity Buildout
+
+Cumulative and new addition offshore wind capacity across all nine census regions, by cost and emissions reduction scenario.
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+cap_col_side
+newcap_col_top
+```
+
+## Total Capacity
+
+Total offshore wind capacity across all nine census regions in 2050, by cost and emissions reduction scenario.
+
+```{r}
+cap_col_heat 
+cap_2050_table
+```
+
+## Regions
+
+Cumulative and new addition offshore wind capacity by region, emissions reduction, and cost reduction.
+
+```{r}
+cap_region_table
+regOSW_map_col
+```
+
+# Grid Mix
+
+## Baseline Production
+
+Grid mix without any offshore wind cost reduction or emissions cap.
+
+```{r}
+baseprod_line_col
+baseprod_fill_col
+```
+
+## All Scenarios
+
+Complete Set
+
+```{r}
+gridmix_all_col
+```
+
+Parsed Set
+
+```{r}
+gridmix_col
+```
+
+## Heatmaps
+
+```{r}
+heatmap_col
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+osw_grid_heatmap_col
+wnd_grid_heatmap_col
+sol_grid_heatmap_col
+coal_grid_heatmap_col
+nga_grid_heatmap_col
+nuk_grid_heatmap_col
+hyd_grid_heatmap_col
+ccs_grid_heatmap_col
+other_grid_heatmap_col
+```
+
+## Market Share
+
+```{r}
+marketShareTable
+marketshare_heatmap
+```
+
+## Renewable Contributions
+
+```{r}
+rps_col
+```
+
+## Retirements and Additions
+
+Summary Graph 
+
+```{r}
+prod_dif_col
+```
+
+# Emissions
+
+## Emissions by Scenario and Commodity
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+emis_col
+emis_perc_col
+```
+
+## Emissions by Commodity - Percent Reduction
+
+```{r}
+emis_perc_hm
+```
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+co2_hm_per_col
+so2_hm_per_col
+nox_hm_per_col
+ch4_hm_per_col
+pm2.5_hm_per_col
+```
+
+# Total Electricity Production
+
+```{r, out.width=c('50%', '50%'), fig.show='hold'}
+elctotal_line_col
+elctotal_heat_col
+```
+
+# End Use ELC
+
+```{r}
+sector_line
+sector_split_ind
+ind_split_line
+```
+
+# Correlations
+
+```{r}
+chart.Correlation(oswcor, histogram = TRUE, method = "spearman")
+```
+
+# Regressions
+
+## Full set of models
+
+OSW Capacity, % Renewables, and Total Elc Production Regressions
+
+```{r, results = 'asis'}
+grid_modeltable
+grid_graph
+```
+
+Emissions Regressions
+
+```{r, results = 'asis'}
+emission_modeltable
+emission_graph
+```
+
+## Emission-specific regressions by CO2 cap scenario
+
+CO2
+
+```{r, results = 'asis'}
+co2_modeltable
+co2_graph
+```
+
+SO2
+
+```{r, results = 'asis'}
+so2_modeltable
+so2_graph
+```
+
+NOx
+
+```{r, results = 'asis'}
+nox_modeltable
+nox_graph
+```
+
+PM 2.5
+
+```{r, results = 'asis'}
+pm2.5_modeltable
+pm2.5_graph
+```
+
+CH4
+
+```{r, results = 'asis'}
+ch4_modeltable
+ch4_graph
+```
+
+## CO2 cap regressions by emissions type
+
+```{r,results = 'asis'}
+emission_fullmodeltable
+```
+
+BAU
+
+```{r, results = 'asis'}
+bau_modeltable
+bau_graph
+```
+
+30% CO2 Cap
+
+```{r, results = 'asis'}
+e30_modeltable
+e30_graph
+```
+
+40% CO2 Cap
+
+```{r, results = 'asis'}
+e40_modeltable
+e40_graph
+```
+
+50% CO2 Cap
+
+```{r, results = 'asis'}
+e50_modeltable
+e50_graph
+```
+
+60% CO2 Cap
+
+```{r, results = 'asis'}
+e60_modeltable
+e60_graph
+```
+
+70% CO2 Cap
+
+```{r, results = 'asis'}
+e70_modeltable
+e70_graph
+```
+
+80% CO2 Cap
+
+```{r, results = 'asis'}
+e80_modeltable
+e80_graph
+```
+

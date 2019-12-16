@@ -4,7 +4,7 @@
 # and plugs the spreadsheet into the function I created to turn all sheets into
 # separate dataframes in the current environment
 
-results <- c("osw_data/OffshoreWind_Resultsdata_12032019.xlsx")
+results <- c(here("osw_data/OffshoreWind_Resultsdata_12032019.xlsx"))
 sheets <- readxl::excel_sheets(results)
 data_global <- ReadAllSheets(results)
 
