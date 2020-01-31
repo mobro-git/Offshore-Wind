@@ -34,6 +34,7 @@ library(readxl)
 library(knitr)
 library(tidyverse)
 library(kableExtra)
+library(ggthemes)
 
 ## ----Functions-------------------------------------------
 
@@ -457,8 +458,8 @@ noaxes <- theme(
   axis.title = element_blank()
 )
 
-x_cont <- scale_x_continuous(breaks = seq(2020,2050, by = 5), expand = c(0,1))
-x_disc <- scale_x_discrete(breaks = seq(2020,2050, by = 5), expand = c(0,.2))
+x_cont <- scale_x_continuous(breaks = seq(2015,2050, by = 5), expand = c(0,1))
+x_disc <- scale_x_discrete(breaks = seq(2015,2050, by = 5), expand = c(0,.2))
 x_disc_l <- scale_x_discrete(breaks = seq(2020,2050, by = 10), expand = c(0,.2))
 
 col_osw <- c(`Terrestrial Wind` = "#92CBF3", `Hydro` = "dodgerblue4", 

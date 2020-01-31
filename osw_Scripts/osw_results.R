@@ -3,8 +3,8 @@
 # allows me to quickly run my two previous scripts when I make changes in them or
 # if I'm just going to work with results and need to pull in the data
 
-# source("osw_Scripts/osw_setup.R")
-# source("osw_Scripts/osw_data.R")
+source("osw_Scripts/osw_setup.R")
+source("osw_Scripts/osw_data.R")
 
 ## Scenarios ----
 
@@ -754,7 +754,7 @@ cost50_facetem <-  cost50 %>%
 cost50_facetem_line_col <- cost50_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, color = Technology, group = Technology), size = 0.75) +
   osw_color +
-  bottom1  
+  bottom1
 
 cost50_facetem_line_bw <- cost50_facetem +
   geom_line(aes(x = Year, y = VAR_FOut, linetype = Technology, group = Technology), size = 0.75) +
@@ -1675,14 +1675,14 @@ ind_line <- enduse %>% filter(Sector == "All Industrial" & costred != 40) %>%
   
 ind_split_line <- enduse %>% 
   filter(Sector == "CHP Industrial" | Sector == "Grid Industrial") %>%
-  filter(!costred %in% c("20", "30", "40")) %>%
-  filter(emred %in% c("BAU", "40", "60", "80")) %>%
+  filter(costred %in% c("50", "80")) %>%
+  filter(emred %in% c("BAU","80")) %>%
   ggplot() +
   facet_grid(emred~costred, labeller = labeller(costred = costlabels, emred = emissionlabels)) +
   yt + x_disc_l +
   labs(x = "Year", y = "Electricity Consumption (PJ)",
        title = "Industrial Electricity Consumption by Scenario") +
-  geom_line(aes(x = Year, y = Consumption, color = Sector, group = Sector)) +
+  geom_line(aes(x = Year, y = Consumption, color = Sector, group = Sector), size = 2) +
   scale_color_manual(name = "Electricity Source", labels = c("Industrial CHP", "Grid ELC"), 
                      values = c("#B45F04", "#0B3861")) +
   bottom1
@@ -1690,18 +1690,18 @@ ind_split_line <- enduse %>%
 ind_split_bar <- enduse %>% 
   filter(Sector == "CHP Industrial" | Sector == "Grid Industrial") %>%
   filter(Year == "2050") %>%
-  filter(!costred %in% c("20", "30", "40")) %>%
-  filter(emred %in% c("BAU", "40", "60", "80")) %>%
+  filter(costred %in% c("50", "80")) %>%
+  filter(emred %in% c("BAU","80")) %>%
+  mutate(Sector = factor(Sector, levels = c("Grid Industrial", "CHP Industrial"))) %>%
   ggplot() +
-  geom_bar(aes(x = " ", y = Consumption, fill = Sector), 
-           stat = "identity", position = "dodge") +
-  facet_grid(emred~costred, labeller = labeller(costred = costlabels, emred = emissionlabels)) +
+  geom_bar(aes(x = 1, y = Consumption, fill = Sector), 
+           stat = "identity", position = "stack") +
+  facet_grid(costred~emred, labeller = labeller(costred = costlabels, emred = emissionlabels)) +
   yt + x_disc_l +
   labs(x = " ", y = "Electricity Consumption (PJ)",
-       title = "Industrial Electricity Consumption by Scenario") +
-  
+       title = "Industrial Electricity Consumption\nby Scenario") +
   scale_fill_manual(name = "Electricity Source", labels = c("Industrial CHP", "Grid ELC"), 
-                     values = c("#B45F04", "#0B3861")) +
+                     values = c("#524C40", "#EAAF38")) +
   bottom1
 
 ## ~ Heatmaps ----
@@ -2089,6 +2089,8 @@ emission_fullmodeltable <- emission_fullmodeltable[
   select(Emission, everything()) %>%
   rename("Coefficient" = "names")
 emission_fullmodeltable$Emission[17] <- c(" ")
+emission_fullmodeltable <- emission_fullmodeltable[,-1]
+emission_fullmodeltable <- emission_fullmodeltable[,-1]
 
 }
 
